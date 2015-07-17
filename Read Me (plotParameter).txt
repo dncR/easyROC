@@ -1,0 +1,129 @@
+Plot Parameters:
+---------------------------
+	Coding 4in1 plot indices.
+
+		C1	C2
+	R1	11	12
+	R2	21	22
+
+
+** stands for plot indices, 11, 12, 21 or 22.
+-----------------------------------------------------------------------------------------------------------------------------------------
+	ui.R id						Input/Output					Description
+-----------------------------------------------------------------------------------------------------------------------------------------
+	showPlots			: 		TRUE/FALSE				Shows 4in1 (2x2) CutOff plots.
+	cutoffPlotsOpts		:		TRUE/FALSE				Activates extra plot options.
+	subGrps				:		Selectize				Graph options to be modified (x-axis, y-axis, legend, other)
+	
+	font.family			:		Selectize				Font family to be used in figures (Times, Courier, Mono, Symbol)
+	selectedGraph		:		Character vector		Tracks the selected plot to be modified (11, 12, 21 or 22)
+	
+	main**				:		Character				Graph title
+	font.main**			:		Selectize				Graph title font (Regular, Italic, Bold, Bold Italic)
+	cex.main**			:		Numeric					Size of graph title (between 0.1 and 5 in steps of 0.1)
+	col.main**			:		Character				Title color
+	ROCcol11			:		Character				Color for ROC line. (Specific to plot 11. Any color from R color palette)
+	ROClty11			:		Selectize				ROC curve line type (One of line types from R whic is coded with numbers, 1:6)
+	
+	specCol				:		Character				Specificity line color (specific to figure 12)
+	sensCol				:		Character				Sensitivity line color (specific to figure 12)
+	specType			:		Selectize				Specificity line type (specific to figure 12)
+	senstype			:		Selectize				Sensitivity line type (specific to figure 12)
+	
+	lineColD			:		Character				Line color for Diseased distribution (specific to figure 21)
+	lineColH			:		Character				Line color for Healthy distribution (specific to figure 21)
+	lineTypeD			:		Selectize				Line type for Diseased distribution (specific to figure 21)
+	lineTypeH			:		Selectize				Line type for Healthy distribution (specific to figure 21)
+	
+	xlab**				:		Character				Label for x-axis.
+	xfont.lab**			:		Selectize				Label font for x-axis (Regular, Italic, Bold, Bold Italic)
+	xcol.lab**			:		Character				Color for x-axis label
+	xcex.lab**			:		Numeric					Size of x-axis label (between 0.1 and 5 in steps of 0.1)
+	
+	xcol.axis**			:		Character				Color for x-axis annotations
+	xcex.axis**			:		Numeric					Size of x-axis annotations (between 0.1 and 5 in steps of 0.1)
+	xcol**				:		Character				Color for x-axis
+	xcol.ticks**		:		Character				Tickmarks' color for x-axis
+
+	ylab**				:		Character				Label for y-axis
+	yfont.lab**			:		Seleztize				Label font for y-axis (Regular, Italic, Bold, Bold Italic)
+	ycol.lab**			:		Character				Color for y-axis label
+	ycex.lab**			:		Numeric					Size of y-axis label (between 0.1 and 5 in steps of 0.1)
+	
+	ycol.axis**			:		Character				Color for y-axis annotations
+	ycex.axis**			:		Numeric					Size of y-axis annotations (between 0.1 and 5 in steps of 0.1)
+	ycol**				:		Character				Color for y-axis
+	ycol.ticks**		:		Character				Tickmarks' color for y-axis
+	
+	pchSize				:		Numeric					Size of the points
+	colPoints			:		Character vector		Point colors for Healthy and Diseased points (specific to figure 22)
+	pchPoints			:		Numeric					Point type (Pre-defined number within 0-25. See R pch styles)
+	pchFill				:		Character vector		Fill color for points with pchPoints within 21-25
+	xlabels22			:		Character vector		x-axis labels for figure 22.
+	jitterAmount		:		Numeric					Amount of jittering for figure 22.
+	
+	legendPos**			:		Selectize				Position of legend (for figure 12 and 21 - Top right(tr), Top left(tl), Bottom right(br), Bottom left(bl))
+	legendXpos**		:		Numeric					x position of legend
+	legendYpos**		:		Numeric					y position of legend
+	legendNames**		:		Character vector		Legend labels
+	cex.legend**		:		Numeric					Size of legend labels and title
+	legendTitle**		:		Character				Legend title
+	font.legendTitle**	:		Selectize				Font for legend title
+	col.legendTitle**	:		Character				Color for legend title
+	
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+## Optimal Cutpoints control parameters.
+-----------------------------------------------------------------------------------------------------------------------------------------
+	ui.R id						  Input/Output					Description
+-----------------------------------------------------------------------------------------------------------------------------------------
+	CFP_Youden			    : 		Numeric				    Cost of a False Positive (if method is "Youden")
+	CFN_Youden		        :		Numeric				    Cost of a False Negative (if method is "Youden")
+	generalized_Youden      :       TRUE/FALSE              Generalized Youden index should be calculated? (Default is FALSE)
+	costs_benefits_Youden   :       TRUE/FALSE              Cost-benefit based Youden incex should be calculated? (Default is FALSE)
+	
+	costs_ratio             :       Numeric                 Cost ratio to be used with the method "CB"
+	
+	CFP_MCT                 :       Numeric                 Cost of a False Positive (if method is "MCT")
+	CFN_MCT                 :       Numeric                 Cost of a False Negative (if method is "MCT")
+	
+	valueSp_MVSp            :       Numeric                 Value of specificity (if method is "MinValueSp")
+	
+	valueSe_MVSe            :       Numeric                 Value of sensitivity (if method is "MinValueSe")
+	
+	valueSe_VSe             :       Numeric                 Value of sensitivity (if method is "ValueSe")
+	   
+	valueSp_VSp             :       Numeric                 Value of specificity (if method is "ValueSp")
+	
+	valueSp_MVSpSe          :       Numeric                 Value of specificity (if method is "MinValueSpSe")
+	valueSe_MVSpSe          :       Numeric                 Value of sensitivity (if method is "MinValueSpSe")
+	maxSp_MVSpSe            :       TRUE/FALSE              Should specificity be maximized if multiple optimal cutpoints are found? (Default is TRUE)
+	
+	CFP_MK                  :       Numeric                 Cost of a False Positive (if method is "MaxKappa")
+	CFN_MK                  :       Numeric                 Cost of a False Negative (if method is "MaxKappa")	
+	weighted_Kappa          :       TRUE/FALSE              Should weighted kappa be computed? (Default is FALSE)
+	
+	costs_benefits_Efficiency   :   TRUE/FALSE              Cost-benefit based optimal cut off (if method is "MaxEfficiency")
+	standard_deviation_accuracy :   TRUE/FALSE              Standard deviation associated with accuracy at optimal cut points (if method is "MaxEfficiency")
+	
+	valueNPV_MVNPV          :       Numeric                 Value of NPV (if method is "MinValueNPV")
+	
+	valuePPV_MVPPV          :       Numeric                 Value of PPV (if method is "MinValuePPV")      
+	
+	valueNPV_VNPV           :       Numeric                 Value of NPV (if method is "valueNPV")                 
+
+	valuePPV_VPPV           :       Numeric                 Value of NPV (if method is "valuePPV")	
+	
+	valueNPV_MVNPVPPV       :       Numeric                 Value of NPV (if method is "MinValueNPVPPV")
+	valuePPV_MVNPVPPV       :       Numeric                 Value of PPV (if method is "MinValueNPVPPV")
+	maxNPV_MVNPVPPV         :       TRUE/FALSE              Should NVP be maximized if multiple optimal cut points are found? (Default is TRUE)
+	
+	valueDLR_Negative       :       Numeric                 Value of Negative Diagnostic Likelihood Ratio.
+	valueDLR_Positive       :       Numeric                 Value of Positive Diagnostic Likelihood Ratio.
+	
+	adjusted_pvalue         :       Selectize               Method for adjusting p-value (if method is "MinPvalue")
+		
+-----------------------------------------------------------------------------------------------------------------------------------------
+
