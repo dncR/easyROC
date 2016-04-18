@@ -3,17 +3,16 @@ shinyServer(function(input, output, session) {
 
 	source("mROC.R")
 	source("rocdata.R")
-    source("pAUC.R")
-    source("roc.utils.max.partial.auc.R")
-    source("roc.utils.min.partial.auc.R")
-    source("SampleSizeSingleTest.R")
-    source("SampleSizeStandardvsNew.R")
-    source("SampleSizeTwoTests.R")
-    source("rocdata.R")
-	source("ROCplot.R")
-    source("printCutOff.R")
+  source("pAUC.R")
+  source("SampleSizeSingleTest.R")
+  source("SampleSizeStandardvsNew.R")
+  source("SampleSizeTwoTests.R")
+  source("rocdata.R")
+  source("ROCplot.R")
+  source("printCutOff.R")
+  library(pROC)
 	library(plyr)
-    library(OptimalCutpoints)
+  library(OptimalCutpoints)
 
 	## Paste Data bölümünü kontrol eden kod.
 	#observe({
@@ -586,7 +585,9 @@ shinyServer(function(input, output, session) {
     
     pAUCresult <- reactive({
         
-        pAUC(data = dataM(), ROCstats(), partial.auc = c(input$pointA, input$pointB) , partial.auc.focus = input$sensSpec, partial.auc.correct = TRUE, percent = FALSE)
+        pAUC(data = dataM(), range = c(input$pointA, input$pointB), 
+             criteria = input$sensSpec, correct = TRUE, percent = FALSE, markers = input$markerInput,
+             status = input$statusVar, direction = ifelse(input$lowhigh, "<", ">"))
         
     })
     

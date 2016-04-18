@@ -26,6 +26,9 @@ SampleSizeTwoTests = function(alpha, power, auc01, auc02, auc11, auc12, ratio) {
   V0 = V01+V02
   V1 = V11+V12
   
+  
+  
+  
   case = round(((Za*sqrt(V0)+Zb*sqrt(V1))^2)/((auc11-auc12)^2),0)
   
   control = case*ratio
