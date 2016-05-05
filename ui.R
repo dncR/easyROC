@@ -3,11 +3,7 @@ shinyUI(pageWithSidebar(
 	titlePanel("easyROC: a web-tool for ROC curve analysis (ver. 1.1)"),
   
 	sidebarPanel(
-	# Sol panelde nelerin yer alacağı bu bölümde belirleniyor.
-	# Tab panellerden veya sol panel içindeki çeşitli radyo butonlar
-	# checkbox'lar gibi seçimlerden sonra panelde nelerin değişeceği de
-	# ayrıca bir conditionalPanel() bloğu ile burada tanımlanabiliyor.
-	
+
 		conditionalPanel(condition="input.tabs1=='Introduction'",
 			HTML('<p><img src="multi.png" width=400 height=400></p>'),
             tags$head(includeScript("google-analytics.js"))
@@ -978,9 +974,7 @@ HTML('<br>')
 
 
 	mainPanel(
-	# Tab panelinden herhangi bir sekme seçildiği zaman ana bölmede (Ekranın orta kısmı)
-	# nelerin görüneceği bu kısımda tanımlanıyor. Belirli koşullar tanımlanmak istenir ise
-	# ayrıca bir conditionalPanel() bloğu burada tanımlanabilir.
+
 		tabsetPanel(
 			tabPanel(title="Introduction", 
 		         h5("The easiest way to perform ROC analysis!"),
@@ -1040,8 +1034,6 @@ HTML('<br>')
                 plotOutput("ROCplot")
 
 
-
-#verbatimTextOutput("resultPAuc")
             ),
 
             tabPanel("Cut points",
@@ -1049,7 +1041,6 @@ HTML('<br>')
                 downloadButton("downloadCutOffPlotPDF", "Download plots as pdf-file"),   
                 verbatimTextOutput("cutPoints"),
 				
-                ## İçeriği sayfada ortalamak için kullanılan HTML kodu.
                 HTML('<div align="center">'),
 					plotOutput("cutPointsPlot"),
 				HTML('</div>')
@@ -1063,44 +1054,117 @@ verbatimTextOutput("SampleSizeForRoc")
 
 ),
 
+
+tabPanel("Authors & News",
+h4("Authors"),
+HTML('<p><a href="http://www.biostatistics.hacettepe.edu.tr/cv/Dincer_Goksuluk_CV_Eng.pdf" target="_blank"> <b>Dincer Goksuluk</b></a><p>'),
+HTML('<p>Hacettepe University Faculty of Medicine <a href="http://www.biostatistics.hacettepe.edu.tr" target="_blank"> Department of Biostatistics</a><p>'),
+HTML('<p><a href="mailto:dincer.goksuluk@hacettepe.edu.tr" target="_blank">dincer.goksuluk@hacettepe.edu.tr</a><p>'),
+HTML('<p><a href="http://yunus.hacettepe.edu.tr/~selcuk.korkmaz/" target="_blank"> <b>Selcuk Korkmaz</b></a><p>'),
+HTML('<p>Hacettepe University Faculty of Medicine <a href="http://www.biostatistics.hacettepe.edu.tr" target="_blank"> Department of Biostatistics</a><p>'),
+HTML('<p><a href="mailto:selcuk.korkmaz@hacettepe.edu.tr" target="_blank">selcuk.korkmaz@hacettepe.edu.tr</a><p>'),
+HTML('<p><a href="http://www.biostatistics.hacettepe.edu.tr/cv/Gokmen_Zararsiz_CV_Eng.pdf" target="_blank"> <b>Gokmen Zararsiz</b></a><p>'),
+HTML('<p>Hacettepe University Faculty of Medicine <a href="http://www.biostatistics.hacettepe.edu.tr" target="_blank"> Department of Biostatistics</a><p>'),
+HTML('<p><a href="mailto:gokmen.zararsiz@hacettepe.edu.tr" target="_blank">gokmen.zararsiz@hacettepe.edu.tr</a><p>'),
+HTML('<br>'),
+h4("News"),
+HTML('<br>'),
+HTML('<p><b> Version 1.1 (June 23, 2015) </b><p>'),
+HTML('<p> (1) Partial AUC feature has been added.<p>'),
+HTML('<p> (2) Sample size calculation tab has been added.<p>'),
+HTML('<p> (3) Minor improvements and bug fixes.<p>'),
+
+HTML('<br>'),
+HTML('<p><b> Version 1.0 (March 19, 2015)</b><p>'),
+HTML('<p> (1) Initial version has been released.<p>'),
+HTML('<br>'),
+
+
+h5("Other Tools"),
+
+HTML('<p><a href="http://www.biosoft.hacettepe.edu.tr/MLViS/" target="_blank"> <b>MLViS: a machine learning-based virtual screening tool</b></a><p>'),
+HTML('<p><a href="http://www.biosoft.hacettepe.edu.tr/MVN/" target="_blank"> <b>MVN: a web-tool for assessing multivariate normality </b></a><p>'),
+HTML('<p><a href="http://www.biosoft.hacettepe.edu.tr/DDNAA/" target="_blank"> <b>DDNAA: Decision support system for differential diagnosis of nontraumatic acute abdomen </b></a><p>'),
+HTML('<br>'),
+
+h6("Please feel free to send us bugs and feature requests.")
+),
+
             tabPanel(title="Manual",
-                h5("Detailed manual will be released soon...")
+                h3("Usage of the web-tool:"),
+                h4("Data upload"),
+                HTML('<p> Load your data set using this tab.</p>'),
+                HTML('<div style="left;"><img src="manual/dataUpload.jpg" width=400, height = 300/><img src="manual/dataUpload2.jpg" width=500, height = 300/></div>'),
+HTML('<br>'),
+
+                h4("ROC curve"),
+
+                HTML('<p>Use this tab to perform ROC curve analysis.</p>'),
+
+                HTML('<li><p>First select marker(s), where all names of the variables, except the status variable, will be imported automatically by the tool.</p></li>'),
+                HTML('<li><p>Under <b>Statistics</b> subtab, you can get area under the curve (AUC) value and its standard error, confidence interval and statistical significance, instantly. </p></li>'),
+                HTML('<li><p>Standart error estimation methods can be changed under <b>Advanced options</b> checkbox (DeLong (Default), Mann-Whitney, Under Null Hypothesis, Binomial). Likewise, users can select a method for confidence inerval estimation (DeLong (Default), Mann-Whitney, Under Null Hypothesis, Binomial Exact). Moreover, one can also change the type I error. </p></li>'),
+                HTML('<li><p>Furthermore, the ROC curve plot can be obtained under this subtab. There are plenty of options under the <b>Plot options</b> checkbox, such as font type, axis label and colour etc. </p></li>'),
+HTML('<br>'),
+
+                HTML('<div style="left;"><img src="manual/rocCurve.jpg" width=900, height = 500</div>'),
+HTML('<br>'),
+HTML('<br>'),
+
+
+                HTML('<p>Each false positive and true positive points can be found under <b>ROC Coordinates</b> subtab. </p>'),
+
+HTML('<div style="left;"><img src="manual/rocCoordinates.jpg" width=900, height = 400</div>'),
+HTML('<br>'),
+HTML('<br>'),
+
+
+                HTML('<p><b>Multiple Comparisons</b> subtab can be used to perform pairwise statistical comparisons for two or more ROC curves.</p>'),
+
+HTML('<div style="left;"><img src="manual/multipleComparison.jpg" width=900, height = 300</div>'),
+HTML('<br>'),
+HTML('<br>'),
+
+
+                HTML('<p><b>Partial AUC</b> subtab gives partial AUC value(s) for specified ranges.</p>'),
+
+HTML('<div style="left;"><img src="manual/partialAUC.jpg" width=900, height = 300</div>'),
+
+
+HTML('<br>'),
+HTML('<br>'),
+
+                h4("Cut points"),
+                HTML('<li><p>Users can determine optimal cut-off points for their marker(s) using this tab.</p></li>'),
+                HTML('<li><p>First, a ROC curve analysis has to be done in order to use this option.</p></li>'),
+                HTML('<li><p>Then, one of the markers, which are used for ROC curve analysis, can be selected to determine the optimal cut-off points. </p></li>'),
+                HTML('<li><p>One can select one of 34 methods for optimal cut-off point determination.</p></li>'),
+                HTML('<li><p>These methods can be found in the <a href="http://cran.r-project.org/web/packages/OptimalCutpoints/index.html" target="_blank"> OptimalCutpoints</a> package of R.</p></li>'),
+                HTML('<li><p>Several graphs, including ROC curve with the optimal cut-off point, Sensitivity & Specificity Curve and Distribution graphs, can be created as well.</p></li>'),
+                HTML('<div style="left;"><img src="manual/cutPoints.jpg" width=900, height = 500</div>'),
+
+
+HTML('<br>'),
+HTML('<br>'),
+
+h4("Sample size"),
+HTML('<li><p>Sample size calculation for ROC curve analysis can be implemented under this tab.</p></li>'),
+HTML('<li><p>There are three different options for sample size calculation.</p></li>'),
+HTML('<li><p>One can perform a sample size calculation for a single diagnostic test, comparison of two diagnostic tests or noninferiority of a new test to a standard test.</p></li>'),
+
+HTML('<p>Please see <a href="http://66.199.228.237/boundary/complex_decision_making_and_ethics/ROC_Analysis.pdf" target="_blank"> Obuchowski, 2005</a> for further details about the methods</p>'),
+
+HTML('<div style="left;"><img src="manual/sampleSize.jpg" width=900, height = 400</div>'),
+
+HTML('<br>'),
+HTML('<br>'),
+HTML('<br>')
+
             ),
 
-			tabPanel("Authors & News",
-                h4("Authors"),
-    	        HTML('<p><a href="http://www.biostatistics.hacettepe.edu.tr/cv/Dincer_Goksuluk_CV_Eng.pdf" target="_blank"> <b>Dincer Goksuluk</b></a><p>'),
-    	        HTML('<p>Hacettepe University Faculty of Medicine <a href="http://www.biostatistics.hacettepe.edu.tr" target="_blank"> Department of Biostatistics</a><p>'),
-    	        HTML('<p><a href="mailto:dincer.goksuluk@hacettepe.edu.tr" target="_blank">dincer.goksuluk@hacettepe.edu.tr</a><p>'),
-                HTML('<p><a href="http://yunus.hacettepe.edu.tr/~selcuk.korkmaz/" target="_blank"> <b>Selcuk Korkmaz</b></a><p>'),
-                HTML('<p>Hacettepe University Faculty of Medicine <a href="http://www.biostatistics.hacettepe.edu.tr" target="_blank"> Department of Biostatistics</a><p>'),
-                HTML('<p><a href="mailto:selcuk.korkmaz@hacettepe.edu.tr" target="_blank">selcuk.korkmaz@hacettepe.edu.tr</a><p>'),
-                HTML('<p><a href="http://www.biostatistics.hacettepe.edu.tr/cv/Gokmen_Zararsiz_CV_Eng.pdf" target="_blank"> <b>Gokmen Zararsiz</b></a><p>'),
-                HTML('<p>Hacettepe University Faculty of Medicine <a href="http://www.biostatistics.hacettepe.edu.tr" target="_blank"> Department of Biostatistics</a><p>'),
-                HTML('<p><a href="mailto:gokmen.zararsiz@hacettepe.edu.tr" target="_blank">gokmen.zararsiz@hacettepe.edu.tr</a><p>'),
-                HTML('<br>'),
-		        h4("News"),
-                HTML('<br>'),
-                HTML('<p><b> Version 1.1 (June 23, 2015) </b><p>'),
-                HTML('<p> (1) Partial AUC feature has been added.<p>'),
-                HTML('<p> (2) Sample size calculation tab has been added.<p>'),
-                HTML('<p> (3) Minor improvements and bug fixes.<p>'),
-
-                HTML('<br>'),
-                HTML('<p><b> Version 1.0 (March 19, 2015)</b><p>'),
-		        HTML('<p> (1) Initial version has been released.<p>'),
-                HTML('<br>'),
 
 
-            h5("Other Tools"),
 
-            HTML('<p><a href="http://www.biosoft.hacettepe.edu.tr/MLViS/" target="_blank"> <b>MLViS: a machine learning-based virtual screening tool</b></a><p>'),
-            HTML('<p><a href="http://www.biosoft.hacettepe.edu.tr/MVN/" target="_blank"> <b>MVN: a web-tool for assessing multivariate normality </b></a><p>'),
-            HTML('<p><a href="http://www.biosoft.hacettepe.edu.tr/DDNAA/" target="_blank"> <b>DDNAA: Decision support system for differential diagnosis of nontraumatic acute abdomen </b></a><p>'),
-            HTML('<br>'),
-
-                h6("Please feel free to send us bugs and feature requests.")
-            ),
 
             #tabPanel("News",
             #    h4("New Features")
