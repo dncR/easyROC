@@ -1093,7 +1093,9 @@ h6("Please feel free to send us bugs and feature requests.")
             tabPanel(title="Manual",
                 h3("Usage of the web-tool:"),
                 h4("Data upload"),
-                HTML('<p> Load your data set using this tab.</p>'),
+                HTML('<p> Load your data set in *.txt file format using this tab.</p>'),
+                HTML('<li><p> Rows must repsresent the observations and each column must repsresent the variables.</p></li>'),
+                HTML('<li><p> First row must be a header which indicates the varaible names.</p></li>'),
                 HTML('<div style="left;"><img src="manual/dataUpload.jpg" width=400, height = 300/><img src="manual/dataUpload2.jpg" width=500, height = 300/></div>'),
 HTML('<br>'),
 
@@ -1102,9 +1104,10 @@ HTML('<br>'),
                 HTML('<p>Use this tab to perform ROC curve analysis.</p>'),
 
                 HTML('<li><p>First select marker(s), where all names of the variables, except the status variable, will be imported automatically by the tool.</p></li>'),
+                HTML('<li><p>Once the markers are selected, the direction should be defined. By default, higher values indicate diseased subject. </p></li>'),
                 HTML('<li><p>Under <b>Statistics</b> subtab, you can get area under the curve (AUC) value and its standard error, confidence interval and statistical significance, instantly. </p></li>'),
-                HTML('<li><p>Standart error estimation methods can be changed under <b>Advanced options</b> checkbox (DeLong (Default), Mann-Whitney, Under Null Hypothesis, Binomial). Likewise, users can select a method for confidence inerval estimation (DeLong (Default), Mann-Whitney, Under Null Hypothesis, Binomial Exact). Moreover, one can also change the type I error. </p></li>'),
-                HTML('<li><p>Furthermore, the ROC curve plot can be obtained under this subtab. There are plenty of options under the <b>Plot options</b> checkbox, such as font type, axis label and colour etc. </p></li>'),
+                HTML('<li><p>Standart error estimation methods can be changed under <b>Advanced options</b> checkbox (DeLong (Default), Mann-Whitney, Under Null Hypothesis, Binomial). Likewise, users can select a method for confidence inerval estimation (DeLong (Default), Mann-Whitney, Under Null Hypothesis, Binomial Exact). Moreover, one can also change the type I error (Default is 0.05). </p></li>'),
+                HTML('<li><p>Furthermore, the ROC curve plot can be obtained under this tab. There are plenty of options under the <b>Plot options</b> checkbox, such as font type, axis label and colour etc. </p></li>'),
 HTML('<br>'),
 
                 HTML('<div style="left;"><img src="manual/rocCurve.jpg" width=900, height = 500</div>'),
@@ -1112,7 +1115,7 @@ HTML('<br>'),
 HTML('<br>'),
 
 
-                HTML('<p>Each false positive and true positive points can be found under <b>ROC Coordinates</b> subtab. </p>'),
+                HTML('<p>Each false positive and true positive points can be found under <b>ROC Coordinates</b> subtab for each marker. </p>'),
 
 HTML('<div style="left;"><img src="manual/rocCoordinates.jpg" width=900, height = 400</div>'),
 HTML('<br>'),
@@ -1120,13 +1123,14 @@ HTML('<br>'),
 
 
                 HTML('<p><b>Multiple Comparisons</b> subtab can be used to perform pairwise statistical comparisons for two or more ROC curves.</p>'),
+                HTML('<li><p>The comparison methods can be changed under <i>Multiple Comparison Method</i> option. Available methods are Bonferroni (by default), False discovery rate and none (i.e no adjustment on multiple tests).</p></li>'),
 
 HTML('<div style="left;"><img src="manual/multipleComparison.jpg" width=900, height = 300</div>'),
 HTML('<br>'),
 HTML('<br>'),
 
 
-                HTML('<p><b>Partial AUC</b> subtab gives partial AUC value(s) for specified ranges.</p>'),
+                HTML('<p><b>Partial AUC</b> subtab gives partial AUC value(s) for specified ranges based on both sensitivity and specificity.</p>'),
 
 HTML('<div style="left;"><img src="manual/partialAUC.jpg" width=900, height = 300</div>'),
 
@@ -1152,7 +1156,7 @@ HTML('<li><p>Sample size calculation for ROC curve analysis can be implemented u
 HTML('<li><p>There are three different options for sample size calculation.</p></li>'),
 HTML('<li><p>One can perform a sample size calculation for a single diagnostic test, comparison of two diagnostic tests or noninferiority of a new test to a standard test.</p></li>'),
 
-HTML('<p>Please see <a href="http://66.199.228.237/boundary/complex_decision_making_and_ethics/ROC_Analysis.pdf" target="_blank"> Obuchowski, 2005</a> for further details about the methods</p>'),
+HTML('<p>Please see <a href="http://66.199.228.237/boundary/complex_decision_making_and_ethics/ROC_Analysis.pdf" target="_blank"> Obuchowski, 2005</a> for further details about the methods.</p>'),
 
 HTML('<div style="left;"><img src="manual/sampleSize.jpg" width=900, height = 400</div>'),
 
