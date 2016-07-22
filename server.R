@@ -1,6 +1,4 @@
 shinyServer(function(input, output, session) {
-    #options(shiny.trace=TRUE)
-
 	source("mROC.R")
 	source("rocdata.R")
   source("pAUC.R")
@@ -10,6 +8,7 @@ shinyServer(function(input, output, session) {
   source("rocdata.R")
   source("ROCplot.R")
   source("printCutOff.R")
+  source("parametricROC.R")
   library(pROC)
 	library(plyr)
   library(OptimalCutpoints)
@@ -25,28 +24,24 @@ shinyServer(function(input, output, session) {
 ### REACTIVE FUNCTIONS  ###
 {
 	dataM <- reactive({  ## Data input.
-		if(input$dataInput==1){  ## Load example data.
-            if(input$sampleData==1){
+		if (input$dataInput==1){  ## Load example data.
+      if (input$sampleData==1){
 				data <- read.table("mayo.txt", header=TRUE)
-            }
+      } else if (input$sampleData==2){
+        data <- read.table("pbc.txt", header=TRUE)
+      }
+		} else if (input$dataInput==2){  ## Upload data.
 			
-			else if(input$sampleData==2){
-                data <- read.table("pbc.txt", header=TRUE)
-            }
-		} 
-		
-		else if(input$dataInput==2){  ## Upload data.
-			
-            inFile <- input$upload
-            mySep <- switch(input$fileSepDF, '1'=",",'2'="\t",'3'=";", '4'="")
+      inFile <- input$upload
+      mySep <- switch(input$fileSepDF, '1'=",",'2'="\t",'3'=";", '4'="")
             
-			if (is.null(input$upload))  {return(NULL)}
-						
-            if (file.info(inFile$datapath)$size <= 10485800){
-				data <- read.table(inFile$datapath, sep=mySep, header=TRUE, fill=TRUE, dec = ifelse(input$decimal, ",", "."))
+			if (is.null(input$upload)){
+			  return(NULL)
 			}
-            
-            else print("File is bigger than 10MB and will not be uploaded.") 
+						
+      if (file.info(inFile$datapath)$size <= 10485800){
+				data <- read.table(inFile$datapath, sep=mySep, header=TRUE, fill=TRUE, dec = ifelse(input$decimal, ",", "."))
+			} else print("File is bigger than 10MB and will not be uploaded.") 
 		} 
 		
 		#else {  ## Paste data.
@@ -69,7 +64,7 @@ shinyServer(function(input, output, session) {
 		return(data)   
 	})
     
-    heightsize <- reactive(input$myheight)
+  heightsize <- reactive(input$myheight)
 	widthsize <- reactive(input$mywidth)
 	
 	heightsizeCutoff <- reactive(input$myheightCutoff)
@@ -79,14 +74,14 @@ shinyServer(function(input, output, session) {
 	#widthsizeCutoff <- reactive(800)
 	
 	direct <- reactive({
-        ifelse(input$lowhigh, "<", ">")
-    })
+    ifelse(input$lowhigh, "<", ">")
+  })
     
 	nMarkerInput <- reactive({
-        length(input$markerInput)
+    length(input$markerInput)
 	})
     
-    CFP = reactive({input$CFP})
+  CFP = reactive({input$CFP})
     
     ctrl <- reactive({  ### control options for optimal cutpoints.
         if (input$cutOffMethods == "Youden") return(control.cutpoints(CFP = input$CFP_Youden, CFN = input$CFN_Youden, generalized.Youden = input$generalized_Youden, costs.benefits.Youden = input$costs_benefits_Youden))
@@ -113,6 +108,9 @@ shinyServer(function(input, output, session) {
             return(control.cutpoints())
         }
     })
+    
+    # Reactive function for "statusVar" and "eventCategories"
+    statusVar <- reactive({return(input$statusVar)})
 }
 
 ###  END REACTIVE FUNCTIONS ###
@@ -123,17 +121,54 @@ shinyServer(function(input, output, session) {
 {
 	## Yüklenen veri setinin değişken isimlerini takip eden kısım.
 	## "statusVar" ve "markerInput" için seçenekler veri setinin değişken isimleri olarak güncelleniyor.
-	observe({
-		updateSelectInput(session, "statusVar", choices = colnames(dataM()), selected = colnames(dataM())[1])
-	})
-    
-    observe({
-        updateSelectInput(session, "markerInput", choices = colnames(dataM())[colnames(dataM()) != input$statusVar], selected = NULL)
-    })
-    observe({
+
+  # Selecting the category for cases.
+  # observe({
+  #   data_tmp <- dataM()
+  #   updateSelectInput(session = session, inputId = "statusVar", 
+  #                     choices = colnames(data_tmp), selected = colnames(data_tmp)[1])
+  # })
+  
+  # Selecting the category for cases.
+  observe({
+    data_tmp <- dataM()
+    if (!is.null(data_tmp)){
+      updateSelectInput(session = session, inputId = "statusVar", 
+                        choices = colnames(data_tmp), selected = colnames(data_tmp)[1])
+    } else {
+      updateSelectInput(session = session, inputId = "statusVar", 
+                        choices = "", selected = "")
+    }
+  })
+  
+  # Update select input with the categories of status variable.
+  observe({
+    data_tmp <- dataM()
+    if (!is.null(data_tmp)){
+      idx <- which(colnames(data_tmp) %in% statusVar())
+      categories <- levels(as.factor(as.character(data_tmp[ ,idx])))
+      
+      updateSelectizeInput(session = session, inputId = "valueStatus", choices = categories, 
+                           selected = NULL)
+    } else {
+      updateSelectizeInput(session = session, inputId = "valueStatus", choices = "", 
+                           selected = "")
+    }
+  })
+  
+  observe({
+    data_tmp <- dataM()
+    if (!is.null(data_tmp)){
+      updateSelectInput(session, "markerInput", choices = colnames(dataM())[colnames(dataM()) != input$statusVar], selected = NULL)
+    } else {
+      updateSelectInput(session, "markerInput", choices = "", selected = "")
+    }
+  })
+  
+  observe({
 		updateSelectInput(session, "cutoffMarker", choices = input$markerInput, selected = input$markerInput[1])
 	})
-    
+  
 	## "Advanced options" bölümünde seçilen değerler, bu bölüm seçili olmadığında "DeLong" olarak güncelleniyor.
 	observe({
 		if (!input$advanced){
@@ -189,6 +224,13 @@ shinyServer(function(input, output, session) {
 
 ######  END OBSERVER FUNCTIONS	#######
 
+##########   DEBUG CONSOLE
+
+  # output$console <- renderPrint({
+  #   head(dataM())
+  # })
+
+#########  
 ########################	Data Upload Tab 	  #######################
 {
 	## display 10 rows of uploaded Raw Data
@@ -439,14 +481,6 @@ shinyServer(function(input, output, session) {
     )   
 }
 
-
-#result <- mardiaTest(dataM())
-#out <- capture.output(result)
-
-
-
-
-
 ########################  End Download Handlers		#####################
 
 
@@ -460,7 +494,7 @@ shinyServer(function(input, output, session) {
 	
     output$ROCstatistics <- renderDataTable(options = list(iDisplayLength = 10),
 		{
-		if(!is.null(input$markerInput) & input$tabs1 == "ROC curve") 
+		if (!is.null(input$markerInput) & input$tabs1 == "ROC curve") 
 			mROC(data=dataM(), statusName=input$statusVar, markerName=input$markerInput, 
 				 event=input$valueStatus, diseaseHigher=input$lowhigh, ci.method=input$ConfInt,
 				 se.method=input$StdErr, advanced=input$advanced, alpha=input$alpha)$stats
@@ -1065,26 +1099,15 @@ shinyServer(function(input, output, session) {
 
 
 SampleSize <- reactive({
+  if(input$sampleSizeMethod == 1){
+    SampleSizeSingleTest(input$alpha1, input$power1, input$auc, input$ratio)
     
-    if(input$singleTest){
-        
-        SampleSizeSingleTest(input$alpha1, input$power1, input$auc, input$ratio)
-        
-    }
+  } else if (input$sampleSizeMethod == 2){
+    SampleSizeTwoTests(input$alpha2, input$power2, input$auc01, input$auc02, input$auc11, input$auc12, input$ratio2)
     
-    if(input$twoTests){
-        
-        SampleSizeTwoTests(input$alpha2, input$power2, input$auc01, input$auc02, input$auc11, input$auc12, input$ratio2)
-        
-    }
-    
-    if(input$StandardVsNew){
-        
-        SampleSizeStandardvsNew(input$alpha3, input$power3, input$aucs,input$aucn, input$sd, input$ratio3)
-        
-    }
-    
-    
+  } else if (input$sampleSizeMethod == 3){
+    SampleSizeStandardvsNew(input$alpha3, input$power3, input$aucs,input$aucn, input$sd, input$ratio3)
+  }
 })
 
 
