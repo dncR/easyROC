@@ -5,6 +5,8 @@
 mROC <- function(data, statusName = NULL, markerName = NULL, eventValue=NULL, diseaseHigher=TRUE,
                  alpha = 0.05, ci.method = "DeLong", se.method = "DeLong", advanced = FALSE){
   
+  require(dplyr)
+  
   if (!is.null(markerName)){warnings("Marker variable is not specified.")}
     
   if (!is.null(markerName)){
@@ -39,6 +41,7 @@ mROC <- function(data, statusName = NULL, markerName = NULL, eventValue=NULL, di
   
   ROCplotdataframe[,c("FPR","TPR")] = round(ROCplotdataframe[,c("FPR","TPR")], 4)
   
+  ROCplotdataframe <- dplyr:::arrange(ROCplotdataframe, Marker, Cutpoint)
   results = list(plotdata = ROCplotdataframe, stats = ROCstats)
   return(results)
 }
