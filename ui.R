@@ -54,7 +54,7 @@ shinyUI(pageWithSidebar(
 			selectizeInput("valueStatus", "Select category for cases", choices = NULL, multiple = FALSE)
 		),  # End for Data Upload tab.
 		
-		conditionalPanel(condition="input.tabs1=='ROC curve'",
+		conditionalPanel(condition="input.tabs1 == 'ROC curve'",
       selectizeInput("markerInput", "Select markers (*)", choices = NULL, multiple = TRUE),
       checkboxInput("lowhigh", "Higher values indicate risks", TRUE),
 			
@@ -70,18 +70,58 @@ shinyUI(pageWithSidebar(
       HTML('<br>'),
 
 			checkboxInput(inputId = "advanced", label = "Advanced options", value = FALSE),
-            
+			
+			# Use this to add vertical spaces.
   		conditionalPanel(condition = "input.advanced",
-				radioButtons(inputId = "StdErr", label = "1. Select a method for SE estimation", 
-                     choices = list("Mann-Whitney"="MW", "DeLong(1988)[+]"="DeLong", "Under Null Hyp."="Null", "Binomial"="Binomial"), selected = "DeLong"),
-							 
-				radioButtons(inputId = "ConfInt", label = "2. Select a method for Conf. Interval", 
-							       choices = list("Mann-Whitney"="MW", "DeLong(1988)[+]"="DeLong", "Under Null Hyp."="Null", "Binomial Exact"="Exact"), selected = "DeLong"),
-				numericInput(inputId = "alpha", label = "Type I error", value = 0.05, min = 0, max = 1, step = 0.01),
-				HTML('<br>'),
-				HTML('<br>'),
-				helpText("[+]: Default options."),
-				HTML('<br>')
+  		  HTML('<style>
+                .bottom-three {
+  		            margin-bottom: 1.2em;
+  		          }
+  		       </style>
+  	
+  		       <p class="bottom-three"></p>'),
+  		  
+## Use this code block to add bold label.
+#   		  HTML('<style>
+#                 .bottom-three {
+#   		              margin-bottom: 0.3cm;
+#   		          }
+#   		       </style>
+#   		       
+#   		       <p class="bottom-three" >
+#                 <strong>Select a method for curve fitting</strong>
+#              </p>'),
+  		  
+  		  radioButtons(inputId = "rocEstimationType", label = "Select a method for curve fitting",
+  		               choices = list("Nonparametric" = "nonParametricROC", "Parametric" = "parametricROC"),
+  		               selected = "nonParametricROC"),       
+        
+  		  # Non parametric ROC curve
+  		  conditionalPanel(condition = "input.rocEstimationType == 'nonParametricROC'",
+  		    radioButtons(inputId = "StdErr", label = "1. Select a method for SE estimation", 
+  		                 choices = list("Mann-Whitney" = "MW", "DeLong(1988)[+]" = "DeLong", "Under Null Hyp." = "Null", "Binomial" = "Binomial"), 
+  		                 selected = "DeLong"),
+  		    
+  		    radioButtons(inputId = "ConfInt", label = "2. Select a method for Conf. Interval", 
+  		                 choices = list("Mann-Whitney"="MW", "DeLong(1988)[+]"="DeLong", "Under Null Hyp."="Null", "Binomial Exact"="Exact"), 
+  		                 selected = "DeLong"),
+  		    numericInput(inputId = "alpha", label = "Type I error", value = 0.05, min = 0, max = 1, step = 0.01),
+  		    HTML('<br>'),
+  		    HTML('<br>'),
+  		    helpText("[+]: Default options."),
+  		    HTML('<br>')
+  		  ),
+  		  
+  		  # Parametric ROC Curve.
+  		  conditionalPanel(condition = "input.rocEstimationType == 'parametricROC'",
+          radioButtons(inputId = "ConfIntParametric", label = "1. Select a method for Conf. Interval", 
+                      choices = list("Asymptotic [+]" = "asymptotic", "Exact" = "Exact"), selected = "asymptotic"),
+          numericInput(inputId = "alphaParametric", label = "Type I error", value = 0.05, min = 0, max = 1, step = 0.01),
+          HTML('<br>'),
+          HTML('<br>'),
+          helpText("[+]: Default options."),
+          HTML('<br>')
+  		  )
 			),
             
 			checkboxInput(inputId = "ROCplotOpts", label = "Plot options", value = FALSE),
@@ -957,6 +997,10 @@ shinyUI(pageWithSidebar(
 		conditionalPanel(condition="input.tabs1=='Authors & News'",
 	    HTML('<p align="center"> <a href="https://www.hacettepe.edu.tr/english/" target="_blank"><img src="hulogo.JPEG" width=150 height=150></a> </p>')
 		)
+
+#     conditionalPanel(condition="input.tabs1=='Options'",
+#       selectInput(inputId = "Deneme", label = "Deneme", choices = c("A", "B"), selected = "A")
+#     )
 	),
 
 	mainPanel(
@@ -986,7 +1030,7 @@ shinyUI(pageWithSidebar(
              It is a non-profit service to the scientific community, provided on an "AS-IS " basis without any warranty, 
              expressed or implied. The authors can not be held liable in any way for the service provided here. </p>')
 			),
-
+			
 			tabPanel("Data upload",
 			  HTML('<br>'),
 			  # verbatimTextOutput("console"),
@@ -1002,11 +1046,11 @@ shinyUI(pageWithSidebar(
           
         h4(textOutput(outputId = "section1")),
         navbarPage(id = "navbarROCcurve",
-            title = '',
-            tabPanel('Statistics', dataTableOutput('ROCstatistics')),
-            tabPanel('ROC Coordinates', dataTableOutput('ROCcoordinates')),
-            tabPanel('Multiple Comparisons', dataTableOutput('ROCcomparisons')),
-            tabPanel('Partial AUC', dataTableOutput('resultPAuc'))
+          title = '',
+          tabPanel('Statistics', dataTableOutput('ROCstatistics')),
+          tabPanel('ROC Coordinates', dataTableOutput('ROCcoordinates')),
+          tabPanel('Multiple Comparisons', dataTableOutput('ROCcomparisons')),
+          tabPanel('Partial AUC', dataTableOutput('resultPAuc'))
         ),
 
         conditionalPanel(condition = "input.navbarROCcurve != 'ROC Coordinates'",
@@ -1025,16 +1069,17 @@ shinyUI(pageWithSidebar(
         verbatimTextOutput("cutPoints"),
 				
         HTML('<div align="center">'),
-				plotOutput("cutPointsPlot"),
+				  plotOutput("cutPointsPlot"),
 				HTML('</div>')
 			),
 
       tabPanel(title = "Sample size",
-        downloadButton("downloadSampleSizeResults", "Download results as txt-file"),
+        #downloadButton("downloadSampleSizeResults", "Download results as txt-file"),
         verbatimTextOutput("SampleSizeForRoc")
       ),
+      
 
-
+			
       tabPanel("Authors & News",
         h4("Authors"),
         HTML('<p><a href="http://yunus.hacettepe.edu.tr/~dincer.goksuluk/" target="_blank"> <b>Dincer Goksuluk</b></a><p>'),
@@ -1080,7 +1125,13 @@ shinyUI(pageWithSidebar(
 
         h6("Please feel free to send us bugs and feature requests.")
       ),
-
+			
+			# General Options will be included here.
+			tabPanel(title = "Options",
+			         selectInput(inputId = "Deneme2", label = "Deneme2", choices = c("A", "B", "C"), selected = "C"),
+			         verbatimTextOutput("deneme2")
+			), 
+			
       tabPanel(title="Manual",
         h3("Usage of the web-tool:"),
         h4("Data upload"),
@@ -1143,7 +1194,7 @@ shinyUI(pageWithSidebar(
         HTML('<br>'),
         HTML('<br>'),
         HTML('<br>')
-      ), id="tabs1"),
+      ), id = "tabs1", type = "pills"),
 
     tags$head(tags$style(type="text/css", "label.radio { display: inline-block; }", ".radio input[type=\"radio\"] { float: none; }"),
     tags$style(type="text/css", "select { max-width: 200px; }"),

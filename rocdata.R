@@ -53,11 +53,16 @@ rocdata <- function(status, marker, event, higherValuesDiseased, alpha=0.05,
   tpr <- tp / (tp + fn)
   fpr <- fp / (fp + tn)
 
-  roc = data.frame(CutOff = cut, FPR = fpr, TPR = tpr)
+  roc = data.frame(Cutpoint = cut, FPR = fpr, TPR = tpr)
   roc <- roc[order(roc$FPR, roc$TPR),]
   
-  roc = rbind(c(roc[1,"Marker"], Inf, 0, 0), roc)
-  roc = rbind(roc, c(roc[1,"Marker"], -Inf, 1, 1))
+  if (higherValuesDiseased){
+    roc = rbind(data.frame(Cutpoint = Inf, FPR = 0, TPR = 0), roc)
+    roc = rbind(roc, data.frame(Cutpoint = -Inf, FPR = 1, TPR = 1))
+  } else {
+    roc = rbind(data.frame(Cutpoint = -Inf, FPR = 0, TPR = 0), roc)
+    roc = rbind(roc, data.frame(Cutpoint = Inf, FPR = 1, TPR = 1))
+  }
   
   i <- 2:nrow(roc)
   auc <- ((roc$FPR[i] - roc$FPR[i - 1]) %*% (roc$TPR[i] + roc$TPR[i - 1]))/2

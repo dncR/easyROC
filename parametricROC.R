@@ -1,16 +1,8 @@
-data = iris[51:150, ]
-marker = "Sepal.Length"
-status = "Species"
-event = "versicolor"
-means = NULL
-sds = NULL
-returnROCdata = TRUE
-higherValuesPositives = TRUE
-plot = FALSE
 
 parametricROC <- function(data = NULL, marker = NULL, status = NULL, event = NULL,
-                          means = NULL, sds = NULL, returnROCdata = TRUE,
-                          higherValuesPositives = TRUE, plot = FALSE, ...){
+                          ns = NULL, means = NULL, sds = NULL, returnROCdata = TRUE,
+                          higherValuesPositives = TRUE, plot = FALSE, exact = FALSE,
+                          confidence.level = 0.95, ...){
   
   if (all(is.null(data), is.null(means), is.null(sds))){
     stop(warning("Either data matrix or distribution parameters should be given."))
@@ -33,9 +25,11 @@ parametricROC <- function(data = NULL, marker = NULL, status = NULL, event = NUL
       stop(warning("Unexpected input for \"data\". \"data.frame\" and \"matrix\" classes are allowed."))
     }
     
+    n1 <- length(data[data[ ,status] == event, marker])
     mu1 <- mean(data[data[ ,status] == event, marker], na.rm = TRUE)
     sd1 <- sd(data[data[ ,status] == event, marker], na.rm = TRUE)
     
+    n0 <- length(data[data[ ,status] != event, marker])
     mu0 <- mean(data[data[ ,status] != event ,marker], na.rm = TRUE)
     sd0 <- sd(data[data[ ,status] != event ,marker], na.rm = TRUE)
     
@@ -75,6 +69,41 @@ parametricROC <- function(data = NULL, marker = NULL, status = NULL, event = NUL
     pnorm(z1, lower.tail = TRUE)
   }
   
+  # Hypothesis tests:
+  # Zhou et. al. (2005) page: 140
+  f <- exp((-a^2) / (2*(1 + b^2))) / sqrt(2*pi*(1 + b^2))
+  g <- -a*b*exp(-a / (2*(1 + b^2))) / (sqrt(2*pi*((1 + b^2)^3)))
+  
+  var.a <- (n1 * (a^2 + 2) + 2*n0*b^2) / (2*n0*n1)
+  var.b <- ((n0 + n1)*b^2) / (2*n0*n1)
+  cov.ab <- (a * b) / (2*n0)
+  
+  se.auc <- sqrt(var.a * f^2 + var.b * g^2 + 2*f*g*cov.ab)
+  
+  if (!exact){
+    lower <- AUC - qnorm((1 - confidence.level)/2, lower.tail = FALSE)*se.auc
+    if (lower <= 0){
+      lower <- 0
+    }
+    
+    upper <- AUC + qnorm((1 - confidence.level)/2, lower.tail = FALSE)*se.auc
+    if (upper >= 1){
+      upper <- 1
+    }
+  } else {
+    ## Binomial Exact (via F-distribution)
+    n <- n0 + n1
+    x <- n*AUC
+    alpha <- 1 - confidence.level
+    F1 <- qf(1-alpha/2, 2*(n-x+1), 2*x)
+    F2 <- qf(1-alpha/2, 2*(x+1), 2*(n-x))
+    upper <- ((x+1)*F2/(n-x)) / (1 + (x+1)*F2/(n-x))
+    lower <- 1 / (1 + F1*(n-x+1)/x)
+  }
+  
+  statistic <- (AUC - 0.5) / se.auc
+  pvalue <- 2*pnorm(abs(statistic), lower.tail = FALSE)
+    
   if (plot){
     plot(FPR, TPR, type="l", xlim=c(0,1), ylim=c(0,1), ...)
     
@@ -89,12 +118,21 @@ parametricROC <- function(data = NULL, marker = NULL, status = NULL, event = NUL
   }
   
   if (returnROCdata){
-    result <- list(rocData = data.frame(cutoff = cuts,
-                                        TPR = TPR,
-                                        FPR = FPR),
-                   AUC = AUC)
+    result <- list(plotdata = data.frame(Cutpoint = cuts,
+                                        FPR = FPR,
+                                        TPR = TPR),
+                   stats = data.frame(Marker = marker,
+                                      Status = status,
+                                      Event = event,
+                                      n1 = n1,
+                                      n0 = n0,
+                                      AUC = AUC,
+                                      SE = se.auc,
+                                      Lower = lower,
+                                      Upper = upper,
+                                      z = statistic,
+                                      p = pvalue))
     
     return(result)
   }
-  
 }
