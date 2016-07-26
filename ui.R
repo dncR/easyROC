@@ -1126,11 +1126,11 @@ shinyUI(pageWithSidebar(
         h6("Please feel free to send us bugs and feature requests.")
       ),
 			
-			# General Options will be included here.
-			tabPanel(title = "Options",
-			         selectInput(inputId = "Deneme2", label = "Deneme2", choices = c("A", "B", "C"), selected = "C"),
-			         verbatimTextOutput("deneme2")
-			), 
+# 			# General Options will be included here.
+# 			tabPanel(title = "Options",
+#         selectInput(inputId = "Deneme2", label = "Deneme2", choices = c("A", "B", "C"), selected = "C"),
+#         verbatimTextOutput("deneme2")
+# 			), 
 			
       tabPanel(title="Manual",
         h3("Usage of the web-tool:"),
