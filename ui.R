@@ -1096,8 +1096,9 @@ shinyUI(pageWithSidebar(
         h4("News"),
         HTML('<br>'),
         HTML('<p><b> Version 1.3 (July 25, 2016)</b><p>'),
-        HTML('<p> (1) Minor bug fixes and improvements.<p>'),
-        HTML('<p> (2) Minor changes in user interface.<p>'),
+        HTML('<p> (1) Support for prametric ROC curve approximation.<p>'),
+        HTML('<p> (2) Minor bug fixes and improvements.<p>'),
+        HTML('<p> (3) Minor changes in user interface.<p>'),
         
         HTML('<br>'),
         HTML('<p><b> Version 1.2 (May 6, 2016)</b><p>'),
@@ -1142,11 +1143,12 @@ shinyUI(pageWithSidebar(
         HTML('<br>'),
 
         h4("ROC curve"),
-        HTML('<p>Use this tab to perform ROC curve analysis.</p>'),
+        HTML('<p>Use this tab to perform ROC curve analysis. easyROC supports both parametric and nonparametric approximations for ROC curve analysis.</p>'),
         HTML('<ul><li><p>First select marker(s), where all names of the variables, except the status variable, will be imported automatically by the tool.</p></li></ul>'),
         HTML('<ul><li><p>Once the markers are selected, the direction should be defined. By default, higher values indicate higher risks. </p></li></ul>'),
         HTML('<ul><li><p>Under <b>Statistics</b> subtab, you can get area under the curve (AUC) value and its standard error, confidence interval and statistical significance, instantly. </p></li></ul>'),
-        HTML('<ul><li><p>Standart error estimation methods can be changed under <b>Advanced options</b> checkbox (DeLong (Default), Mann-Whitney, Under Null Hypothesis, Binomial). Likewise, users can select a method for confidence inerval estimation (DeLong (Default), Mann-Whitney, Under Null Hypothesis, Binomial Exact). Moreover, one can also change the type I error (Default is 0.05). </p></li></ul>'),
+        HTML('<ul><li><p>One may select one of parametric or nonparametric approximations under <b>Advanced options</b> checkbox (By default, the nonparametric approach is selected). The standart errors can be estimated using one of the proposed methods. 
+             Likewise, users can select a method for confidence inerval estimation. Moreover, one can also change the type I error (Default is 0.05). </p></li></ul>'),
         HTML('<ul><li><p>Furthermore, the ROC curve plot can be obtained under this tab. There are plenty of options under the <b>Plot options</b> checkbox, such as font type, axis label and colour etc. </p></li></ul>'),
         HTML('<br>'),
 
