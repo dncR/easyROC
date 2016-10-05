@@ -2,9 +2,9 @@ shinyUI(pageWithSidebar(
 
   titlePanel("easyROC: a web-tool for ROC curve analysis (ver. 1.3)"),
   
-	sidebarPanel(
+	sidebarPanel(width =3,
 		conditionalPanel(condition="input.tabs1=='Introduction'",
-  		HTML('<p><img src="multi.png" width=400 height=400></p>'),
+  		HTML('<p><img src="multi.png" width=300 height=300></p>'),
       tags$head(includeScript("google-analytics.js"))
 		),
 
