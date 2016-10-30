@@ -377,12 +377,13 @@ shinyServer(function(input, output, session) {
 					}
 					
 					## Figure 22
-					bgD = strsplit(opts$pchFill, ",")[[1]][2]
-					bgH = strsplit(opts$pchFill, ",")[[1]][1]
+					bgD = trimws(strsplit(opts$pchFill, ",")[[1]][2], "both")
+					bgH = trimws(strsplit(opts$pchFill, ",")[[1]][1], "both")
 
 					pchColD = strsplit(opts$colPoints, ",")[[1]][2]
 					pchColH = strsplit(opts$colPoints, ",")[[1]][1]
-
+          
+					set.seed(3627)
 					plot(jitter(rep(1, length(healthy)), amount=opts$jitterAmount), healthy, xlim=c(0.5,2.5), 
 						ylim=c(xmin - expand, xmax + expand), axes = FALSE, xlab="", ylab="", main="",
 						pch = opts$pchPoints, col = pchColH, bg = bgH, cex = opts$pchSize)
@@ -1153,12 +1154,13 @@ shinyServer(function(input, output, session) {
 			}
 			
 			## Figure 22
-			bgD = strsplit(opts$pchFill, ",")[[1]][2]
-			bgH = strsplit(opts$pchFill, ",")[[1]][1]
+			bgD = trimws(strsplit(opts$pchFill, ",")[[1]][2], "both")
+			bgH = trimws(strsplit(opts$pchFill, ",")[[1]][1], "both")
 
-			pchColD = strsplit(opts$colPoints, ",")[[1]][2]
-			pchColH = strsplit(opts$colPoints, ",")[[1]][1]
-
+			pchColD = trimws(strsplit(opts$colPoints, ",")[[1]][2], "both")
+			pchColH = trimws(strsplit(opts$colPoints, ",")[[1]][1], "both")
+      
+			set.seed(3627)
 			plot(jitter(rep(1, length(healthy)), amount=opts$jitterAmount), healthy, xlim=c(0.5,2.5), 
 				ylim=c(xmin - expand, xmax + expand), axes = FALSE, xlab="", ylab="", main="",
 				pch = opts$pchPoints, col = pchColH, bg = bgH, cex = opts$pchSize)

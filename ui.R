@@ -462,10 +462,10 @@ shinyUI(pageWithSidebar(
             
       conditionalPanel(condition="input.showPlots",
 				fluidRow(
-					column(1),
-					column(5, sliderInput("myheightCutoff", "Plot height:", value=600, min=400, max=1400)),
-					column(1),
-					column(5, sliderInput("mywidthCutoff", "Plot width:", value=800, min=400, max=1400 ))
+					# column(1),
+					column(6, sliderInput("myheightCutoff", "Plot height:", value=600, min=400, max=1400)),
+					# column(1),
+					column(6, sliderInput("mywidthCutoff", "Plot width:", value=800, min=400, max=1400 ))
 				),
 				
 				HTML('<br>'),
@@ -475,7 +475,7 @@ shinyUI(pageWithSidebar(
             
       conditionalPanel(condition="input.cutoffPlotsOpts",
 				fluidRow(
-					column(10, selectizeInput("fontfamily", "Font family", 
+					column(12, selectizeInput("fontfamily", "Font family", 
 											choices = c("Times New Roman" = "serif", "Arial" = "sans", 
 														      "Corier New" = "mono"), selected = "sans"))
 				),
@@ -491,24 +491,24 @@ shinyUI(pageWithSidebar(
 				conditionalPanel(condition = "input.selectedGraph == '1'",
 					conditionalPanel(condition = "input.subGrps == 'others'",
 						fluidRow(
-						  column(5, textInput("main11", "Graph title", "ROC Curve")),
-						  column(1),
-						  column(5, selectizeInput("font.main11", "Title font", 
+						  column(6, textInput("main11", "Graph title", "ROC Curve")),
+						  # column(1),
+						  column(6, selectizeInput("font.main11", "Title font", 
                                         choices = c("Regular" = "1", "Bold" = "2", 
 																						        "Italic" = "3", "Bold Italic" = "4"), 
 												                selected = "2"))
 						),
 					
 						fluidRow(
-							column(5, textInput("col.main11", "Title color", "black")),
-							column(1),
-							column(5, numericInput("cex.main11", "Title size", min=0.1, max=5, value = 1.2, step = 0.1))
+							column(6, textInput("col.main11", "Title color", "black")),
+							# column(1),
+							column(6, numericInput("cex.main11", "Title size", min=0.1, max=5, value = 1.2, step = 0.1))
 						),
 					
 						fluidRow(
-							column(5, textInput("ROCcol11", "ROC line color", "black")),
-							column(1),
-							column(5, selectizeInput("ROClty11", "ROC line type", 
+							column(6, textInput("ROCcol11", "ROC line color", "black")),
+							# column(1),
+							column(6, selectizeInput("ROClty11", "ROC line type", 
 													choices = c("\U2500\U2500\U2500\U2500\U2500\U2500\U2500" = "1",
       																"\U2574 \U2574 \U2574 \U2574 \U2574 \U2574" = "2", 
       																"\U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7" = "3",
@@ -524,25 +524,25 @@ shinyUI(pageWithSidebar(
 						
 						## X axis label options
 						fluidRow(
-							column(5, textInput("xlab11", "Axis label", "1-Specificity")),
-							column(1),
-							column(5, selectizeInput("xfont.lab11", "Label font", 
+							column(6, textInput("xlab11", "Axis label", "1-Specificity")),
+							# column(1),
+							column(6, selectizeInput("xfont.lab11", "Label font", 
                                         choices = c("Regular" = "1", "Bold" = "2", 
 																							      "Italic" = "3", "Bold Italic" = "4"), 
 													              selected = "1"))	
 						),
 						
 						fluidRow(
-							column(5, textInput("xcol.lab11", "Label color", "black")),
-							column(1),
-							column(5, numericInput("xcex.lab11", "Label size", min=0.1, max=5, value = 1, step = 0.1))
+							column(6, textInput("xcol.lab11", "Label color", "black")),
+							# column(1),
+							column(6, numericInput("xcex.lab11", "Label size", min=0.1, max=5, value = 1, step = 0.1))
 						),
 						
 						## X axis annotation options
 						fluidRow(
-							column(5, textInput("xcol.axis11", "Annotation color", "black")),
-							column(1),
-							column(5, numericInput("xcex.axis11", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
+							column(6, textInput("xcol.axis11", "Annotation color", "black")),
+							# column(1),
+							column(6, numericInput("xcex.axis11", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
 						)
 						
 						#fluidRow(
@@ -557,25 +557,25 @@ shinyUI(pageWithSidebar(
 						
 						## Y axis label options
 						fluidRow(
-							column(5, textInput("ylab11", "Axis label", "Sensitivity")),
-							column(1),
-							column(5, selectizeInput("yfont.lab11", "Label font", 
+							column(6, textInput("ylab11", "Axis label", "Sensitivity")),
+							# column(1),
+							column(6, selectizeInput("yfont.lab11", "Label font", 
                                         choices = c("Regular" = "1", "Bold" = "2", 
 																								    "Italic" = "3", "Bold Italic" = "4"), 
 													              selected = "1"))	
 						),
 						
 						fluidRow(
-							column(5, textInput("ycol.lab11", "Label color", "black")),
-							column(1),
-							column(5, numericInput("ycex.lab11", "Label size", min=0.1, max=5, value = 1, step = 0.1))
+							column(6, textInput("ycol.lab11", "Label color", "black")),
+							# column(1),
+							column(6, numericInput("ycex.lab11", "Label size", min=0.1, max=5, value = 1, step = 0.1))
 						),
 						
 						## Y axis annotation options
 						fluidRow(
-							column(5, textInput("ycol.axis11", "Annotation color", "black")),
-							column(1),
-							column(5, numericInput("ycex.axis11", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
+							column(6, textInput("ycol.axis11", "Annotation color", "black")),
+							# column(1),
+							column(6, numericInput("ycex.axis11", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
 						)
 					)	
 				),
@@ -584,24 +584,24 @@ shinyUI(pageWithSidebar(
 				conditionalPanel(condition = "input.selectedGraph == '2'",
 					conditionalPanel(condition = "input.subGrps == 'others'",
 						fluidRow(
-							column(5, textInput("main12", "Graph title", "Sens. & Spec. Curve")),
-							column(1),
-							column(5, selectizeInput("font.main12", "Title font", 
+							column(6, textInput("main12", "Graph title", "Sens. & Spec. Curve")),
+							# column(1),
+							column(6, selectizeInput("font.main12", "Title font", 
                                         choices = c("Regular" = "1", "Bold" = "2", 
 																								    "Italic" = "3", "Bold Italic" = "4"), 
 													              selected = "2"))
 						),
 					
 						fluidRow(
-							column(5, textInput("col.main12", "Title color", "black")),
-							column(1),
-							column(5, numericInput("cex.main12", "Title size", min=0.1, max=5, value = 1.2, step = 0.1))
+							column(6, textInput("col.main12", "Title color", "black")),
+							# column(1),
+							column(6, numericInput("cex.main12", "Title size", min=0.1, max=5, value = 1.2, step = 0.1))
 						),
 					
 						fluidRow(
-							column(5, textInput("specCol", "Spec. line color", "blue")),
-							column(1),
-							column(5, selectizeInput("specType", "Spec. line type", 
+							column(6, textInput("specCol", "Spec. line color", "blue")),
+							# column(1),
+							column(6, selectizeInput("specType", "Spec. line type", 
 													choices = c("\U2500\U2500\U2500\U2500\U2500\U2500\U2500" = "1",
       																"\U2574 \U2574 \U2574 \U2574 \U2574 \U2574" = "2", 
       																"\U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7" = "3",
@@ -612,9 +612,9 @@ shinyUI(pageWithSidebar(
 						),
 						
 						fluidRow(
-							column(5, textInput("sensCol", "Sens. line color", "red")),
-							column(1),
-							column(5, selectizeInput("sensType", "Sens. line type", 
+							column(6, textInput("sensCol", "Sens. line color", "red")),
+							# column(1),
+							column(6, selectizeInput("sensType", "Sens. line type", 
 													choices = c("\U2500\U2500\U2500\U2500\U2500\U2500\U2500" = "1",
       																"\U2574 \U2574 \U2574 \U2574 \U2574 \U2574" = "2", 
       																"\U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7" = "3",
@@ -627,18 +627,18 @@ shinyUI(pageWithSidebar(
 					
 					conditionalPanel(condition = "input.subGrps == 'Legend'",
 						fluidRow(
-							column(5, selectizeInput("legendPos12", "Position", 
+							column(6, selectizeInput("legendPos12", "Position", 
                                         choices = c("Top right" = "topright", "Top left" = "topleft", 
                                                     "Bottom right" = "bottomright", "Bottom left" = "bottomleft", "xy coord." = "xy"),
 														            selected = "topright")),
-							column(1),
-							column(2,
+							# column(1),
+							column(3,
 								conditionalPanel(condition = "input.legendPos12 == 'xy'",
 									numericInput("legendXpos12", "x", value = 0, step = 0.1)
 								)
 							),
-							column(1),
-							column(2,
+							# column(1),
+							column(3,
 								conditionalPanel(condition = "input.legendPos12 == 'xy'",
 									numericInput("legendYpos12", "y", value = 0, step = 0.02)
 								)
@@ -646,15 +646,15 @@ shinyUI(pageWithSidebar(
 						),
 						
 						fluidRow(
-							column(7, textInput("legendNames12", "Leg. labels (comma sep.)", "Sens.,Spec.")),
-							column(1),
-							column(3, numericInput("cex.legend12", "Leg. size", min = 0.5, max = 5, step = 0.1, value = 1))
+							column(8, textInput("legendNames12", "Legend labels", "Sens.,Spec.")),
+							# column(1),
+							column(4, numericInput("cex.legend12", "Leg. size", min = 0.5, max = 5, step = 0.1, value = 1))
 						),
 						
 						fluidRow(
-							column(5, textInput("legendTitle12", "Title", "")),
-							column(1),
-							column(5, textInput("col.legendTitle12", "Title color", "black"))
+							column(6, textInput("legendTitle12", "Title", "")),
+							# column(1),
+							column(6, textInput("col.legendTitle12", "Title color", "black"))
 						),
                         
             checkboxInput("borderless12", label = "Remove borders.", value = FALSE)
@@ -665,25 +665,25 @@ shinyUI(pageWithSidebar(
 						
 						## X axis label options
 						fluidRow(
-							column(5, textInput("xlab12", "Axis label", "Marker Name")),
-							column(1),
-							column(5, selectizeInput("xfont.lab12", "Label font", 
+							column(6, textInput("xlab12", "Axis label", "Marker Name")),
+							# column(1),
+							column(6, selectizeInput("xfont.lab12", "Label font", 
                                         choices = c("Regular" = "1", "Bold" = "2", 
 																								    "Italic" = "3", "Bold Italic" = "4"), 
 													              selected = "1"))	
 						),
 						
 						fluidRow(
-							column(5, textInput("xcol.lab12", "Label color", "black")),
-							column(1),
-							column(5, numericInput("xcex.lab12", "Label size", min=0.1, max=5, value = 1, step = 0.1))
+							column(6, textInput("xcol.lab12", "Label color", "black")),
+							# column(1),
+							column(6, numericInput("xcex.lab12", "Label size", min=0.1, max=5, value = 1, step = 0.1))
 						),
 						
 						## X axis annotation options
 						fluidRow(
-							column(5, textInput("xcol.axis12", "Annotation color", "black")),
-							column(1),
-							column(5, numericInput("xcex.axis12", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
+							column(6, textInput("xcol.axis12", "Annotation color", "black")),
+							# column(1),
+							column(6, numericInput("xcex.axis12", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
 						)
 					),
 					
@@ -692,25 +692,25 @@ shinyUI(pageWithSidebar(
 						
 						## Y axis label options
 						fluidRow(
-							column(5, textInput("ylab12", "Axis label", "Value")),
-							column(1),
-							column(5, selectizeInput("yfont.lab12", "Label font", 
+							column(6, textInput("ylab12", "Axis label", "Value")),
+							# column(1),
+							column(6, selectizeInput("yfont.lab12", "Label font", 
                                         choices = c("Regular" = "1", "Bold" = "2", 
 																								    "Italic" = "3", "Bold Italic" = "4"), 
 													              selected = "1"))	
 						),
 						
 						fluidRow(
-							column(5, textInput("ycol.lab12", "Label color", "black")),
-							column(1),
-							column(5, numericInput("ycex.lab12", "Label size", min=0.1, max=5, value = 1, step = 0.1))
+							column(6, textInput("ycol.lab12", "Label color", "black")),
+							# column(1),
+							column(6, numericInput("ycex.lab12", "Label size", min=0.1, max=5, value = 1, step = 0.1))
 						),
 						
 						## Y axis annotation options
 						fluidRow(
-							column(5, textInput("ycol.axis12", "Annotation color", "black")),
-							column(1),
-							column(5, numericInput("ycex.axis12", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
+							column(6, textInput("ycol.axis12", "Annotation color", "black")),
+							# column(1),
+							column(6, numericInput("ycex.axis12", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
 						)
 					)
 				),
@@ -719,24 +719,24 @@ shinyUI(pageWithSidebar(
 				conditionalPanel(condition = "input.selectedGraph == '3'",
 					conditionalPanel(condition = "input.subGrps == 'others'",
 						fluidRow(
-							column(5, textInput("main21", "Graph title", "Distribution Graph")),
-							column(1),
-							column(5, selectizeInput("font.main21", "Title font", 
+							column(6, textInput("main21", "Graph title", "Distribution Graph")),
+							# column(1),
+							column(6, selectizeInput("font.main21", "Title font", 
                                         choices = c("Regular" = "1", "Bold" = "2", 
 									                                  "Italic" = "3", "Bold Italic" = "4"), 
 													              selected = "2"))
 						),
 					
 						fluidRow(
-							column(5, textInput("col.main21", "Title color", "black")),
-							column(1),
-							column(5, numericInput("cex.main21", "Title size", min=0.1, max=5, value = 1.2, step = 0.1))
+							column(6, textInput("col.main21", "Title color", "black")),
+							# column(1),
+							column(6, numericInput("cex.main21", "Title size", min=0.1, max=5, value = 1.2, step = 0.1))
 						),
 					
 						fluidRow(
 							column(6, textInput("lineColD", "Line color (Diseased)", "red")),
-							column(1),
-							column(5, selectizeInput("lineTypeD", "Line type", 
+							# column(1),
+							column(6, selectizeInput("lineTypeD", "Line type", 
 													choices = c("\U2500\U2500\U2500\U2500\U2500\U2500\U2500" = "1",
       																"\U2574 \U2574 \U2574 \U2574 \U2574 \U2574" = "2", 
       																"\U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7" = "3",
@@ -748,8 +748,8 @@ shinyUI(pageWithSidebar(
 						
 						fluidRow(
 							column(6, textInput("lineColH", "Line color (Healthy)", "blue")),
-							column(1),
-							column(5, selectizeInput("lineTypeH", "Line type", 
+							# column(1),
+							column(6, selectizeInput("lineTypeH", "Line type", 
 													choices = c("\U2500\U2500\U2500\U2500\U2500\U2500\U2500" = "1",
       																"\U2574 \U2574 \U2574 \U2574 \U2574 \U2574" = "2", 
       																"\U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7" = "3",
@@ -762,18 +762,18 @@ shinyUI(pageWithSidebar(
 					
 					conditionalPanel(condition = "input.subGrps == 'Legend'",
 						fluidRow(
-							column(5, selectizeInput("legendPos21", "Position", 
+							column(6, selectizeInput("legendPos21", "Position", 
                                         choices = c("Top right" = "topright", "Top left" = "topleft", 
                                                     "Bottom right" = "bottomright", "Bottom left" = "bottomleft", "xy coord." = "xy"),
 														            selected = "topright")),
-							column(1),
-							column(2,
+							# column(1),
+							column(3,
 								conditionalPanel(condition = "input.legendPos21 == 'xy'",
 									numericInput("legendXpos21", "x", value = 0, step = 0.1)
 								)
 							),
-							column(1),
-							column(2,
+							# column(1),
+							column(3,
 								conditionalPanel(condition = "input.legendPos21 == 'xy'",
 									numericInput("legendYpos21", "y", value = 0, step = 0.1)
 								)
@@ -781,15 +781,15 @@ shinyUI(pageWithSidebar(
 						),
 						
 						fluidRow(
-							column(7, textInput("legendNames21", "Leg. labels (comma sep.)", "Diseased,Healthy")),
-							column(1),
-							column(3, numericInput("cex.legend21", "Leg. Size", min = 0.5, max = 5, step = 0.1, value = 1))
+							column(8, textInput("legendNames21", "Legend labels", "Diseased,Healthy")),
+							# column(1),
+							column(4, numericInput("cex.legend21", "Leg. Size", min = 0.5, max = 5, step = 0.1, value = 1))
 						),
 						
 						fluidRow(
-							column(5, textInput("legendTitle21", "Title", "")),
-							column(1),
-							column(5, textInput("col.legendTitle21", "Title color", "black"))
+							column(6, textInput("legendTitle21", "Title", "")),
+							# column(1),
+							column(6, textInput("col.legendTitle21", "Title color", "black"))
 						),
                         
 						checkboxInput("borderless21", label = "Remove borders.", value = FALSE)
@@ -800,25 +800,25 @@ shinyUI(pageWithSidebar(
 						
 						## X axis label options
 						fluidRow(
-							column(5, textInput("xlab21", "Axis label", "Marker Name")),
-							column(1),
-							column(5, selectizeInput("xfont.lab21", "Label font", 
+							column(6, textInput("xlab21", "Axis label", "Marker Name")),
+							# column(1),
+							column(6, selectizeInput("xfont.lab21", "Label font", 
                                         choices = c("Regular" = "1", "Bold" = "2", 
 																								    "Italic" = "3", "Bold Italic" = "4"), 
 													              selected = "1"))	
 						),
 						
 						fluidRow(
-							column(5, textInput("xcol.lab21", "Label color", "black")),
-							column(1),
-							column(5, numericInput("xcex.lab21", "Label size", min=0.1, max=5, value = 1, step = 0.1))
+							column(6, textInput("xcol.lab21", "Label color", "black")),
+							# column(1),
+							column(6, numericInput("xcex.lab21", "Label size", min=0.1, max=5, value = 1, step = 0.1))
 						),
 						
 						## X axis annotation options
 						fluidRow(
-							column(5, textInput("xcol.axis21", "Annotation color", "black")),
-							column(1),
-							column(5, numericInput("xcex.axis21", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
+							column(6, textInput("xcol.axis21", "Annotation color", "black")),
+							# column(1),
+							column(6, numericInput("xcex.axis21", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
 						)
 					),
 					
@@ -827,25 +827,25 @@ shinyUI(pageWithSidebar(
 						
 						## Y axis label options
 						fluidRow(
-							column(5, textInput("ylab21", "Axis label", "Density")),
-							column(1),
-							column(5, selectizeInput("yfont.lab21", "Label font", 
+							column(6, textInput("ylab21", "Axis label", "Density")),
+							# column(1),
+							column(6, selectizeInput("yfont.lab21", "Label font", 
                                         choices = c("Regular" = "1", "Bold" = "2", 
 																								    "Italic" = "3", "Bold Italic" = "4"), 
 													              selected = "1"))	
 						),
 						
 						fluidRow(
-							column(5, textInput("ycol.lab21", "Label color", "black")),
-							column(1),
-							column(5, numericInput("ycex.lab21", "Label size", min=0.1, max=5, value = 1, step = 0.1))
+							column(6, textInput("ycol.lab21", "Label color", "black")),
+							# column(1),
+							column(6, numericInput("ycex.lab21", "Label size", min=0.1, max=5, value = 1, step = 0.1))
 						),
 						
 						## Y axis annotation options
 						fluidRow(
-							column(5, textInput("ycol.axis21", "Annotation color", "black")),
-							column(1),
-							column(5, numericInput("ycex.axis21", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
+							column(6, textInput("ycol.axis21", "Annotation color", "black")),
+							# column(1),
+							column(6, numericInput("ycex.axis21", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
 						)
 					)
 				),
@@ -854,33 +854,33 @@ shinyUI(pageWithSidebar(
 				conditionalPanel(condition = "input.selectedGraph == '4'",
 					conditionalPanel(condition = "input.subGrps == 'others'",
 						fluidRow(
-							column(5, textInput("main22", "Graph title", "Distribution Graph")),
-							column(1),
-							column(5, selectizeInput("font.main22", "Title font", 
+							column(6, textInput("main22", "Graph title", "Distribution Graph")),
+							# column(1),
+							column(6, selectizeInput("font.main22", "Title font", 
                                         choices = c("Regular" = "1", "Bold" = "2", 
 																							      "Italic" = "3", "Bold Italic" = "4"), 
 													              selected = "2"))
 						),
 					
 						fluidRow(
-							column(5, textInput("col.main22", "Title color", "black")),
-							column(1),
-							column(5, numericInput("cex.main22", "Title size", min=0.1, max=5, value = 1.2, step = 0.1))
+							column(6, textInput("col.main22", "Title color", "black")),
+							# column(1),
+							column(6, numericInput("cex.main22", "Title size", min=0.1, max=5, value = 1.2, step = 0.1))
 						),
 						
 						numericInput("jitterAmount", "Amount of jittering", min=0.01, max = 0.5, value = 0.05, step = 0.01),
 						
 						## pch options for Healthy and Diseased subjects
 						fluidRow(
-							column(8, textInput("colPoints", "Point colors (comma sep.)", "black,black")),
-							column(1),
-							column(2, numericInput("pchPoints", "Type", min = 0, max = 25, step = 1, value = 1))
+							column(8, textInput("colPoints", "Point colors", "black,black")),
+							# column(1),
+							column(4, numericInput("pchPoints", "Type", min = 0, max = 25, step = 1, value = 1))
 						),
 						
 						fluidRow(
-							column(3, numericInput("pchSize", "Point size", min = 0.1, max = 5, step = 0.1, value = 1)),
-							column(1),
-							column(7,
+							column(4, numericInput("pchSize", "Point size", min = 0.1, max = 5, step = 0.1, value = 1)),
+							# column(1),
+							column(8,
 								conditionalPanel(condition = "input.pchPoints > 20",
 									textInput("pchFill", "Fill points with color" ,"white,white")
 								)
@@ -893,18 +893,18 @@ shinyUI(pageWithSidebar(
 						
 						## X axis label options
 						fluidRow(
-							column(5, textInput("xlab22", "Axis label", "Disease Status")),
-							column(1),
-							column(5, selectizeInput("xfont.lab22", "Label font", 
+							column(6, textInput("xlab22", "Axis label", "Disease Status")),
+							# column(1),
+							column(6, selectizeInput("xfont.lab22", "Label font", 
                                         choices = c("Regular" = "1", "Bold" = "2", 
 																							      "Italic" = "3", "Bold Italic" = "4"), 
 													              selected = "1"))	
 						),
 						
 						fluidRow(
-							column(5, textInput("xcol.lab22", "Label color", "black")),
-							column(1),
-							column(5, numericInput("xcex.lab22", "Label size", min=0.1, max=5, value = 1, step = 0.1))
+							column(6, textInput("xcol.lab22", "Label color", "black")),
+							# column(1),
+							column(6, numericInput("xcex.lab22", "Label size", min=0.1, max=5, value = 1, step = 0.1))
 						),
 						
 						## X axis annotation options
@@ -913,9 +913,9 @@ shinyUI(pageWithSidebar(
 						),
 						
 						fluidRow(
-							column(5, textInput("xcol.axis22", "Annotation color", "black")),
-							column(1),
-							column(5, numericInput("xcex.axis22", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
+							column(6, textInput("xcol.axis22", "Annotation color", "black")),
+							# column(1),
+							column(6, numericInput("xcex.axis22", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
 						)
 					),
 					
@@ -924,25 +924,25 @@ shinyUI(pageWithSidebar(
 						
 						## Y axis label options
 						fluidRow(
-							column(5, textInput("ylab22", "Axis label", "Marker Name")),
-							column(1),
-							column(5, selectizeInput("yfont.lab22", "Label font", 
+							column(6, textInput("ylab22", "Axis label", "Marker Name")),
+							# column(1),
+							column(6, selectizeInput("yfont.lab22", "Label font", 
                                         choices = c("Regular" = "1", "Bold" = "2", 
 																								    "Italic" = "3", "Bold Italic" = "4"), 
 													              selected = "1"))	
 						),
 						
 						fluidRow(
-							column(5, textInput("ycol.lab22", "Label color", "black")),
-							column(1),
-							column(5, numericInput("ycex.lab22", "Label size", min=0.1, max=5, value = 1, step = 0.1))
+							column(6, textInput("ycol.lab22", "Label color", "black")),
+							# column(1),
+							column(6, numericInput("ycex.lab22", "Label size", min=0.1, max=5, value = 1, step = 0.1))
 						),
 						
 						## Y axis annotation options
 						fluidRow(
-							column(5, textInput("ycol.axis22", "Annotation color", "black")),
-							column(1),
-							column(5, numericInput("ycex.axis22", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
+							column(6, textInput("ycol.axis22", "Annotation color", "black")),
+							# column(1),
+							column(6, numericInput("ycex.axis22", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
 						)
 					)	
 				)
