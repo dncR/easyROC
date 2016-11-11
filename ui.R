@@ -2,7 +2,7 @@ shinyUI(pageWithSidebar(
 
   titlePanel("easyROC: a web-tool for ROC curve analysis (ver. 1.3)"),
   
-	sidebarPanel(width =3,
+	sidebarPanel(width = 3,
 		conditionalPanel(condition="input.tabs1=='Introduction'",
   		HTML('<p><img src="multi.png" width=300 height=300></p>'),
       tags$head(includeScript("google-analytics.js"))
@@ -128,15 +128,15 @@ shinyUI(pageWithSidebar(
 
       conditionalPanel(condition = "input.ROCplotOpts",
         fluidRow(
-          column(5, sliderInput("myheight", "Plot height:", value=400, min=200, max=1200)),
-          column(2),
-          column(5, sliderInput("mywidth", "Plot width:", value=400, min=200, max=1200 ))
+          column(6, sliderInput("myheight", "Plot height:", value=400, min=200, max=1200)),
+          # column(2),
+          column(6, sliderInput("mywidth", "Plot width:", value=400, min=200, max=1200 ))
         ),
           
         HTML('<br>'), 
           
         fluidRow(
-          column(10, selectizeInput("fontfamilyRC", "Font family", 
+          column(12, selectizeInput("fontfamilyRC", "Font family", 
                                             choices = c("Times New Roman" = "serif", 
                                                         "Arial" = "sans", 
                                                         "Corier New" = "mono"),
@@ -152,9 +152,9 @@ shinyUI(pageWithSidebar(
           
         conditionalPanel(condition = "input.subGrpsRC == 'others'",
           fluidRow(
-            column(5, textInput("mainRC", "Graph title", "ROC Curve")),
-            column(1),
-            column(5, selectizeInput("font.mainRC", "Title font", choices = c("Regular" = "1", 
+            column(6, textInput("mainRC", "Graph title", "ROC Curve")),
+            # column(1),
+            column(6, selectizeInput("font.mainRC", "Title font", choices = c("Regular" = "1", 
                                                                               "Bold" = "2", 
                                                                               "Italic" = "3", 
                                                                               "Bold Italic" = "4"), 
@@ -162,15 +162,15 @@ shinyUI(pageWithSidebar(
           ),
                          
           fluidRow(
-            column(5, textInput("col.mainRC", "Title color", "black")),
-            column(1),
-            column(5, numericInput("cex.mainRC", "Title size", min=0.1, max=5, value = 1.2, step = 0.1))
+            column(6, textInput("col.mainRC", "Title color", "black")),
+            # column(1),
+            column(6, numericInput("cex.mainRC", "Title size", min=0.1, max=5, value = 1.2, step = 0.1))
           ),
                          
           fluidRow(
-            column(5, textInput("ROCcolRC", "ROC line color", "black,red")),
-            column(1),
-            column(5, selectizeInput("ROCltyRC", "ROC line type", 
+            column(6, textInput("ROCcolRC", "ROC line color", value = NULL)),
+            # column(1),
+            column(6, selectizeInput("ROCltyRC", "ROC line type", 
                                       choices = c("\U2500\U2500\U2500\U2500\U2500\U2500\U2500" = "1",
                                                   "\U2574 \U2574 \U2574 \U2574 \U2574 \U2574" = "2", 
                                                   "\U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7" = "3",
@@ -188,24 +188,24 @@ shinyUI(pageWithSidebar(
                          
           ## X axis label options
           fluidRow(
-            column(5, textInput("xlabRC", "Axis label", "1-Specificity")),
-            column(1),
-            column(5, selectizeInput("xfont.labRC", "Label font", choices = c("Regular" = "1", "Bold" = "2", 
+            column(6, textInput("xlabRC", "Axis label", "1-Specificity")),
+            # column(1),
+            column(6, selectizeInput("xfont.labRC", "Label font", choices = c("Regular" = "1", "Bold" = "2", 
                                                                                "Italic" = "3", "Bold Italic" = "4"), 
                                                                   selected = "1"))    
           ),
          
           fluidRow(
-            column(5, textInput("xcol.labRC", "Label color", "black")),
-            column(1),
-            column(5, numericInput("xcex.labRC", "Label size", min = 0.1, max = 5, value = 1, step = 0.1))
+            column(6, textInput("xcol.labRC", "Label color", "black")),
+            # column(1),
+            column(6, numericInput("xcex.labRC", "Label size", min = 0.1, max = 5, value = 1, step = 0.1))
           ),
          
          ## X axis annotation options
           fluidRow(
-            column(5, textInput("xcol.axisRC", "Annotation color", "black")),
-            column(1),
-            column(5, numericInput("xcex.axisRC", "Annotation size", min = 0.1, max = 5, value = 1, step = 0.1))
+            column(6, textInput("xcol.axisRC", "Annotation color", "black")),
+            # column(1),
+            column(6, numericInput("xcex.axisRC", "Annotation size", min = 0.1, max = 5, value = 1, step = 0.1))
           )
          
          #fluidRow(
@@ -220,24 +220,24 @@ shinyUI(pageWithSidebar(
                          
          ## Y axis label options
           fluidRow(
-            column(5, textInput("ylabRC", "Axis label", "Sensitivity")),
-            column(1),
-            column(5, selectizeInput("yfont.labRC", "Label font", choices = c("Regular" = "1", "Bold" = "2", 
+            column(6, textInput("ylabRC", "Axis label", "Sensitivity")),
+            # column(1),
+            column(6, selectizeInput("yfont.labRC", "Label font", choices = c("Regular" = "1", "Bold" = "2", 
                                                                                "Italic" = "3", "Bold Italic" = "4"), 
                                                                   selected = "1"))	
           ),
                          
           fluidRow(
-            column(5, textInput("ycol.labRC", "Label color", "black")),
-            column(1),
-            column(5, numericInput("ycex.labRC", "Label size", min=0.1, max=5, value = 1, step = 0.1))
+            column(6, textInput("ycol.labRC", "Label color", "black")),
+            # column(1),
+            column(6, numericInput("ycex.labRC", "Label size", min=0.1, max=5, value = 1, step = 0.1))
           ),
                          
           ## Y axis annotation options
           fluidRow(
-            column(5, textInput("ycol.axisRC", "Annotation color", "black")),
-            column(1),
-            column(5, numericInput("ycex.axisRC", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
+            column(6, textInput("ycol.axisRC", "Annotation color", "black")),
+            # column(1),
+            column(6, numericInput("ycex.axisRC", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
           )
         )
       ),
@@ -246,9 +246,9 @@ shinyUI(pageWithSidebar(
         checkboxInput(inputId = "partialAUC", label = "Partial AUC", value = TRUE),
         conditionalPanel(condition = "input.partialAUC",
           fluidRow(
-            column(5, numericInput("pointA", "Value 1", min=0, max=1, value = 0.5, step = 0.1)),
-            column(1),
-            column(5, numericInput("pointB", "Value 2", min=0, max=1, value = 1, step = 0.1))
+            column(6, numericInput("pointA", "Value 1", min=0, max=1, value = 0.5, step = 0.1)),
+            # column(1),
+            column(6, numericInput("pointB", "Value 2", min=0, max=1, value = 1, step = 0.1))
           ),
           selectizeInput("sensSpec", "Select a measure", choices = c("Sensitivity", "Specificity"), multiple = FALSE, selected = "Sensitivity")
         )   

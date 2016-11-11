@@ -463,22 +463,26 @@ shinyServer(function(input, output, session) {
         filename <- function(){paste('ROCplot.pdf')},
         content <- function(file){
             pdf(file, height = input$myheightCutoff/96, width = input$mywidthCutoff/96)
-            #pdf(file, height = 5.9, width = 5.9)
+          
             if(!is.null(input$markerInput) & input$tabs1 == "ROC curve"){
-              # results <- mROC(data=dataM(), statusName=input$statusVar, markerName=input$markerInput, event=input$valueStatus, diseaseHigher=input$lowhigh)$plotdata
               results <- ROCstats()$plotdata
-              if (input$ROCplotOpts) opts = grphPrmtrsRC()
-              else if (!input$ROCplotOpts) opts = grphPrmtrsDefaultRC()
+              if (input$ROCplotOpts){
+                opts = grphPrmtrsRC()
+              } else if (!input$ROCplotOpts){
+                opts = grphPrmtrsDefaultRC()
+              }
               
-              par(mar=(par()$mar - c(0,0,2,0)), family = opts$fontfamilyRC)
+              par(family = opts$fontfamilyRC)
               
               ## ROC Curve
-              #ROCplot(results, main = opts$mainRC, xlab = opts$xlabRC, ylab = opts$ylabRC,)
-              if (input$ROCplotOpts) legNms = opts$legend.namesRC
-              else legNms = NULL
+              if (input$ROCplotOpts){
+                legNms = opts$legend.namesRC
+              } else {
+                legNms = NULL
+              }
               
               ROCplot(results, xlab = "", ylab = "", axes = FALSE, main = "", legend=TRUE,
-                      legendNames = legNms)
+                      legendNames = legNms, col = opts$ROCcolRC, lty = as.numeric(opts$ROCltyRC))
               box()
               axis(1, col.axis = opts$xcol.axisRC, cex.axis = opts$xcex.axisRC)
               axis(2, col.axis = opts$ycol.axisRC, cex.axis = opts$ycex.axisRC)
@@ -683,7 +687,7 @@ shinyServer(function(input, output, session) {
 			  opts = grphPrmtrsDefaultRC()
 			}
             
-			par(mar=(par()$mar - c(0,0,2,0)), family = opts$fontfamilyRC)
+			par(family = opts$fontfamilyRC)
             
 			## ROC Curve
       if (input$ROCplotOpts){
@@ -692,8 +696,9 @@ shinyServer(function(input, output, session) {
         legNms = NULL
       }
             
-      ROCplot(results, xlab = "", ylab = "", axes = FALSE, main = "", legend=TRUE,
-              legendNames = legNms)
+			ROCplot(results, xlab = "", ylab = "", axes = FALSE, main = "", legend=TRUE,
+			        legendNames = legNms, col = opts$ROCcolRC, lty = as.numeric(opts$ROCltyRC))
+			
 			box()
 			axis(1, col.axis = opts$xcol.axisRC, cex.axis = opts$xcex.axisRC)
 			axis(2, col.axis = opts$ycol.axisRC, cex.axis = opts$ycex.axisRC)
@@ -769,8 +774,8 @@ shinyServer(function(input, output, session) {
         
         opts$legend.namesRC = strsplit(input$legend.namesRC, split = ",")[[1]]
         
-        #opts$ROCcolRC = 1
-        #opts$ROCltyRC = 1
+        opts$ROCcolRC = 1:length(input$markerInput)
+        opts$ROCltyRC = 1
         opts$xlabRC = "1-Specificity"
         opts$xfont.labRC = 1
         opts$xcol.labRC = "black"
@@ -791,248 +796,247 @@ shinyServer(function(input, output, session) {
     })
     
     grphPrmtrsRC <- reactive({
-        opts = list()
-        opts$fontfamilyRC = input$fontfamilyRC
-        
-        opts$mainRC = input$mainRC
-        opts$font.mainRC = input$font.mainRC
-        opts$cex.mainRC = input$cex.mainRC
-        opts$col.mainRC = input$col.mainRC
-        
-        opts$legend.namesRC = strsplit(input$legend.namesRC, split = ",")[[1]]
-        
-        #opts$ROCcolRC = 1
-        #opts$ROCltyRC = 1
-        opts$xlabRC = input$xlabRC
-        opts$xfont.labRC = input$xfont.labRC
-        opts$xcol.labRC = input$xcol.labRC
-        opts$xcex.labRC = input$xcex.labRC
-        
-        opts$xcol.axisRC = input$xcol.axisRC
-        opts$xcex.axisRC = input$xcex.axisRC
-        
-        opts$ylabRC = input$ylabRC
-        opts$yfont.labRC = input$yfont.labRC
-        
-        opts$ycol.labRC = input$ycol.labRC
-        opts$ycex.labRC = input$ycex.labRC
-        opts$ycol.axisRC = input$ycol.axisRC
-        opts$ycex.axisRC = input$ycex.axisRC
-        
-        return(opts)
+      opts = list()
+      opts$fontfamilyRC = input$fontfamilyRC
+      
+      opts$mainRC = input$mainRC
+      opts$font.mainRC = input$font.mainRC
+      opts$cex.mainRC = input$cex.mainRC
+      opts$col.mainRC = input$col.mainRC
+      
+      opts$legend.namesRC = strsplit(input$legend.namesRC, split = ",")[[1]]
+      
+      opts$ROCcolRC = trimws(strsplit(input$ROCcolRC, ",")[[1]], "both")
+      opts$ROCltyRC = input$ROCltyRC
+      opts$xlabRC = input$xlabRC
+      opts$xfont.labRC = input$xfont.labRC
+      opts$xcol.labRC = input$xcol.labRC
+      opts$xcex.labRC = input$xcex.labRC
+      
+      opts$xcol.axisRC = input$xcol.axisRC
+      opts$xcex.axisRC = input$xcex.axisRC
+      
+      opts$ylabRC = input$ylabRC
+      opts$yfont.labRC = input$yfont.labRC
+      
+      opts$ycol.labRC = input$ycol.labRC
+      opts$ycex.labRC = input$ycex.labRC
+      opts$ycol.axisRC = input$ycol.axisRC
+      opts$ycex.axisRC = input$ycex.axisRC
+      
+      return(opts)
     })
     
     grphPrmtrsDefault <- reactive({
-		opts = list()
-		opts$fontfamily = "sans"
-		
-		opts$main11 = "ROC Curve"
-		opts$main12 = "Sens. & Spec. Curves"
-		opts$main21 = paste("Distribution of ", input$cutoffMarker, sep="")
-		opts$main22 = paste("Distribution of ", input$cutoffMarker, sep="")
-		
-		opts$font.main11 = opts$font.main12 = opts$font.main21 = opts$font.main22 = 2
-		opts$cex.main11 = opts$cex.main12 = opts$cex.main21 = opts$cex.main22 = 1.2
-		opts$col.main11 = opts$col.main12 = opts$col.main21 = opts$col.main22 = "black"
-		
-		opts$ROCcol11 = "black"  	# ROC line color
-		opts$ROClty11 = 1			# ROC line type
-		
-		opts$sensCol = "red" 		# Line color for Sensitivity
-		opts$specCol = "blue"		# Line color for Specificity
-		opts$sensType = opts$specType = 1   # Line type for Sensitivity and Specificity
-		
-		opts$lineColD = "red"
-		opts$lineColH = "blue"
-		opts$lineTypeD = opts$lineTypeH = 1
-		
-		opts$xlab11 = "1-Specificity"
-		opts$xlab12 = opts$xlab21 = input$cutoffMarker
-		opts$xlab22 = "Disease Status"
-		
-		opts$xfont.lab11 = opts$xfont.lab12 = opts$xfont.lab21 = opts$xfont.lab22 = 1
-		opts$xcol.lab11 = opts$xcol.lab12 = opts$xcol.lab21 = opts$xcol.lab22 = "black"
-		
-		opts$xcex.lab11 = opts$xcex.lab12 = opts$xcex.lab21 = opts$xcex.lab22 = 1
-		opts$xcol.axis11 = opts$xcol.axis12 = opts$xcol.axis21 = opts$xcol.axis22 = "black"
-		opts$xcex.axis11 = opts$xcex.axis12 = opts$xcex.axis21 = opts$xcex.axis22 = 1
-		
-		opts$ylab11 = "Sensitivity"
-		opts$ylab12 = ""
-		opts$ylab22 = input$cutoffMarker
-		opts$ylab21 = "Density"
-		
-		opts$yfont.lab11 = opts$yfont.lab12 = opts$yfont.lab21 = opts$yfont.lab22 = 1
-		opts$ycol.lab11 = opts$ycol.lab12 = opts$ycol.lab21 = opts$ycol.lab22 = "black"
-		
-		opts$ycex.lab11 = opts$ycex.lab12 = opts$ycex.lab21 = opts$ycex.lab22 = 1
-		opts$ycol.axis11 = opts$ycol.axis12 = opts$ycol.axis21 = opts$ycol.axis22 = "black"
-		opts$ycex.axis11 = opts$ycex.axis12 = opts$ycex.axis21 = opts$ycex.axis22 = 1
-		
-		opts$legendPos12 = "topright"
-		opts$legendXpos12 = opts$legendYpos12 = 1
-		opts$legendNames12 = "Sens.,Spec."
-		opts$cex.legend12 = 1
-		opts$legendTitle12 = NULL
-		opts$font.legendTitle12 = 2
-		opts$col.legendTitle12 = "black"
-        opts$borderless12 = FALSE
-        
-		opts$legendPos21 = "topright"
-		opts$legendXpos21 = opts$legendYpos21 = 1
-		opts$legendNames21 = "Diseased,Healthy"
-		opts$cex.legend21 = 1
-		opts$legendTitle21 = NULL
-		opts$font.legendTitle21 = 2
-		opts$col.legendTitle21 = "black"
-		opts$borderless21 = FALSE
-        
-		opts$colPoints = "black,black"
-		opts$pchFill = "white,white"
-		opts$xlabels22 = "Healthy,Diseased"
-		opts$pchPoints = 1
-		opts$pchSize = 1
-		opts$jitterAmount = 0.05
-		
-		return(opts)
+  		opts = list()
+  		opts$fontfamily = "sans"
+  		
+  		opts$main11 = "ROC Curve"
+  		opts$main12 = "Sens. & Spec. Curves"
+  		opts$main21 = paste("Distribution of ", input$cutoffMarker, sep="")
+  		opts$main22 = paste("Distribution of ", input$cutoffMarker, sep="")
+  		
+  		opts$font.main11 = opts$font.main12 = opts$font.main21 = opts$font.main22 = 2
+  		opts$cex.main11 = opts$cex.main12 = opts$cex.main21 = opts$cex.main22 = 1.2
+  		opts$col.main11 = opts$col.main12 = opts$col.main21 = opts$col.main22 = "black"
+  		
+  		opts$ROCcol11 = "black"  	# ROC line color
+  		opts$ROClty11 = 1			# ROC line type
+  		
+  		opts$sensCol = "red" 		# Line color for Sensitivity
+  		opts$specCol = "blue"		# Line color for Specificity
+  		opts$sensType = opts$specType = 1   # Line type for Sensitivity and Specificity
+  		
+  		opts$lineColD = "red"
+  		opts$lineColH = "blue"
+  		opts$lineTypeD = opts$lineTypeH = 1
+  		
+  		opts$xlab11 = "1-Specificity"
+  		opts$xlab12 = opts$xlab21 = input$cutoffMarker
+  		opts$xlab22 = "Disease Status"
+  		
+  		opts$xfont.lab11 = opts$xfont.lab12 = opts$xfont.lab21 = opts$xfont.lab22 = 1
+  		opts$xcol.lab11 = opts$xcol.lab12 = opts$xcol.lab21 = opts$xcol.lab22 = "black"
+  		
+  		opts$xcex.lab11 = opts$xcex.lab12 = opts$xcex.lab21 = opts$xcex.lab22 = 1
+  		opts$xcol.axis11 = opts$xcol.axis12 = opts$xcol.axis21 = opts$xcol.axis22 = "black"
+  		opts$xcex.axis11 = opts$xcex.axis12 = opts$xcex.axis21 = opts$xcex.axis22 = 1
+  		
+  		opts$ylab11 = "Sensitivity"
+  		opts$ylab12 = ""
+  		opts$ylab22 = input$cutoffMarker
+  		opts$ylab21 = "Density"
+  		
+  		opts$yfont.lab11 = opts$yfont.lab12 = opts$yfont.lab21 = opts$yfont.lab22 = 1
+  		opts$ycol.lab11 = opts$ycol.lab12 = opts$ycol.lab21 = opts$ycol.lab22 = "black"
+  		
+  		opts$ycex.lab11 = opts$ycex.lab12 = opts$ycex.lab21 = opts$ycex.lab22 = 1
+  		opts$ycol.axis11 = opts$ycol.axis12 = opts$ycol.axis21 = opts$ycol.axis22 = "black"
+  		opts$ycex.axis11 = opts$ycex.axis12 = opts$ycex.axis21 = opts$ycex.axis22 = 1
+  		
+  		opts$legendPos12 = "topright"
+  		opts$legendXpos12 = opts$legendYpos12 = 1
+  		opts$legendNames12 = "Sens.,Spec."
+  		opts$cex.legend12 = 1
+  		opts$legendTitle12 = NULL
+  		opts$font.legendTitle12 = 2
+  		opts$col.legendTitle12 = "black"
+      opts$borderless12 = FALSE
+          
+  		opts$legendPos21 = "topright"
+  		opts$legendXpos21 = opts$legendYpos21 = 1
+  		opts$legendNames21 = "Diseased,Healthy"
+  		opts$cex.legend21 = 1
+  		opts$legendTitle21 = NULL
+  		opts$font.legendTitle21 = 2
+  		opts$col.legendTitle21 = "black"
+  		opts$borderless21 = FALSE
+          
+  		opts$colPoints = "black,black"
+  		opts$pchFill = "white,white"
+  		opts$xlabels22 = "Healthy,Diseased"
+  		opts$pchPoints = 1
+  		opts$pchSize = 1
+  		opts$jitterAmount = 0.05
+  		
+  		return(opts)
     })
     
     grphPrmtrs <- reactive({
 		
-		opts = list()
-		opts$fontfamily = input$fontfamily
-		opts$main11 = input$main11
-		opts$main12 = input$main12
-		opts$main21 = input$main21
-		opts$main22 = input$main22
-		
-		opts$font.main11 = as.numeric(input$font.main11)
-		opts$font.main12 = as.numeric(input$font.main12)
-		opts$font.main21 = as.numeric(input$font.main21)
-		opts$font.main22 = as.numeric(input$font.main22)
-		
-		opts$cex.main11 = input$cex.main11
-		opts$cex.main12 = input$cex.main12
-		opts$cex.main21 = input$cex.main21
-		opts$cex.main22 = input$cex.main22
-		
-		opts$col.main11 = input$col.main11
-		opts$col.main12 = input$col.main12
-		opts$col.main21 = input$col.main21
-		opts$col.main22 = input$col.main22
-		
-		opts$ROCcol11 = input$ROCcol11
-		opts$ROClty11 = as.numeric(input$ROClty11)
-		
-		opts$sensCol = input$sensCol
-		opts$specCol = input$specCol
-		opts$sensType = as.numeric(input$sensType)
-		opts$specType = as.numeric(input$specType)
-		
-		opts$lineColD = input$lineColD
-		opts$lineColH = input$lineColH
-		opts$lineTypeD = as.numeric(input$lineTypeD)
-		opts$lineTypeH = as.numeric(input$lineTypeH)
-		
-		opts$xlab11 = input$xlab11
-		opts$xlab12 = input$xlab12
-		opts$xlab21 = input$xlab21
-		opts$xlab22 = input$xlab22
-		
-		opts$xfont.lab11 = as.numeric(input$xfont.lab11)
-		opts$xfont.lab12 = as.numeric(input$xfont.lab12)
-		opts$xfont.lab21 = as.numeric(input$xfont.lab21)
-		opts$xfont.lab22 = as.numeric(input$xfont.lab22)
-						
-		opts$xcol.lab11 = input$xcol.lab11
-		opts$xcol.lab12 = input$xcol.lab12
-		opts$xcol.lab21 = input$xcol.lab21
-		opts$xcol.lab22 = input$xcol.lab22
-		
-		opts$xcex.lab11 = input$xcex.lab11
-		opts$xcex.lab12 = input$xcex.lab12
-		opts$xcex.lab21 = input$xcex.lab21
-		opts$xcex.lab22 = input$xcex.lab22
-		
-		opts$xcol.axis11 = input$xcol.axis11
-		opts$xcol.axis12 = input$xcol.axis12
-		opts$xcol.axis21 = input$xcol.axis21
-		opts$xcol.axis22 = input$xcol.axis22
-		
-		opts$xcex.axis11 = input$xcex.axis11
-		opts$xcex.axis12 = input$xcex.axis12
-		opts$xcex.axis21 = input$xcex.axis21
-		opts$xcex.axis22 = input$xcex.axis22
-
-		opts$ylab11 = input$ylab11
-		opts$ylab12 = input$ylab12
-		opts$ylab22 = input$ylab22
-		opts$ylab21 = input$ylab21
-		
-		opts$yfont.lab11 = as.numeric(input$yfont.lab11)
-		opts$yfont.lab12 = as.numeric(input$yfont.lab12)
-		opts$yfont.lab21 = as.numeric(input$yfont.lab21)
-		opts$yfont.lab22 = as.numeric(input$yfont.lab22)
-		
-		opts$ycol.lab11 = input$ycol.lab11
-		opts$ycol.lab12 = input$ycol.lab12
-		opts$ycol.lab21 = input$ycol.lab21
-		opts$ycol.lab22 = input$ycol.lab22
-		
-		opts$ycex.lab11 = input$ycex.lab11
-		opts$ycex.lab12 = input$ycex.lab12
-		opts$ycex.lab21 = input$ycex.lab21
-		opts$ycex.lab22 = input$ycex.lab22
-		
-		opts$ycol.axis11 = input$ycol.axis11
-		opts$ycol.axis12 = input$ycol.axis12
-		opts$ycol.axis21 = input$ycol.axis21
-		opts$ycol.axis22 = input$ycol.axis22
-		
-		opts$ycex.axis11 = input$ycex.axis11
-		opts$ycex.axis12 = input$ycex.axis12
-		opts$ycex.axis21 = input$ycex.axis21
-		opts$ycex.axis22 = input$ycex.axis22
-		
-		opts$legendPos12 = input$legendPos12
-		opts$legendXpos12 = input$legendXpos12
-		opts$legendYpos12 = input$legendYpos12
-		opts$legendNames12 = input$legendNames12
-		opts$cex.legend12 = input$cex.legend12
-		opts$borderless12 = input$borderless12
-		
-		opts$legendTitle12 = { 
-			if (is.null(input$legendTitle12) | input$legendTitle12 == "") NULL
-			else input$legendTitle12
-		}
-		
-		opts$font.legendTitle12 = as.numeric(input$font.legendTitle12)
-		opts$col.legendTitle12 = input$col.legendTitle12
-		
-		opts$legendPos21 = input$legendPos21
-		opts$legendXpos21 = input$legendXpos21
-		opts$legendYpos21 = input$legendYpos21
-		opts$legendNames21 = input$legendNames21
-		opts$cex.legend21 = input$cex.legend21
-		opts$borderless21 = input$borderless21
-        
-		opts$legendTitle21 = {
-			if (is.null(input$legendTitle21) | input$legendTitle21 == "") NULL
-			else input$legendTitle21
-		}
-		
-		opts$font.legendTitle21 = as.numeric(input$font.legendTitle21)
-		opts$col.legendTitle21 = input$col.legendTitle21
-		
-		opts$colPoints = input$colPoints
-		opts$pchFill = input$pchFill
-		opts$xlabels22 = input$xlabels22
-		opts$pchPoints = input$pchPoints
-		opts$pchSize = input$pchSize
-		opts$jitterAmount = input$jitterAmount
-		
-		return(opts)
-		
+  		opts = list()
+  		opts$fontfamily = input$fontfamily
+  		opts$main11 = input$main11
+  		opts$main12 = input$main12
+  		opts$main21 = input$main21
+  		opts$main22 = input$main22
+  		
+  		opts$font.main11 = as.numeric(input$font.main11)
+  		opts$font.main12 = as.numeric(input$font.main12)
+  		opts$font.main21 = as.numeric(input$font.main21)
+  		opts$font.main22 = as.numeric(input$font.main22)
+  		
+  		opts$cex.main11 = input$cex.main11
+  		opts$cex.main12 = input$cex.main12
+  		opts$cex.main21 = input$cex.main21
+  		opts$cex.main22 = input$cex.main22
+  		
+  		opts$col.main11 = input$col.main11
+  		opts$col.main12 = input$col.main12
+  		opts$col.main21 = input$col.main21
+  		opts$col.main22 = input$col.main22
+  		
+  		opts$ROCcol11 = input$ROCcol11
+  		opts$ROClty11 = as.numeric(input$ROClty11)
+  		
+  		opts$sensCol = input$sensCol
+  		opts$specCol = input$specCol
+  		opts$sensType = as.numeric(input$sensType)
+  		opts$specType = as.numeric(input$specType)
+  		
+  		opts$lineColD = input$lineColD
+  		opts$lineColH = input$lineColH
+  		opts$lineTypeD = as.numeric(input$lineTypeD)
+  		opts$lineTypeH = as.numeric(input$lineTypeH)
+  		
+  		opts$xlab11 = input$xlab11
+  		opts$xlab12 = input$xlab12
+  		opts$xlab21 = input$xlab21
+  		opts$xlab22 = input$xlab22
+  		
+  		opts$xfont.lab11 = as.numeric(input$xfont.lab11)
+  		opts$xfont.lab12 = as.numeric(input$xfont.lab12)
+  		opts$xfont.lab21 = as.numeric(input$xfont.lab21)
+  		opts$xfont.lab22 = as.numeric(input$xfont.lab22)
+  						
+  		opts$xcol.lab11 = input$xcol.lab11
+  		opts$xcol.lab12 = input$xcol.lab12
+  		opts$xcol.lab21 = input$xcol.lab21
+  		opts$xcol.lab22 = input$xcol.lab22
+  		
+  		opts$xcex.lab11 = input$xcex.lab11
+  		opts$xcex.lab12 = input$xcex.lab12
+  		opts$xcex.lab21 = input$xcex.lab21
+  		opts$xcex.lab22 = input$xcex.lab22
+  		
+  		opts$xcol.axis11 = input$xcol.axis11
+  		opts$xcol.axis12 = input$xcol.axis12
+  		opts$xcol.axis21 = input$xcol.axis21
+  		opts$xcol.axis22 = input$xcol.axis22
+  		
+  		opts$xcex.axis11 = input$xcex.axis11
+  		opts$xcex.axis12 = input$xcex.axis12
+  		opts$xcex.axis21 = input$xcex.axis21
+  		opts$xcex.axis22 = input$xcex.axis22
+  
+  		opts$ylab11 = input$ylab11
+  		opts$ylab12 = input$ylab12
+  		opts$ylab22 = input$ylab22
+  		opts$ylab21 = input$ylab21
+  		
+  		opts$yfont.lab11 = as.numeric(input$yfont.lab11)
+  		opts$yfont.lab12 = as.numeric(input$yfont.lab12)
+  		opts$yfont.lab21 = as.numeric(input$yfont.lab21)
+  		opts$yfont.lab22 = as.numeric(input$yfont.lab22)
+  		
+  		opts$ycol.lab11 = input$ycol.lab11
+  		opts$ycol.lab12 = input$ycol.lab12
+  		opts$ycol.lab21 = input$ycol.lab21
+  		opts$ycol.lab22 = input$ycol.lab22
+  		
+  		opts$ycex.lab11 = input$ycex.lab11
+  		opts$ycex.lab12 = input$ycex.lab12
+  		opts$ycex.lab21 = input$ycex.lab21
+  		opts$ycex.lab22 = input$ycex.lab22
+  		
+  		opts$ycol.axis11 = input$ycol.axis11
+  		opts$ycol.axis12 = input$ycol.axis12
+  		opts$ycol.axis21 = input$ycol.axis21
+  		opts$ycol.axis22 = input$ycol.axis22
+  		
+  		opts$ycex.axis11 = input$ycex.axis11
+  		opts$ycex.axis12 = input$ycex.axis12
+  		opts$ycex.axis21 = input$ycex.axis21
+  		opts$ycex.axis22 = input$ycex.axis22
+  		
+  		opts$legendPos12 = input$legendPos12
+  		opts$legendXpos12 = input$legendXpos12
+  		opts$legendYpos12 = input$legendYpos12
+  		opts$legendNames12 = input$legendNames12
+  		opts$cex.legend12 = input$cex.legend12
+  		opts$borderless12 = input$borderless12
+  		
+  		opts$legendTitle12 = { 
+  			if (is.null(input$legendTitle12) | input$legendTitle12 == "") NULL
+  			else input$legendTitle12
+  		}
+  		
+  		opts$font.legendTitle12 = as.numeric(input$font.legendTitle12)
+  		opts$col.legendTitle12 = input$col.legendTitle12
+  		
+  		opts$legendPos21 = input$legendPos21
+  		opts$legendXpos21 = input$legendXpos21
+  		opts$legendYpos21 = input$legendYpos21
+  		opts$legendNames21 = input$legendNames21
+  		opts$cex.legend21 = input$cex.legend21
+  		opts$borderless21 = input$borderless21
+          
+  		opts$legendTitle21 = {
+  			if (is.null(input$legendTitle21) | input$legendTitle21 == "") NULL
+  			else input$legendTitle21
+  		}
+  		
+  		opts$font.legendTitle21 = as.numeric(input$font.legendTitle21)
+  		opts$col.legendTitle21 = input$col.legendTitle21
+  		
+  		opts$colPoints = input$colPoints
+  		opts$pchFill = input$pchFill
+  		opts$xlabels22 = input$xlabels22
+  		opts$pchPoints = input$pchPoints
+  		opts$pchSize = input$pchSize
+  		opts$jitterAmount = input$jitterAmount
+  		
+  		return(opts)
     })
     
   
