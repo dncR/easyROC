@@ -1,0 +1,2 @@
+1. ROC Curve Tab > Plot Options'a "Legend" ile ilgili düzenleme özelliği eklenecek.
+2. ROC Curve Tab > Plot Options > x-y axis annotation size düzgün çalışmıyor.
