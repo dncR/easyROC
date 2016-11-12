@@ -1,6 +1,6 @@
 shinyUI(pageWithSidebar(
 
-  titlePanel("easyROC: a web-tool for ROC curve analysis (ver. 1.4 beta)"),
+  titlePanel("easyROC: a web-tool for ROC curve analysis (ver. 1.3)"),
   
 	sidebarPanel(width = 3,
 		conditionalPanel(condition="input.tabs1=='Introduction'",
