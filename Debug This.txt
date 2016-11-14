@@ -1,2 +1,11 @@
 1. ROC Curve Tab > Plot Options'a "Legend" ile ilgili düzenleme özelliği eklenecek.
 2. ROC Curve Tab > Plot Options > x-y axis annotation size düzgün çalışmıyor.
+
+
+## Issue:
+Warning in checkDT9(options) :
+  shiny (>= 0.10.2) has upgraded DataTables from 1.9.4 to 1.10.2, and DataTables 1.10.x uses different parameter names with 1.9.x. Please follow the upgrade guide https://datatables.net/upgrade/1.10-convert to change your DataTables parameter names:
+
+* iDisplayLength
+
+## Read Me.md içerisindeki bölüm değiştirilecek. Shiny ver 0.10.1 yükleme zorunlulupu md dosyasında devam ediyor. Artık shiny yeni sürümlerini kullanabiliyoruz.
