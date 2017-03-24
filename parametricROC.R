@@ -1,4 +1,31 @@
-
+#' Fitting the parametric ROC curves
+#' 
+#' This function is used to fit parametric ROC curve 
+#' 
+#' @details 
+#' 
+#' @note 
+#' 
+#' @param data a data.frame or matrix
+#' @param marker a string indicating the name of diagnostic test, marker or biomarker
+#' @param status a string indicating the name of status variable.
+#' @param event a string or numeric value. This is the value defining the cases or events.
+#' @param ns 
+#' @param means
+#' @param sds
+#' @param returnROCdata a logical. If TRUE, ROC data and coordinates (i.e, FPR and TPR values) are returned.
+#' @param higherValuesPositives
+#' @param plot
+#' @param exact
+#' @param confidence.level
+#' @param ...  
+#' 
+#' @author Dincer Goksuluk
+#' 
+#' @examples <examples here>
+#' @rdname parametricROC
+#' @aliases parametricROC
+#' @export
 parametricROC <- function(data = NULL, marker = NULL, status = NULL, event = NULL,
                           ns = NULL, means = NULL, sds = NULL, returnROCdata = TRUE,
                           higherValuesPositives = TRUE, plot = FALSE, exact = FALSE,
