@@ -10,6 +10,11 @@ rocdata <- function(status, marker, event, higherValuesDiseased, alpha=0.05,
   #         roc = data.frame with x and y co-ordinates of plot
   #         stats = data.frame containing: area under ROC curve, p value, upper and lower 95% confidence interval
   
+  ## Complete cases.
+  completeIdx <- complete.cases(status, marker)
+  status <- status[completeIdx]
+  marker <- marker[completeIdx]
+  
   se.method = match.arg(se.method)
   ci.method = match.arg(ci.method)
   

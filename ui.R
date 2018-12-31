@@ -1,6 +1,6 @@
 shinyUI(pageWithSidebar(
 
-  titlePanel("easyROC: a web-tool for ROC curve analysis (ver. 1.3)"),
+  titlePanel("easyROC: a web-tool for ROC curve analysis (ver. 1.3.1)"),
   
 	sidebarPanel(width = 3,
 		conditionalPanel(condition="input.tabs1=='Introduction'",
@@ -1094,6 +1094,10 @@ shinyUI(pageWithSidebar(
         HTML('<br>'),
 
         h4("News"),
+        HTML('<br>'),
+        HTML('<p><b> Version 1.3.1 (July 25, 2016)</b><p>'),
+		HTML('<p> (1) Minor fixes: Added feature to keep only pairwise complete data. Missing cases are now removed before ROC curve analysis which causes to null return in ROC statistics.<p>'),
+
         HTML('<br>'),
         HTML('<p><b> Version 1.3 (July 25, 2016)</b><p>'),
         HTML('<p> (1) Support for prametric ROC curve approximation.<p>'),
