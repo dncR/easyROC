@@ -30,6 +30,7 @@ Second, install following R packages:
     install_version("shiny", version = "0.10.1", repos = "http://cran.us.r-project.org")
     install.packages("OptimalCutpoints")
     install.packages("plyr")
+    install.packages("dplyr")
     install.packages("pROC")
 
 Finally, run following code in R console:
