@@ -29,7 +29,7 @@ RUN R -e "devtools::install_version('shiny', version = '0.10.1', repos = 'http:/
 RUN R -e "source('installDependencies.R')"
 
 # copy the app to the image
-COPY /app/. /srv/shiny-server/
+COPY /app/. /srv/shiny-server/easyROC
 
 # select port
 EXPOSE 3838
