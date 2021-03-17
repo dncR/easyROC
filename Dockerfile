@@ -1,6 +1,10 @@
 # get shiny serves plus tidyverse packages image
 FROM rocker/shiny:4.0.4
 
+# Working directory within container.
+WORKDIR /home
+# COPY . /home/shinyapps
+
 # system libraries of general use
 RUN apt-get update && apt-get install -y \
     sudo \
@@ -11,7 +15,7 @@ RUN apt-get update && apt-get install -y \
     libxt-dev \
     libssl-dev \
     libssh2-1-dev 
-  
+
 # install R packages required 
 # (change it dependeing on the packages you need)
 # Below packages are mandatory for shiny installation.
@@ -23,10 +27,7 @@ RUN R -e "install.packages('devtools')"
 RUN R -e "source('installDependencies.R')"
 
 # copy the app to the image
-COPY project.Rproj /srv/shiny-server/
-COPY app.R /srv/shiny-server/
-COPY R /srv/shiny-server/R
-COPY data /srv/shiny-server/data
+COPY /app/. /srv/shiny-server/
 
 # select port
 EXPOSE 3838
