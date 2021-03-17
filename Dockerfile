@@ -19,9 +19,11 @@ RUN apt-get update && apt-get install -y \
 # install R packages required 
 # (change it dependeing on the packages you need)
 # Below packages are mandatory for shiny installation.
-RUN R -e "install.packages('shiny')"
-RUN R -e "install.packages('shinydashboard')"
 RUN R -e "install.packages('devtools')"
+RUN R -e "devtools::install_version("shiny", version = "0.10.1", repos = "http://cran.us.r-project.org")"
+# RUN R -e "install.packages('shiny')"
+# RUN R -e "install.packages('shinydashboard')"
+
 
 # Use "installDependencies.R" file to add required packages for this shiny application
 RUN R -e "source('installDependencies.R')"
