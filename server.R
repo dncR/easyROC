@@ -1,3 +1,6 @@
+# Maximum file upload size is 30 MB.
+options(shiny.maxRequestSize = 30*1024^2)
+
 shinyServer(function(input, output, session) {
 	source("mROC.R")
 	source("rocdata.R")
