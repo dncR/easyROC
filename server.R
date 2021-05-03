@@ -39,9 +39,9 @@ shinyServer(function(input, output, session) {
 			  return(NULL)
 			}
 						
-      if (file.info(inFile$datapath)$size <= 10485800){
+      if (file.info(inFile$datapath)$size <= 31457280){
 				data <- read.table(inFile$datapath, sep=mySep, header=TRUE, fill=TRUE, dec = ifelse(input$decimal, ",", "."))
-			} else print("File is bigger than 10MB and will not be uploaded.") 
+			} else print("File is bigger than 30MB and will not be uploaded.") 
 		} 
 		
 		#else {  ## Paste data.
