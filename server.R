@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 options(shiny.maxRequestSize = 30 * 1024^2)  # Upload limit size set to 30 MB per file
+=======
+# Maximum file upload size is 30 MB.
+options(shiny.maxRequestSize = 30*1024^2)
+>>>>>>> e863f5e8220b5ec63f6e64e55854ad188dc98593
 
 shinyServer(function(input, output, session) {
 	source("mROC.R")
