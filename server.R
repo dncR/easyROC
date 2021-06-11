@@ -1,3 +1,5 @@
+options(shiny.maxRequestSize = 30 * 1024^2)  # Upload limit size set to 30 MB per file
+
 shinyServer(function(input, output, session) {
 	source("mROC.R")
 	source("rocdata.R")
@@ -39,9 +41,9 @@ shinyServer(function(input, output, session) {
 			  return(NULL)
 			}
 						
-      if (file.info(inFile$datapath)$size <= 10485800){
+      if (file.info(inFile$datapath)$size <= 31457280){
 				data <- read.table(inFile$datapath, sep=mySep, header=TRUE, fill=TRUE, dec = ifelse(input$decimal, ",", "."))
-			} else print("File is bigger than 10MB and will not be uploaded.") 
+			} else print("File is bigger than 30MB and will not be uploaded.") 
 		} 
 		
 		#else {  ## Paste data.
@@ -224,9 +226,20 @@ shinyServer(function(input, output, session) {
 		}
 	})
     
-    observe({
-        if (input$ROCplotOpts && input$legend.namesRC == "") updateTextInput(session, inputId = "legend.namesRC", value = paste("Marker", 1:length(input$markerInput), sep = "", collapse = ","))
-    })
+	observe({
+	  if (input$ROCplotOpts && input$legend.namesRC == ""){
+	    updateTextInput(session, inputId = "legend.namesRC", 
+	                    value = paste("Marker", 1:length(input$markerInput), sep = "", collapse = ","))
+	  } 
+	})
+	
+	# Observe line colors for ROC curves under "ROC Curve" tab when Plot Options is activated.
+	observe({
+	  if (input$ROCplotOpts && input$ROCcolRC == ""){
+	    updateTextInput(session, inputId = "ROCcolRC", 
+	                    value = paste0(1:length(input$markerInput), collapse = ","))
+	  } 
+	})
 }
 
 ######  END OBSERVER FUNCTIONS	#######

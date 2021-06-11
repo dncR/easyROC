@@ -2,12 +2,14 @@ shinyUI(pageWithSidebar(
 
   titlePanel("easyROC: a web-tool for ROC curve analysis (ver. 1.3.1)"),
   
+  # Left-side panel, including options and inputs for each tab.
 	sidebarPanel(width = 3,
 		conditionalPanel(condition="input.tabs1=='Introduction'",
   		HTML('<p><img src="multi.png" width=300 height=300></p>'),
       tags$head(includeScript("google-analytics.js"))
 		),
 
+		# Tab: Data Upload
 		conditionalPanel(condition="input.tabs1 == 'Data upload'",
 			# h4("Input data"),
 			#radioButtons("dataInput", "", list("Load example data"=1, "Upload a file"=2, "Paste your data"=3), selected=1),
@@ -16,14 +18,14 @@ shinyUI(pageWithSidebar(
 			conditionalPanel(condition="input.dataInput=='1'",
 			  HTML('<br>'),
 				h5("Datasets:"),
-				radioButtons("sampleData", "", list("Mayo data (n=312, p=4)"=1, "PBC data set (n=418, p=20)"=2), selected=1),
-				HTML('<p>n: number of observations</p>'),
-				HTML('<p>p: number of variables</p>')
+				radioButtons("sampleData", "", list("Mayo data (n=312, p=4)" = 1, "PBC data set (n=418, p=20)" = 2), selected = 1),
+				HTML('<p><b>n</b>: number of observations</p>'),
+				HTML('<p><b>p</b>: number of variables</p>')
 			),
 
 			conditionalPanel(condition="input.dataInput=='2'",
         HTML('<br>'),
-				h5("Upload a delimited text file (max. 10MB): "),
+				h5("Upload a delimited text file (max. 30MB): "),
 				#HTML('<i class="fa fa-beer fa-lg"></i>'),
 				fileInput("upload", "", multiple = FALSE),
 				radioButtons("fileSepDF", "Delimiter:", list("Comma"=1, "Tab"=2, "Semicolon"=3, "Space"=4),selected=2),
@@ -54,21 +56,22 @@ shinyUI(pageWithSidebar(
 			selectizeInput("valueStatus", "Select category for cases", choices = NULL, multiple = FALSE)
 		),  # End for Data Upload tab.
 		
+		# Tab: ROC Curve
 		conditionalPanel(condition="input.tabs1 == 'ROC curve'",
       selectizeInput("markerInput", "Select markers (*)", choices = NULL, multiple = TRUE),
       checkboxInput("lowhigh", "Higher values indicate risks", TRUE),
 			
       HTML('<br>'),
-            
+      helpText("(*) Multiple markers are allowed."),
+      HTML('<br>'),
+      
       conditionalPanel(condition = "input.navbarROCcurve == 'Multiple Comparisons'",
         selectInput(inputId = "MultipleCompMethod", label = "Multiple Comparison Method", selected = "bonferroni",
                     choices = c("Bonferroni" = "bonferroni", "False discovery rate" = "fdr", "None" = "none")),
         HTML('<br>')
       ),
 
-      helpText("(*) Multiple markers are allowed."),
-      HTML('<br>'),
-
+      
 			checkboxInput(inputId = "advanced", label = "Advanced options", value = FALSE),
 			
 			# Use this to add vertical spaces.
@@ -78,7 +81,6 @@ shinyUI(pageWithSidebar(
   		            margin-bottom: 1.2em;
   		          }
   		       </style>
-  	
   		       <p class="bottom-three"></p>'),
   		  
 ## Use this code block to add bold label.
@@ -107,7 +109,6 @@ shinyUI(pageWithSidebar(
   		                 selected = "DeLong"),
   		    numericInput(inputId = "alpha", label = "Type I error", value = 0.05, min = 0, max = 1, step = 0.01),
   		    HTML('<br>'),
-  		    HTML('<br>'),
   		    helpText("[+]: Default options."),
   		    HTML('<br>')
   		  ),
@@ -128,19 +129,19 @@ shinyUI(pageWithSidebar(
 
       conditionalPanel(condition = "input.ROCplotOpts",
         fluidRow(
-          column(6, sliderInput("myheight", "Plot height:", value=400, min=200, max=1200)),
+          column(6, sliderInput("myheight", "Plot height:", value = 400, min = 200, max = 1200)),
           # column(2),
-          column(6, sliderInput("mywidth", "Plot width:", value=400, min=200, max=1200 ))
+          column(6, sliderInput("mywidth", "Plot width:", value = 400, min = 200, max = 1200 ))
         ),
           
         HTML('<br>'), 
           
         fluidRow(
           column(12, selectizeInput("fontfamilyRC", "Font family", 
-                                            choices = c("Times New Roman" = "serif", 
-                                                        "Arial" = "sans", 
-                                                        "Corier New" = "mono"),
-                                            selected = "sans"))
+                                    choices = c("Times New Roman" = "serif", 
+                                                "Arial" = "sans", 
+                                                "Corier New" = "mono"),
+                                    selected = "sans"))
         ),
           
         HTML('<br>'),
@@ -168,7 +169,7 @@ shinyUI(pageWithSidebar(
           ),
                          
           fluidRow(
-            column(6, textInput("ROCcolRC", "ROC line color", value = NULL)),
+            column(6, textInput("ROCcolRC", "ROC line color", value = "")),
             # column(1),
             column(6, selectizeInput("ROCltyRC", "ROC line type", 
                                       choices = c("\U2500\U2500\U2500\U2500\U2500\U2500\U2500" = "1",
@@ -995,7 +996,7 @@ shinyUI(pageWithSidebar(
 		),
 
 		conditionalPanel(condition="input.tabs1=='Authors & News'",
-	    HTML('<p align="center"> <a href="https://www.hacettepe.edu.tr/english/" target="_blank"><img src="hulogo.JPEG" width=150 height=150></a> </p>')
+	    HTML('<p align="center"> <a href="https://www.erciyes.edu.tr/home/index" target="_blank"><img src="eru_logo.png" width=150 height=150></a> </p>')
 		)
 
 #     conditionalPanel(condition="input.tabs1=='Options'",
@@ -1083,14 +1084,16 @@ shinyUI(pageWithSidebar(
       tabPanel("Authors & News",
         h4("Authors"),
         HTML('<p><a href="http://yunus.hacettepe.edu.tr/~dincer.goksuluk/" target="_blank"> <b>Dincer Goksuluk</b></a><p>'),
-        HTML('<p>Hacettepe University Faculty of Medicine <a href="http://www.biostatistics.hacettepe.edu.tr" target="_blank"> Department of Biostatistics</a><p>'),
-        HTML('<p><a href="mailto:dincer.goksuluk@hacettepe.edu.tr" target="_blank">dincer.goksuluk@hacettepe.edu.tr</a><p>'),
-        HTML('<p><a href="http://yunus.hacettepe.edu.tr/~selcuk.korkmaz/" target="_blank"> <b>Selcuk Korkmaz</b></a><p>'),
-        HTML('<p>Hacettepe University Faculty of Medicine <a href="http://www.biostatistics.hacettepe.edu.tr" target="_blank"> Department of Biostatistics</a><p>'),
-        HTML('<p><a href="mailto:selcuk.korkmaz@hacettepe.edu.tr" target="_blank">selcuk.korkmaz@hacettepe.edu.tr</a><p>'),
-        HTML('<p><a href="http://www.biostatistics.hacettepe.edu.tr/cv/Gokmen_Zararsiz_CV_Eng.pdf" target="_blank"> <b>Gokmen Zararsiz</b></a><p>'),
-        HTML('<p>Hacettepe University Faculty of Medicine <a href="http://www.biostatistics.hacettepe.edu.tr" target="_blank"> Department of Biostatistics</a><p>'),
-        HTML('<p><a href="mailto:gokmen.zararsiz@hacettepe.edu.tr" target="_blank">gokmen.zararsiz@hacettepe.edu.tr</a><p>'),
+        HTML('<p>Erciyes University, Faculty of Medicine, Department of Biostatistics<p>'),
+        HTML('<p><a href="mailto:dincergoksuluk@erciyes.edu.tr" target="_blank">dincergoksuluk@erciyes.edu.tr</a><p>'),
+        
+        HTML('<p><a href="https://personel.trakya.edu.tr/selcukkorkmaz/#.YGG-eK8zaUk" target="_blank"> <b>Selcuk Korkmaz</b></a><p>'),
+        HTML('<p>Trakya University, Faculty of Medicine, Department of Biostatistics<p>'),
+        HTML('<p><a href="mailto:selcukkorkmaz@trakya.edu.tr" target="_blank">selcukkorkmaz@trakya.edu.tr</a><p>'),
+        
+        HTML('<p><a href="https://avesis.erciyes.edu.tr/gokmenzararsiz" target="_blank"> <b>Gokmen Zararsiz</b></a><p>'),
+        HTML('<p>Erciyes University, Faculty of Medicine, Department of Biostatistics<p>'),
+        HTML('<p><a href="mailto:gokmenzararsiz@erciyes.edu.tr" target="_blank">gokmenzararsiz@erciyes.edu.tr</a><p>'),
         HTML('<br>'),
 
         h4("News"),
