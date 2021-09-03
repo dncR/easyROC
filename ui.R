@@ -6,7 +6,7 @@ shinyUI(pageWithSidebar(
 	sidebarPanel(width = 3,
 		conditionalPanel(condition="input.tabs1=='Introduction'",
   		HTML('<p><img src="multi.png" width=300 height=300></p>'),
-      tags$head(includeScript("google-analytics.js"))
+      tags$head(includeScript("js/google-analytics.js"))
 		),
 
 		# Tab: Data Upload
@@ -1126,9 +1126,9 @@ shinyUI(pageWithSidebar(
 
         h5("Other Tools"),
 
-        HTML('<p><a href="http://www.biosoft.hacettepe.edu.tr/MLViS/" target="_blank"> <b>MLViS: a machine learning-based virtual screening tool</b></a><p>'),
-        HTML('<p><a href="http://www.biosoft.hacettepe.edu.tr/MVN/" target="_blank"> <b>MVN: a web-tool for assessing multivariate normality </b></a><p>'),
-        HTML('<p><a href="http://www.biosoft.hacettepe.edu.tr/DDNAA/" target="_blank"> <b>DDNAA: Decision support system for differential diagnosis of nontraumatic acute abdomen </b></a><p>'),
+        HTML('<p><a href="/app/MLViS/" target="_blank"> <b>MLViS: a machine learning-based virtual screening tool</b></a><p>'),
+        HTML('<p><a href="/app/MVN/" target="_blank"> <b>MVN: a web-tool for assessing multivariate normality </b></a><p>'),
+        HTML('<p><a href="/app/DDNAA/" target="_blank"> <b>DDNAA: Decision support system for differential diagnosis of nontraumatic acute abdomen </b></a><p>'),
         HTML('<br>'),
 
         h6("Please feel free to send us bugs and feature requests.")

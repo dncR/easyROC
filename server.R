@@ -2,16 +2,17 @@
 options(shiny.maxRequestSize = 30*1024^2)
 
 shinyServer(function(input, output, session) {
-	source("mROC.R")
-	source("rocdata.R")
-  source("pAUC.R")
-  source("SampleSizeSingleTest.R")
-  source("SampleSizeStandardvsNew.R")
-  source("SampleSizeTwoTests.R")
-  source("rocdata.R")
-  source("ROCplot.R")
-  source("printCutOff.R")
-  source("parametricROC.R")
+	source("R/mROC.R")
+	source("R/rocdata.R")
+  source("R/pAUC.R")
+  source("R/SampleSizeSingleTest.R")
+  source("R/SampleSizeStandardvsNew.R")
+  source("R/SampleSizeTwoTests.R")
+  source("R/rocdata.R")
+  source("R/ROCplot.R")
+  source("R/printCutOff.R")
+  source("R/parametricROC.R")
+  
   library(pROC)
 	library(plyr)
   library(OptimalCutpoints)
@@ -27,11 +28,11 @@ shinyServer(function(input, output, session) {
 ### REACTIVE FUNCTIONS  ###
 {
 	dataM <- reactive({  ## Data input.
-		if (input$dataInput==1){  ## Load example data.
-      if (input$sampleData==1){
-				data <- read.table("mayo.txt", header=TRUE)
-      } else if (input$sampleData==2){
-        data <- read.table("pbc.txt", header=TRUE)
+		if (input$dataInput == 1){  ## Load example data.
+      if (input$sampleData == 1){
+				data <- read.table("data/mayo.txt", header=TRUE)
+      } else if (input$sampleData == 2){
+        data <- read.table("data/pbc.txt", header=TRUE)
       }
 		} else if (input$dataInput==2){  ## Upload data.
 			
@@ -43,7 +44,8 @@ shinyServer(function(input, output, session) {
 			}
 						
       if (file.info(inFile$datapath)$size <= 31457280){
-				data <- read.table(inFile$datapath, sep=mySep, header=TRUE, fill=TRUE, dec = ifelse(input$decimal, ",", "."))
+				data <- read.table(inFile$datapath, sep = mySep, header = TRUE, fill = TRUE, 
+				                   dec = ifelse(input$decimal, ",", "."))
 			} else print("File is bigger than 30MB and will not be uploaded.") 
 		} 
 		
