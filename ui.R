@@ -5,48 +5,58 @@ shinyUI(pageWithSidebar(
   # Left-side panel, including options and inputs for each tab.
 	sidebarPanel(width = 3,
 		conditionalPanel(condition="input.tabs1=='Introduction'",
-  		HTML('<p><img src="multi.png" width=300 height=300></p>'),
-      tags$head(includeScript("js/google-analytics.js"))
+		  tags$p(
+		    tags$img(src = "multi.png", width = 300, height = 300)
+		  ),
+      tags$head(
+        includeScript("js/google-analytics.js")
+      )
 		),
 
 		# Tab: Data Upload
 		conditionalPanel(condition="input.tabs1 == 'Data upload'",
 			# h4("Input data"),
 			#radioButtons("dataInput", "", list("Load example data"=1, "Upload a file"=2, "Paste your data"=3), selected=1),
-			radioButtons("dataInput", "", list("Load example data"=1, "Upload a file"=2), selected=1),
+			radioButtons("dataInput", "", list("Load example data" = 1, "Upload a file" = 2), selected = 1),
 			
-			conditionalPanel(condition="input.dataInput=='1'",
-			  HTML('<br>'),
-				h5("Datasets:"),
-				radioButtons("sampleData", "", list("Mayo data (n=312, p=4)" = 1, "PBC data set (n=418, p=20)" = 2), selected = 1),
-				HTML('<p><b>n</b>: number of observations</p>'),
+			conditionalPanel(condition = "input.dataInput == '1'",
+			  #HTML('<br>'),
+				h5(tags$b("Datasets:")),
+				radioButtons("sampleData", "", 
+				             list("Mayo data (n=312, p=4)" = 1, "PBC data set (n=418, p=20)" = 2), 
+				             selected = 1),
+				tags$p(tags$b('n:'), ' number of observations'),
 				HTML('<p><b>p</b>: number of variables</p>')
 			),
 
-			conditionalPanel(condition="input.dataInput=='2'",
+			conditionalPanel(condition = "input.dataInput == '2'",
         HTML('<br>'),
 				h5("Upload a delimited text file (max. 30MB): "),
 				#HTML('<i class="fa fa-beer fa-lg"></i>'),
 				fileInput("upload", "", multiple = FALSE),
-				radioButtons("fileSepDF", "Delimiter:", list("Comma"=1, "Tab"=2, "Semicolon"=3, "Space"=4),selected=2),
+				radioButtons("fileSepDF", "Delimiter:", 
+				             list("Comma" = 1, "Tab" = 2, "Semicolon" = 3, "Space" = 4),
+				             selected = 2),
 				
-				conditionalPanel(condition="input.fileSepDF!='1'",
+				conditionalPanel(condition = "input.fileSepDF != '1'",
 					checkboxInput(inputId = "decimal", label = "Use comma as decimal", value = FALSE)
 				),
         
 				HTML('<br>'),
-				HTML('<p>You can upload your data as separated by comma, tab, semicolon or space.</p>'),
-				HTML('<p><b>Note</b>: First row must be header.</p>')
+				HTML('<p>You can upload your data separated by comma, tab, semicolon or space.</p>'),
+				HTML('<p><b>Note</b>: First row must be the header including the variable names.</p>')
 			),
 			
-			conditionalPanel(condition="input.dataInput=='3'",
+			conditionalPanel(condition = "input.dataInput == '3'",
 				h5("Paste or enter your data below:"),
-				tags$textarea(id="myData", rows=10, cols=5, ""),
+				tags$textarea(id = "myData", rows = 10, cols = 5, ""),
 				actionButton('clearText_button','Clear data'),
 				HTML('<br>'),
 				HTML('<br>'),
 
-				radioButtons("fileSepP", "Separator:", list("Comma"=1,"Tab"=2,"Semicolon"=3), selected=2),
+				radioButtons("fileSepP", "Separator:", 
+				             list("Comma" = 1, "Tab" = 2, "Semicolon" = 3), 
+				             selected = 2),
 				HTML('<p>You can paste or manually enter your data as separated by comma, tab or semicolon.</p>'),
 				HTML('<p>Note: First row must be header.</p>')
 			),
@@ -57,7 +67,7 @@ shinyUI(pageWithSidebar(
 		),  # End for Data Upload tab.
 		
 		# Tab: ROC Curve
-		conditionalPanel(condition="input.tabs1 == 'ROC curve'",
+		conditionalPanel(condition = "input.tabs1 == 'ROC curve'",
       selectizeInput("markerInput", "Select markers (*)", choices = NULL, multiple = TRUE),
       checkboxInput("lowhigh", "Higher values indicate risks", TRUE),
 			
@@ -76,24 +86,12 @@ shinyUI(pageWithSidebar(
 			
 			# Use this to add vertical spaces.
   		conditionalPanel(condition = "input.advanced",
-  		  HTML('<style>
-                .bottom-three {
-  		            margin-bottom: 1.2em;
-  		          }
-  		       </style>
-  		       <p class="bottom-three"></p>'),
-  		  
-## Use this code block to add bold label.
-#   		  HTML('<style>
-#                 .bottom-three {
-#   		              margin-bottom: 0.3cm;
-#   		          }
-#   		       </style>
-#   		       
-#   		       <p class="bottom-three" >
-#                 <strong>Select a method for curve fitting</strong>
-#              </p>'),
-  		  
+        ## Use this code block to add bold label.
+        tags$style('.bottom-three { 
+                      margin-bottom: 1.2em; 
+                      font-weight: bold 
+                   }'),
+        tags$p(class = "bottom-three", ""),
   		  radioButtons(inputId = "rocEstimationType", label = "Select a method for curve fitting",
   		               choices = list("Nonparametric" = "nonParametricROC", "Parametric" = "parametricROC"),
   		               selected = "nonParametricROC"),       
@@ -101,16 +99,18 @@ shinyUI(pageWithSidebar(
   		  # Non parametric ROC curve
   		  conditionalPanel(condition = "input.rocEstimationType == 'nonParametricROC'",
   		    radioButtons(inputId = "StdErr", label = "1. Select a method for SE estimation", 
-  		                 choices = list("Mann-Whitney" = "MW", "DeLong(1988)[+]" = "DeLong", "Under Null Hyp." = "Null", "Binomial" = "Binomial"), 
+  		                 choices = list("Mann-Whitney" = "MW", "DeLong(1988)[+]" = "DeLong", 
+  		                                "Under Null Hyp." = "Null", "Binomial" = "Binomial"), 
   		                 selected = "DeLong"),
   		    
   		    radioButtons(inputId = "ConfInt", label = "2. Select a method for Conf. Interval", 
-  		                 choices = list("Mann-Whitney"="MW", "DeLong(1988)[+]"="DeLong", "Under Null Hyp."="Null", "Binomial Exact"="Exact"), 
+  		                 choices = list("Mann-Whitney" = "MW", "DeLong(1988)[+]" = "DeLong", 
+  		                                "Under Null Hyp." = "Null", "Binomial Exact" = "Exact"), 
   		                 selected = "DeLong"),
   		    numericInput(inputId = "alpha", label = "Type I error", value = 0.05, min = 0, max = 1, step = 0.01),
-  		    HTML('<br>'),
+  		    tags$br(),
   		    helpText("[+]: Default options."),
-  		    HTML('<br>')
+  		    tags$br()
   		  ),
   		  
   		  # Parametric ROC Curve.
@@ -1099,7 +1099,7 @@ shinyUI(pageWithSidebar(
         h4("News"),
         HTML('<br>'),
         HTML('<p><b> Version 1.3.1 (July 25, 2016)</b><p>'),
-		HTML('<p> (1) Minor fixes: Added feature to keep only pairwise complete data. Missing cases are now removed before ROC curve analysis which causes to null return in ROC statistics.<p>'),
+		    HTML('<p> (1) Minor fixes: Added feature to keep only pairwise complete data. Missing cases are now removed before ROC curve analysis which causes to null return in ROC statistics.<p>'),
 
         HTML('<br>'),
         HTML('<p><b> Version 1.3 (July 25, 2016)</b><p>'),
@@ -1199,20 +1199,23 @@ shinyUI(pageWithSidebar(
         HTML('<p>Please see <a href="http://66.199.228.237/boundary/complex_decision_making_and_ethics/ROC_Analysis.pdf" target="_blank"> Obuchowski, 2005</a> for further details about the methods.</p>'),
 
         HTML('<div style="left;"><img src="manual/sampleSize.png" width=900, height = 400</div>'),
-
-        HTML('<br>'),
-        HTML('<br>'),
-        HTML('<br>')
+        
+        tags$br(),
+        tags$br(),
+        tags$br()
       ), id = "tabs1", type = "pills"),
 
-    tags$head(tags$style(type="text/css", "label.radio { display: inline-block; }", ".radio input[type=\"radio\"] { float: none; }"),
-    tags$style(type="text/css", "select { max-width: 200px; }"),
-    tags$style(type="text/css", "textarea { max-width: 185px; }"),
-    tags$style(type="text/css", ".jslider { max-width: 200px; }"),
-    tags$style(type='text/css', ".well { max-width: 330px; }"),
-    tags$style(type='text/css', ".span4 { max-width: 330px; }")),
+    tags$head(
+      tags$style(type="text/css", "label.radio{display: inline-block}", ".radio input[type=\"radio\"] {float: none}"),
+      tags$style(type="text/css", "select{max-width: 200px}"),
+      tags$style(type="text/css", "textarea{max-width: 185px}"),
+      tags$style(type="text/css", ".jslider{max-width: 200px}"),
+      tags$style(type='text/css', ".well{max-width: 330px}"),
+      tags$style(type='text/css', ".span4{max-width: 330px}")
+    ),
 
     tags$head(
-    tags$link(rel = "shortcut icon", href = "favicon-2.ico"))
+      tags$link(rel = "shortcut icon", href = "favicon-2.ico")
+    )
   )
 ))
