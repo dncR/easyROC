@@ -38,6 +38,11 @@ Finally, run following code in R console:
 
     shiny::runGitHub("easyROC", "dncR")
 
+## Docker Image
+
+easyROC is available through Docker Container. The docker image can be pulled from Docker Hub using the code below:
+
+    docker pull dncr/biosoft:app-easyroc-latest
 
 # License
 
