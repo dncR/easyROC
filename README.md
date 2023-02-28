@@ -1,5 +1,6 @@
-**Main URL**: http://www.biosoft.hacettepe.edu.tr/easyROC/ <br>
-**Mirror URL**: http://opensoft.turcosa.com.tr/easyROC/
+> **NOTE**: The easyROC server located at Hacettepe University (http://www.biosoft.erciyes.edu.tr) has moved to Erciyes University. The URL of new server is given below.
+
+**Main URL (UPDATED)**: http://www.biosoft.erciyes.edu.tr/easyROC/
 
 *Current Version*: 1.3.1
 
