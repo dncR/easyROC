@@ -12,13 +12,13 @@ This application designed as a comprehensive ROC analysis tool. Firstly, it prov
 
 ## References:
 
+Goksuluk D, Korkmaz S, Zararsiz G, Karaagaoglu AE (2016). easyROC: An Interactive Web-tool for ROC Curve Analysis Using R Language Environment. R Journal, 8(2):213-230. doi: [10.32614/RJ-2016-042](https://doi.org/10.32614/RJ-2016-042)
+
 DeLong, E. R., DeLong, D. M., & Clarke-Pearson, D. L. (1988). Comparing the areas under two or more correlated receiver operating characteristic curves: a nonparametric approach. Biometrics, 837-845.
 
-Lopez-Raton, M., Rodrıguez-Alvarez, M. X., Cadarso-Suárez, C., & Gude-Sampedro, F. (2014). OptimalCutpoints: An R Package for Selecting Optimal Cutpoints in Diagnostic Tests. JOURNAL OF STATISTICAL SOFTWARE, 61(8), 1-36.
+Lopez-Raton, M., Rodrıguez-Alvarez, M. X., Cadarso-Suárez, C., & Gude-Sampedro, F. (2014). OptimalCutpoints: An R Package for Selecting Optimal Cutpoints in Diagnostic Tests. JOURNAL OF STATISTICAL SOFTWARE, 61(8):1-36.
 
-Obuchowski, N. A. (2005). Fundamentals of clinical research for radiologists. Am. J. Roentgenol, 184, 364-372.
-
-easyROC web-tool: http://www.biosoft.hacettepe.edu.tr/easyROC/
+Obuchowski, N. A. (2005). Fundamentals of clinical research for radiologists. Am. J. Roentgenol, 184:364-372.
 
 # Installation
 
