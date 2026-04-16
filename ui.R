@@ -1,3 +1,5 @@
+source("R/mod_data_upload.R")
+
 shinyUI(pageWithSidebar(
 
   titlePanel("easyROC: a web-tool for ROC curve analysis (ver. 1.3.1)"),
@@ -15,40 +17,7 @@ shinyUI(pageWithSidebar(
 
 		# Tab: Data Upload
 		conditionalPanel(condition="input.tabs1 == 'Data upload'",
-			radioButtons("dataInput", "", list("Load example data" = 1, "Upload a file" = 2), selected = 1),
-			
-			conditionalPanel(condition = "input.dataInput == '1'",
-			  #HTML('<br>'),
-				h5(tags$b("Datasets:")),
-				radioButtons("sampleData", "", 
-				             list("Mayo data (n=312, p=4)" = 1, "PBC data set (n=418, p=20)" = 2), 
-				             selected = 1),
-				tags$p(tags$b('n:'), ' number of observations'),
-				HTML('<p><b>p</b>: number of variables</p>')
-			),
-
-			conditionalPanel(condition = "input.dataInput == '2'",
-        HTML('<br>'),
-				h5("Upload a delimited text file (max. 30MB): "),
-				#HTML('<i class="fa fa-beer fa-lg"></i>'),
-				fileInput("upload", "", multiple = FALSE),
-				radioButtons("fileSepDF", "Delimiter:", 
-				             list("Comma" = 1, "Tab" = 2, "Semicolon" = 3, "Space" = 4),
-				             selected = 2),
-				
-				conditionalPanel(condition = "input.fileSepDF != '1'",
-					checkboxInput(inputId = "decimal", label = "Use comma as decimal", value = FALSE)
-				),
-        
-				HTML('<br>'),
-				HTML('<p>You can upload your data separated by comma, tab, semicolon or space.</p>'),
-				HTML('<p><b>Note</b>: First row must be the header including the variable names.</p>'),
-        uiOutput("uploadValidationMessage")
-			),
-			
-			HTML('<br>'),
-			selectizeInput("statusVar", "Select status variable", choices = NULL, multiple = FALSE),
-			selectizeInput("valueStatus", "Select category for cases", choices = NULL, multiple = FALSE)
+			mod_data_upload_ui("data_upload")
 		),  # End for Data Upload tab.
 		
 		# Tab: ROC Curve

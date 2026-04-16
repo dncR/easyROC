@@ -23,6 +23,7 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 - Sprint 1 `EASY-012` tamamlandi: geriye uyumluluk etkileri `docs/compatibility.md` dosyasinda resmi olarak dokumante edildi.
 - Sprint 2 `EASY-013` tamamlandi: `app.R` giris noktasi eklendi ve uygulamanin `app.R` uzerinden baslatilabilirligi dogrulandi.
 - Sprint 2 `EASY-014` tamamlandi: `R/` altinda hedef moduller icin `mod_*` iskelet dosyalari olusturuldu.
+- Sprint 2 `EASY-015` tamamlandi: veri yukleme akisi `mod_data_upload` modulune tasindi; UI+server tarafinda moduler baglanti kuruldu.
 
 ## Netlesmemis Kararlar
 
@@ -37,6 +38,6 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 
 ## Bir Sonraki Onerilen Adim
 
-1. Sprint 2 icin `EASY-015` adiminda `mod_data_upload` cikarimina basla.
-2. `EASY-016` oncesi ortak reactive state kontratini tanimla.
+1. Sprint 2 icin `EASY-016` adiminda ortak reactive state kontratini tanimla.
+2. `EASY-017` icin download akislarini modul kontratina bagla.
 3. Sprint 2 degisiklikleri icin smoke test kapsam notunu olustur.

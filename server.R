@@ -4,6 +4,7 @@ options(shiny.maxRequestSize = 30*1024^2)
 shinyServer(function(input, output, session) {
 	source("R/mROC.R")
 	source("R/rocdata.R")
+  source("R/mod_data_upload.R")
   source("R/data_input_utils.R")
   source("R/pAUC.R")
   source("R/SampleSizeSingleTest.R")
@@ -22,46 +23,10 @@ shinyServer(function(input, output, session) {
 
 ### REACTIVE FUNCTIONS  ###
 {
-  uploadError <- reactiveVal(NULL)
-
-	dataM <- reactive({  ## Data input.
-    data <- NULL
-
-		if (input$dataInput == 1){  ## Load example data.
-      if (input$sampleData == 1){
-				data <- read.table("data/mayo.txt", header=TRUE)
-      } else if (input$sampleData == 2){
-        data <- read.table("data/pbc.txt", header=TRUE)
-      }
-      uploadError(NULL)
-		} else if (input$dataInput==2){  ## Upload data.
-			
-      inFile <- input$upload
-      mySep <- switch(input$fileSepDF, '1'=",",'2'="\t",'3'=";", '4'="")
-            
-			if (is.null(inFile)){
-        uploadError(NULL)
-			  return(NULL)
-			}
-			
-      parsed <- readDelimitedUpload(
-        filePath = inFile$datapath,
-        fileSize = inFile$size,
-        sep = mySep,
-        decimalComma = isTRUE(input$decimal)
-      )
-
-      if (!is.null(parsed$error)){
-        uploadError(parsed$error)
-        return(NULL)
-      }
-
-      uploadError(NULL)
-      data <- parsed$data
-		}
-		
-		return(data)   
-	})
+  data_upload <- mod_data_upload_server("data_upload")
+  dataM <- data_upload$data
+  statusVar <- data_upload$status_var
+  valueStatus <- data_upload$event_value
     
   heightsize <- reactive(input$myheight)
 	widthsize <- reactive(input$mywidth)
@@ -108,8 +73,6 @@ shinyServer(function(input, output, session) {
         }
     })
     
-    # Reactive function for "statusVar" and "eventCategories"
-    statusVar <- reactive({return(input$statusVar)})
 }
 
 ###  END REACTIVE FUNCTIONS ###
@@ -118,55 +81,15 @@ shinyServer(function(input, output, session) {
    
 ####  OBSERVER FUNCTIONS #### 
 {
-  output$uploadValidationMessage <- renderUI({
-    msg <- uploadError()
-    if (is.null(msg) || msg == ""){
-      return(NULL)
-    }
-    tags$p(style = "color:#b22222; font-weight:600; margin-top:8px;", msg)
-  })
-
-	## Yüklenen veri setinin değişken isimlerini takip eden kısım.
-	## "statusVar" ve "markerInput" için seçenekler veri setinin değişken isimleri olarak güncelleniyor.
-
-  # Selecting the category for cases.
-  # observe({
-  #   data_tmp <- dataM()
-  #   updateSelectInput(session = session, inputId = "statusVar", 
-  #                     choices = colnames(data_tmp), selected = colnames(data_tmp)[1])
-  # })
-  
-  # Selecting the category for cases.
   observe({
     data_tmp <- dataM()
     if (!is.null(data_tmp)){
-      updateSelectInput(session = session, inputId = "statusVar", 
-                        choices = colnames(data_tmp), selected = colnames(data_tmp)[1])
-    } else {
-      updateSelectInput(session = session, inputId = "statusVar", 
-                        choices = "", selected = "")
-    }
-  })
-  
-  # Update select input with the categories of status variable.
-  observe({
-    data_tmp <- dataM()
-    if (!is.null(data_tmp)){
-      idx <- which(colnames(data_tmp) %in% statusVar())
-      categories <- levels(as.factor(as.character(data_tmp[ ,idx])))
-      
-      updateSelectizeInput(session = session, inputId = "valueStatus", choices = categories, 
-                           selected = NULL)
-    } else {
-      updateSelectizeInput(session = session, inputId = "valueStatus", choices = "", 
-                           selected = "")
-    }
-  })
-  
-  observe({
-    data_tmp <- dataM()
-    if (!is.null(data_tmp)){
-      updateSelectInput(session, "markerInput", choices = colnames(dataM())[colnames(dataM()) != input$statusVar], selected = NULL)
+      current_status <- statusVar()
+      marker_choices <- colnames(dataM())
+      if (!is.null(current_status) && current_status != ""){
+        marker_choices <- marker_choices[marker_choices != current_status]
+      }
+      updateSelectInput(session, "markerInput", choices = marker_choices, selected = NULL)
     } else {
       updateSelectInput(session, "markerInput", choices = "", selected = "")
     }
@@ -282,7 +205,7 @@ shinyServer(function(input, output, session) {
 					if (!input$cutoffPlotsOpts) opts = grphPrmtrsDefault()
 					if (input$cutoffPlotsOpts) opts = grphPrmtrs()
 					
-					results <- mROC(data=dataM(), statusName=input$statusVar, markerName=input$markerInput, event=input$valueStatus, diseaseHigher=input$lowhigh)$plotdata
+					results <- mROC(data=dataM(), statusName=statusVar(), markerName=input$markerInput, event=valueStatus(), diseaseHigher=input$lowhigh)$plotdata
 					cut.results <- optimal.cutpoint()
 					data = dataM()
 					
@@ -290,8 +213,8 @@ shinyServer(function(input, output, session) {
 					cutvals = coord[ ,"Cutpoint"]
 					TPRs = coord[ ,"TPR"]
 					FPRs = coord[ ,"FPR"]
-					diseased = data[data[,input$statusVar] == input$valueStatus, input$cutoffMarker]
-					healthy = data[data[,input$statusVar] != input$valueStatus, input$cutoffMarker]
+					diseased = data[data[,statusVar()] == valueStatus(), input$cutoffMarker]
+					healthy = data[data[,statusVar()] != valueStatus(), input$cutoffMarker]
 					dens.diseased = density(diseased)
 					dens.healthy = density(healthy)
 					
@@ -434,14 +357,14 @@ shinyServer(function(input, output, session) {
           if (!is.null(input$markerInput) & input$tabs1 == "ROC curve"){
             out <- if (input$rocEstimationType == "nonParametricROC"){
                       # Nonparametric ROC
-                      mROC(data = dataM(), statusName = input$statusVar, markerName = input$markerInput, 
-                           event = input$valueStatus, diseaseHigher = input$lowhigh, ci.method = input$ConfInt,
+                      mROC(data = dataM(), statusName = statusVar(), markerName = input$markerInput, 
+                           event = valueStatus(), diseaseHigher = input$lowhigh, ci.method = input$ConfInt,
                            se.method = input$StdErr, advanced = input$advanced, alpha = input$alpha)$stats
                     } else {
                       # Parametric ROC
                       tmp <- lapply(input$markerInput, function(x){
-                        parametricROC(data = dataM(), marker = x, status = input$statusVar,
-                                      event = input$valueStatus, returnROCdata = TRUE,
+                        parametricROC(data = dataM(), marker = x, status = statusVar(),
+                                      event = valueStatus(), returnROCdata = TRUE,
                                       higherValuesPositives = input$lowhigh, confidence.level = 1 - input$alphaParametric,
                                       plot = FALSE, exact = ifelse(input$ConfIntParametric == "Exact", TRUE, FALSE))$stats
                       })
@@ -545,14 +468,14 @@ shinyServer(function(input, output, session) {
 		if (!is.null(input$markerInput) & input$tabs1 == "ROC curve"){
 		  if (input$rocEstimationType == "nonParametricROC"){
 		    # Nonparametric ROC
-		    mROC(data = dataM(), statusName = input$statusVar, markerName = input$markerInput, 
-		         event = input$valueStatus, diseaseHigher = input$lowhigh, ci.method = input$ConfInt,
+		    mROC(data = dataM(), statusName = statusVar(), markerName = input$markerInput, 
+		         event = valueStatus(), diseaseHigher = input$lowhigh, ci.method = input$ConfInt,
 		         se.method = input$StdErr, advanced = input$advanced, alpha = input$alpha)$stats
 		  } else {
 		    # Parametric ROC
 		    tmp <- lapply(input$markerInput, function(x){
-		      parametricROC(data = dataM(), marker = x, status = input$statusVar,
-		                    event = input$valueStatus, returnROCdata = TRUE,
+		      parametricROC(data = dataM(), marker = x, status = statusVar(),
+		                    event = valueStatus(), returnROCdata = TRUE,
 		                    higherValuesPositives = input$lowhigh, confidence.level = 1 - input$alphaParametric,
 		                    plot = FALSE, exact = ifelse(input$ConfIntParametric == "Exact", TRUE, FALSE))$stats
 		    })
@@ -571,13 +494,13 @@ shinyServer(function(input, output, session) {
   ROCstats <- reactive ({
     # Nonparametric ROC
     if (input$rocEstimationType == "nonParametricROC"){
-      mROC(data=dataM(), statusName=input$statusVar, markerName=input$markerInput,
-           event=input$valueStatus, diseaseHigher=input$lowhigh)
+      mROC(data=dataM(), statusName=statusVar(), markerName=input$markerInput,
+           event=valueStatus(), diseaseHigher=input$lowhigh)
     } else {
       # Parametric ROC
       tmp <- lapply(input$markerInput, function(x){
-        tmp2 <- parametricROC(data = dataM(), marker = x, status = input$statusVar,
-                              event = input$valueStatus, returnROCdata = TRUE,
+        tmp2 <- parametricROC(data = dataM(), marker = x, status = statusVar(),
+                              event = valueStatus(), returnROCdata = TRUE,
                               higherValuesPositives = input$lowhigh, confidence.level = 1 - input$alphaParametric,
                               plot = FALSE, exact = FALSE)$plotdata
         
@@ -630,8 +553,8 @@ shinyServer(function(input, output, session) {
 			Comparisons[,1] = input$markerInput[as.numeric(combs[1,])]
 			Comparisons[,2] = input$markerInput[as.numeric(combs[2,])]
 						
-			stats = mROC(data=dataM(), statusName=input$statusVar, markerName=input$markerInput, 
-						 event=input$valueStatus, diseaseHigher=input$lowhigh, ci.method=input$ConfInt,
+			stats = mROC(data=dataM(), statusName=statusVar(), markerName=input$markerInput, 
+						 event=valueStatus(), diseaseHigher=input$lowhigh, ci.method=input$ConfInt,
 						 se.method=input$StdErr, advanced=input$advanced, alpha=input$alpha)$stats
 			
 			stats.tmp = stats[,1:3]
@@ -690,8 +613,8 @@ shinyServer(function(input, output, session) {
 		  
 # 		  if (input$rocEstimationType == "nonParametricROC"){
 # 		    # Nonparametric ROC
-#   			results <- mROC(data=dataM(), statusName=input$statusVar, markerName=input$markerInput, 
-#   			                event=input$valueStatus, diseaseHigher=input$lowhigh)$plotdata
+#   			results <- mROC(data=dataM(), statusName=statusVar(), markerName=input$markerInput, 
+#   			                event=valueStatus(), diseaseHigher=input$lowhigh)$plotdata
 # 		  } else {
 # 		    # Parametric ROC
 # 		    
@@ -733,7 +656,7 @@ shinyServer(function(input, output, session) {
         
         pAUC(data = dataM(), range = c(input$pointA, input$pointB), 
              criteria = input$sensSpec, correct = TRUE, percent = FALSE, markers = input$markerInput,
-             status = input$statusVar, direction = ifelse(input$lowhigh, "<", ">"))
+             status = statusVar(), direction = ifelse(input$lowhigh, "<", ">"))
         
     })
     
@@ -765,14 +688,14 @@ shinyServer(function(input, output, session) {
     
     tagHealthy <- reactive({
         dataTmp <- dataM()
-        if (is.null(dataTmp) || is.null(input$statusVar) || input$statusVar == "" || is.null(input$valueStatus) || input$valueStatus == ""){
+        if (is.null(dataTmp) || is.null(statusVar()) || statusVar() == "" || is.null(valueStatus()) || valueStatus() == ""){
           return(NULL)
         }
-        resolveTagHealthy(statusValues = dataTmp[, input$statusVar], eventValue = input$valueStatus)
+        resolveTagHealthy(statusValues = dataTmp[, statusVar()], eventValue = valueStatus())
     })
     
     
-	optimal.cutpoint <- reactive(optimal.cutpoints(X = input$cutoffMarker, status = input$statusVar, tag.healthy = tagHealthy(), methods = input$cutOffMethods, 
+	optimal.cutpoint <- reactive(optimal.cutpoints(X = input$cutoffMarker, status = statusVar(), tag.healthy = tagHealthy(), methods = input$cutOffMethods, 
 											  data = dataM(), direction = direct(), pop.prev = NULL, categorical.cov = NULL, 
 											  control = ctrl(), ci.fit = TRUE, conf.level = 0.95, trace = FALSE))
 											   
@@ -1067,8 +990,8 @@ shinyServer(function(input, output, session) {
 			if (!input$cutoffPlotsOpts) opts = grphPrmtrsDefault()
 			if (input$cutoffPlotsOpts) opts = grphPrmtrs()
 			
-			results <- mROC(data=dataM(), statusName=input$statusVar, markerName=input$markerInput, 
-			                event=input$valueStatus, diseaseHigher=input$lowhigh)$plotdata
+			results <- mROC(data=dataM(), statusName=statusVar(), markerName=input$markerInput, 
+			                event=valueStatus(), diseaseHigher=input$lowhigh)$plotdata
 			cut.results <- optimal.cutpoint()
 			data = dataM()
 			
@@ -1076,8 +999,8 @@ shinyServer(function(input, output, session) {
 			cutvals = coord[ ,"Cutpoint"]
 			TPRs = coord[ ,"TPR"]
 			FPRs = coord[ ,"FPR"]
-			diseased = data[data[,input$statusVar] == input$valueStatus, input$cutoffMarker]
-			healthy = data[data[,input$statusVar] != input$valueStatus, input$cutoffMarker]
+			diseased = data[data[,statusVar()] == valueStatus(), input$cutoffMarker]
+			healthy = data[data[,statusVar()] != valueStatus(), input$cutoffMarker]
 			dens.diseased = density(diseased)
 			dens.healthy = density(healthy)
 			
