@@ -26,6 +26,7 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 - Sprint 2 `EASY-015` tamamlandi: veri yukleme akisi `mod_data_upload` modulune tasindi; UI+server tarafinda moduler baglanti kuruldu.
 - Sprint 2 `EASY-016` tamamlandi: paylasilan reactive state kontrati (`createSharedState`/`validateSharedState`) tanimlandi ve data upload modulu ile ana server bu kontrat uzerinden baglandi.
 - Sprint 2 `EASY-017` tamamlandi: indirme handler'lari `mod_downloads` yardimcilari ile tek kayıt noktasinda orkestre edildi (`create_download_handler_spec` + `register_download_handlers`).
+- Sprint 2 `EASY-018` tamamlandi: `docs/architecture.md` taslagi olusturuldu; mevcut snapshot + hedef mimari + modul kontratlari yazili hale getirildi.
 
 ## Netlesmemis Kararlar
 
@@ -40,6 +41,6 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 
 ## Bir Sonraki Onerilen Adim
 
-1. Sprint 2 icin `EASY-018` adiminda mimari diyagram taslagini olustur.
-2. `EASY-019` icin refactor smoke test kapsam notunu yaz ve uygula.
+1. Sprint 2 icin `EASY-019` adiminda refactor smoke test kapsam notunu yaz ve uygula.
+2. Sprint 3 baslangici icin `EASY-020` modulu (ROC analysis) scope sinirlarini netlestir.
 3. Sprint 2 cikisinda moduler gecis risklerini tekrar degerlendir.
