@@ -20,6 +20,8 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 - Sprint 1 P0 adiminda `EASY-006/007/008` kapsami uygulandi: status/event uyumlulugu duzeltildi, `:::` kullanimlari temizlendi, temel input dogrulama kontrolleri ve birim testler eklendi.
 - Sprint 1 `EASY-010` tamamlandi: dosya yukleme dogrulama katmani eklendi, UI uzerinden anlamli hata mesaji yansitildi ve ilgili birim testleri yazildi.
 - Sprint 1 `EASY-009` tamamlandi: artik UI'da sunulmayan "paste data" akisina ait erisilemeyen kod bloklari temizlendi.
+- Sprint 1 `EASY-012` tamamlandi: geriye uyumluluk etkileri `docs/compatibility.md` dosyasinda resmi olarak dokumante edildi.
+- Sprint 2 `EASY-013` tamamlandi: `app.R` giris noktasi eklendi ve uygulamanin `app.R` uzerinden baslatilabilirligi dogrulandi.
 
 ## Netlesmemis Kararlar
 
@@ -34,6 +36,6 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 
 ## Bir Sonraki Onerilen Adim
 
-1. Sprint 1 kalan issue'larina devam et (`EASY-012`).
-2. Sprint-1 issue'larini PR dilimlerine map et.
-3. Stabilizasyon degisiklikleri icin test baseline setini netlestir.
+1. Sprint 2 icin `EASY-014` (modul klasor yapisi) adimina gec.
+2. `EASY-015` oncesi `mod_data_upload` dosya sinirlarini netlestir.
+3. Sprint 2 degisiklikleri icin smoke test kapsam notunu olustur.

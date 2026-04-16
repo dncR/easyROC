@@ -60,7 +60,7 @@ Sprint hedefi: Üretimi etkileyebilecek kırılgan noktaları kapatmak.
 | [x] | EASY-009 | Ölü/yarım akışları temizle | P1 | 3 | EASY-004 | Kullanılmayan yol kalmadı |
 | [x] | EASY-010 | Dosya yükleme doğrulama katmanı ekle | P1 | 5 | EASY-008 | Hatalı dosyalar anlamlı mesajla yakalanıyor |
 | [x] | EASY-011 | Kritik bugfix birim testlerini ekle | P0 | 5 | EASY-006, EASY-007 | Bugfix’ler testle korunuyor |
-| [ ] | EASY-012 | Geriye uyumluluk notlarını yaz | P2 | 2 | EASY-006..011 | `docs/compatibility.md` güncel |
+| [x] | EASY-012 | Geriye uyumluluk notlarını yaz | P2 | 2 | EASY-006..011 | `docs/compatibility.md` güncel |
 
 Sprint çıkış kriteri: Bilinen P0/P1 bugların kapanması.
 
@@ -70,7 +70,7 @@ Sprint hedefi: Modüler mimari iskeletini ayağa kaldırmak.
 
 | Done | ID | Issue | Öncelik | SP | Bağımlılık | Kabul Kriteri |
 |---|---|---|---:|---:|---|---|
-| [ ] | EASY-013 | `app.R` giriş noktası oluştur | P0 | 3 | EASY-012 | Uygulama `app.R` üzerinden çalışıyor |
+| [x] | EASY-013 | `app.R` giriş noktası oluştur | P0 | 3 | EASY-012 | Uygulama `app.R` üzerinden çalışıyor |
 | [ ] | EASY-014 | Modül klasör yapısını kur (`mod_*`) | P0 | 3 | EASY-013 | Standart yapı repo’da hazır |
 | [ ] | EASY-015 | `mod_data_upload` çıkarımı | P0 | 5 | EASY-014 | Veri yükleme modülü bağımsız çalışıyor |
 | [ ] | EASY-016 | Ortak reactive state yapısını tanımla | P0 | 5 | EASY-015 | Modüller arası veri akışı net |
