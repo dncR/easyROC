@@ -49,9 +49,12 @@ mod_data_upload_ui <- function(id) {
   )
 }
 
-mod_data_upload_server <- function(id) {
+mod_data_upload_server <- function(id, shared_state = NULL) {
   shiny::moduleServer(id, function(input, output, session) {
-    uploadError <- shiny::reactiveVal(NULL)
+    if (is.null(shared_state)) {
+      shared_state <- createSharedState()
+    }
+    validateSharedState(shared_state)
 
     dataM <- shiny::reactive({
       data <- NULL
@@ -62,13 +65,13 @@ mod_data_upload_server <- function(id) {
         } else if (input$sampleData == 2) {
           data <- utils::read.table("data/pbc.txt", header = TRUE)
         }
-        uploadError(NULL)
+        shared_state$upload_error(NULL)
       } else if (input$dataInput == 2) {
         inFile <- input$upload
         mySep <- switch(input$fileSepDF, "1" = ",", "2" = "\t", "3" = ";", "4" = "")
 
         if (is.null(inFile)) {
-          uploadError(NULL)
+          shared_state$upload_error(NULL)
           return(NULL)
         }
 
@@ -80,11 +83,11 @@ mod_data_upload_server <- function(id) {
         )
 
         if (!is.null(parsed$error)) {
-          uploadError(parsed$error)
+          shared_state$upload_error(parsed$error)
           return(NULL)
         }
 
-        uploadError(NULL)
+        shared_state$upload_error(NULL)
         data <- parsed$data
       }
 
@@ -92,7 +95,7 @@ mod_data_upload_server <- function(id) {
     })
 
     output$uploadValidationMessage <- shiny::renderUI({
-      msg <- uploadError()
+      msg <- shared_state$upload_error()
       if (is.null(msg) || msg == "") {
         return(NULL)
       }
@@ -140,10 +143,20 @@ mod_data_upload_server <- function(id) {
       }
     })
 
+    shiny::observe({
+      shared_state$data(dataM())
+    })
+
+    shiny::observe({
+      shared_state$status_var(input$statusVar)
+      shared_state$event_value(input$valueStatus)
+    })
+
     list(
-      data = dataM,
-      status_var = shiny::reactive(input$statusVar),
-      event_value = shiny::reactive(input$valueStatus)
+      data = shiny::reactive(shared_state$data()),
+      status_var = shiny::reactive(shared_state$status_var()),
+      event_value = shiny::reactive(shared_state$event_value()),
+      shared_state = shared_state
     )
   })
 }

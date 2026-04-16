@@ -5,6 +5,7 @@ shinyServer(function(input, output, session) {
 	source("R/mROC.R")
 	source("R/rocdata.R")
   source("R/mod_data_upload.R")
+  source("R/shared_state.R")
   source("R/data_input_utils.R")
   source("R/pAUC.R")
   source("R/SampleSizeSingleTest.R")
@@ -23,10 +24,13 @@ shinyServer(function(input, output, session) {
 
 ### REACTIVE FUNCTIONS  ###
 {
-  data_upload <- mod_data_upload_server("data_upload")
-  dataM <- data_upload$data
-  statusVar <- data_upload$status_var
-  valueStatus <- data_upload$event_value
+  shared_state <- createSharedState()
+  validateSharedState(shared_state)
+  mod_data_upload_server("data_upload", shared_state = shared_state)
+
+  dataM <- reactive(shared_state$data())
+  statusVar <- reactive(shared_state$status_var())
+  valueStatus <- reactive(shared_state$event_value())
     
   heightsize <- reactive(input$myheight)
 	widthsize <- reactive(input$mywidth)
