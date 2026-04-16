@@ -1,0 +1,5 @@
+task	total_sec	iter	per_iter_ms
+mayo_nonparam_roc_stats	4.339	100	43.39
+mayo_pauc	0.327999999999999	500	0.655999999999999
+mayo_cutoff_youden	0.604	100	6.04
+mayo_parametric_roc	0.191999999999999	500	0.383999999999999

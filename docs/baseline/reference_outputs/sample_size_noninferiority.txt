@@ -1,0 +1,18 @@
+Sample size calculation for testing noninferiority of a new test to a standard test 
+----------------------------------------- 
+Input: 
+----------------------------------------- 
+Type I error          : 0.05 
+Power                 : 0.8 
+AUC for standard test : 0.8 
+AUC for new test      : 0.8 
+Allocation ratio      : 1 
+----------------------------------------- 
+Output: 
+----------------------------------------- 
+Case    : 148 
+Control : 148 
+Total   : 296 
+----------------------------------------- 
+
+

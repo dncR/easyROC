@@ -1,0 +1,7 @@
+	Value	Lower_Limit	Upper_Limit
+Sensitivity	0.752	0.667	0.825
+Specificity	0.824	0.761	0.875
+Positive Predictive Value	0.740	0.661	0.816
+Negative Predictive Value	0.832	0.766	0.882
+Positive Likelihood Ratio	4.261	3.077	5.901
+Negative Likelihood Ratio	0.301	0.220	0.412

@@ -1,0 +1,18 @@
+Sample size calculation for comparison of two diagnostic tests 
+-------------------------------------------------------------- 
+1) Input: 
+-------------------------------------------------------------- 
+Type I error                                     : 0.05 
+Power                                            : 0.8 
+AUC for first test under null hypothesis         : 0.8 
+AUC for second test under null hypothesis        : 0.8 
+AUC for first test under alternative hypothesis  : 0.9 
+AUC for second test under alternative hypothesis : 0.7 
+Allocation ratio                                 : 1 
+-------------------------------------------------------------- 
+2) Output: 
+-------------------------------------------------------------- 
+Case    : 45 
+Control : 45 
+Total   : 90 
+-------------------------------------------------------------- 
