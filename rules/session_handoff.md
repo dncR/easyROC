@@ -18,6 +18,7 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 - "Simdi cerceve sonra icerik" yaklasimi resmi kural haline getirildi (OP-009).
 - Sprint 0 baseline artefaktlari olusturuldu (`docs/baseline.md`, referans cikti seti, teknik borc envanteri, branch/PR kurallari).
 - Sprint 1 P0 adiminda `EASY-006/007/008` kapsami uygulandi: status/event uyumlulugu duzeltildi, `:::` kullanimlari temizlendi, temel input dogrulama kontrolleri ve birim testler eklendi.
+- Sprint 1 `EASY-010` tamamlandi: dosya yukleme dogrulama katmani eklendi, UI uzerinden anlamli hata mesaji yansitildi ve ilgili birim testleri yazildi.
 
 ## Netlesmemis Kararlar
 
@@ -32,6 +33,6 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 
 ## Bir Sonraki Onerilen Adim
 
-1. Workplan Scope etiketleri icin kontrollu bir mini sozluk ekle.
+1. Sprint 1 kalan issue'larina devam et (`EASY-009`, `EASY-012`).
 2. Sprint-1 issue'larini PR dilimlerine map et.
 3. Stabilizasyon degisiklikleri icin test baseline setini netlestir.

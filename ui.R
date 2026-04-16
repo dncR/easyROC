@@ -44,7 +44,8 @@ shinyUI(pageWithSidebar(
         
 				HTML('<br>'),
 				HTML('<p>You can upload your data separated by comma, tab, semicolon or space.</p>'),
-				HTML('<p><b>Note</b>: First row must be the header including the variable names.</p>')
+				HTML('<p><b>Note</b>: First row must be the header including the variable names.</p>'),
+        uiOutput("uploadValidationMessage")
 			),
 			
 			conditionalPanel(condition = "input.dataInput == '3'",

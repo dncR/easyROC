@@ -4,6 +4,7 @@ options(shiny.maxRequestSize = 30*1024^2)
 shinyServer(function(input, output, session) {
 	source("R/mROC.R")
 	source("R/rocdata.R")
+  source("R/data_input_utils.R")
   source("R/pAUC.R")
   source("R/SampleSizeSingleTest.R")
   source("R/SampleSizeStandardvsNew.R")
@@ -27,6 +28,8 @@ shinyServer(function(input, output, session) {
 
 ### REACTIVE FUNCTIONS  ###
 {
+  uploadError <- reactiveVal(NULL)
+
 	dataM <- reactive({  ## Data input.
 		if (input$dataInput == 1){  ## Load example data.
       if (input$sampleData == 1){
@@ -34,19 +37,31 @@ shinyServer(function(input, output, session) {
       } else if (input$sampleData == 2){
         data <- read.table("data/pbc.txt", header=TRUE)
       }
+      uploadError(NULL)
 		} else if (input$dataInput==2){  ## Upload data.
 			
       inFile <- input$upload
       mySep <- switch(input$fileSepDF, '1'=",",'2'="\t",'3'=";", '4'="")
             
-			if (is.null(input$upload)){
+			if (is.null(inFile)){
+        uploadError(NULL)
 			  return(NULL)
 			}
-						
-      if (file.info(inFile$datapath)$size <= 31457280){
-				data <- read.table(inFile$datapath, sep = mySep, header = TRUE, fill = TRUE, 
-				                   dec = ifelse(input$decimal, ",", "."))
-			} else print("File is bigger than 30MB and will not be uploaded.") 
+			
+      parsed <- readDelimitedUpload(
+        filePath = inFile$datapath,
+        fileSize = inFile$size,
+        sep = mySep,
+        decimalComma = isTRUE(input$decimal)
+      )
+
+      if (!is.null(parsed$error)){
+        uploadError(parsed$error)
+        return(NULL)
+      }
+
+      uploadError(NULL)
+      data <- parsed$data
 		} 
 		
 		#else {  ## Paste data.
@@ -124,6 +139,14 @@ shinyServer(function(input, output, session) {
    
 ####  OBSERVER FUNCTIONS #### 
 {
+  output$uploadValidationMessage <- renderUI({
+    msg <- uploadError()
+    if (is.null(msg) || msg == ""){
+      return(NULL)
+    }
+    tags$p(style = "color:#b22222; font-weight:600; margin-top:8px;", msg)
+  })
+
 	## Yüklenen veri setinin değişken isimlerini takip eden kısım.
 	## "statusVar" ve "markerInput" için seçenekler veri setinin değişken isimleri olarak güncelleniyor.
 
