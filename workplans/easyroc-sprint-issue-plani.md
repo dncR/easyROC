@@ -74,7 +74,7 @@ Sprint hedefi: Modüler mimari iskeletini ayağa kaldırmak.
 | [x] | EASY-014 | Modül klasör yapısını kur (`mod_*`) | P0 | 3 | EASY-013 | Standart yapı repo’da hazır |
 | [x] | EASY-015 | `mod_data_upload` çıkarımı | P0 | 5 | EASY-014 | Veri yükleme modülü bağımsız çalışıyor |
 | [x] | EASY-016 | Ortak reactive state yapısını tanımla | P0 | 5 | EASY-015 | Modüller arası veri akışı net |
-| [ ] | EASY-017 | `mod_downloads` temelini çıkar | P1 | 3 | EASY-014 | Tek noktadan indirme orkestrasyonu |
+| [x] | EASY-017 | `mod_downloads` temelini çıkar | P1 | 3 | EASY-014 | Tek noktadan indirme orkestrasyonu |
 | [ ] | EASY-018 | Mimari diyagram taslağı | P1 | 2 | EASY-014 | `docs/architecture.md` taslak hazır |
 | [ ] | EASY-019 | Refactor smoke testleri | P0 | 3 | EASY-015, EASY-016 | Ana akış bozulmadan çalışıyor |
 

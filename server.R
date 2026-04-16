@@ -5,6 +5,7 @@ shinyServer(function(input, output, session) {
 	source("R/mROC.R")
 	source("R/rocdata.R")
   source("R/mod_data_upload.R")
+  source("R/mod_downloads.R")
   source("R/shared_state.R")
   source("R/data_input_utils.R")
   source("R/pAUC.R")
@@ -198,10 +199,12 @@ shinyServer(function(input, output, session) {
 
 ########################  Download Handlers     #########################
 {
+  download_specs <- list()
+
 	# 2. PDF Format
-	output$downloadCutOffPlotPDF <- downloadHandler(
-		filename <- function(){paste('CutOff_Plots.pdf')},
-		content <- function(file){
+	download_specs$downloadCutOffPlotPDF <- create_download_handler_spec(
+		filename = function(){paste('CutOff_Plots.pdf')},
+		content = function(file){
 			pdf(file, height = input$myheightCutoff/96, width = input$mywidthCutoff/96)
 			#pdf(file, height = 5.9, width = 5.9)
 				if (!is.null(input$markerInput) && input$showPlots && input$tabs1 == "Cut points"){
@@ -350,12 +353,12 @@ shinyServer(function(input, output, session) {
 				}	
 			dev.off()
 		},
-		contentType = 'application/pdf'
+		content_type = 'application/pdf'
 	)
 }
 
 { ##  Download ROC Stats.
-    output$downloadROCStats <- downloadHandler(
+    download_specs$downloadROCStats <- create_download_handler_spec(
         filename = function() { "ROC_Statistics.txt" },
         content = function(file) {
           if (!is.null(input$markerInput) & input$tabs1 == "ROC curve"){
@@ -390,7 +393,7 @@ shinyServer(function(input, output, session) {
 }
 
 { ##  Download ROC Coordinates.
-  output$downloadROCData <- downloadHandler(
+  download_specs$downloadROCData <- create_download_handler_spec(
     filename = function() { "ROC_Coordinates.txt" },
     content = function(file) {
       
@@ -404,9 +407,9 @@ shinyServer(function(input, output, session) {
 
 {
     # Download ROCPlot (pdf format)
-    output$downloadROCPlot <- downloadHandler(
-        filename <- function(){paste('ROCplot.pdf')},
-        content <- function(file){
+    download_specs$downloadROCPlot <- create_download_handler_spec(
+        filename = function(){paste('ROCplot.pdf')},
+        content = function(file){
             pdf(file, height = input$myheightCutoff/96, width = input$mywidthCutoff/96)
           
             if(!is.null(input$markerInput) & input$tabs1 == "ROC curve"){
@@ -439,13 +442,13 @@ shinyServer(function(input, output, session) {
             }
             dev.off()
         },
-        contentType = 'application/pdf'
+        content_type = 'application/pdf'
     )
 }
 
 
 { ##  Download Cut-off results.
-    output$downloadCutOffresults <- downloadHandler(
+    download_specs$downloadCutOffresults <- create_download_handler_spec(
         filename = function() { "CutOff_Results.txt" },
         content = function(file) {
             if (!is.null(input$markerInput) & input$tabs1 == "Cut points"){
@@ -1154,7 +1157,7 @@ SampleSize <- reactive({
 
 output$SampleSizeForRoc<- renderPrint({ SampleSize() })
 
-output$downloadSampleSizeResults <- downloadHandler(
+download_specs$downloadSampleSizeResults <- create_download_handler_spec(
 filename = function() { "Sample_Size_Results.txt" },
 content = function(file) {
     #if(input$tabs1 == "Sample size"){
@@ -1166,5 +1169,7 @@ content = function(file) {
 )
 
 ######################  End Sample SizeTab   ###############################
+
+register_download_handlers(output, download_specs)
 
 })
