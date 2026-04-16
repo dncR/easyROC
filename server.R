@@ -8,7 +8,7 @@ shinyServer(function(input, output, session) {
   source("R/SampleSizeSingleTest.R")
   source("R/SampleSizeStandardvsNew.R")
   source("R/SampleSizeTwoTests.R")
-  source("R/rocdata.R")
+  source("R/status_utils.R")
   source("R/ROCplot.R")
   source("R/printCutOff.R")
   source("R/parametricROC.R")
@@ -445,7 +445,7 @@ shinyServer(function(input, output, session) {
                       })
                       names(tmp) <- input$markerInput
                       
-                      tmp <- plyr:::ldply(tmp, rbind)[ ,-1]
+                      tmp <- plyr::ldply(tmp, rbind)[ ,-1]
                       tmp <- tmp[ ,-c(2:5)]
                       
                       colnames(tmp) <- c("Marker", "AUC", "SE.AUC", "LowerLimit", paste("UpperLimit (*)", sep=""), "z", "p-value")
@@ -556,7 +556,7 @@ shinyServer(function(input, output, session) {
 		    })
 		    names(tmp) <- input$markerInput
 		    
-		    tmp <- plyr:::ldply(tmp, rbind)[ ,-1]
+		    tmp <- plyr::ldply(tmp, rbind)[ ,-1]
 		    tmp <- tmp[ ,-c(2:5)]
 		    
 		    colnames(tmp) <- c("Marker", "AUC", "SE.AUC", "LowerLimit", paste("UpperLimit (*)", sep=""), "z", "p-value")
@@ -593,10 +593,10 @@ shinyServer(function(input, output, session) {
       })
       names(tmp) <- input$markerInput
       
-      tmp <- plyr:::ldply(tmp, rbind)
+      tmp <- plyr::ldply(tmp, rbind)
       colnames(tmp)[1] <- "Marker"
       
-      tmp <- dplyr:::arrange(tmp, Marker, Cutpoint)
+      tmp <- dplyr::arrange(tmp, Marker, Cutpoint)
       
       tmp <- list(plotdata = as.data.frame(tmp))
       tmp
@@ -762,9 +762,11 @@ shinyServer(function(input, output, session) {
 {
     
     tagHealthy <- reactive({
-        cl = unique(dataM()[,input$statusVar])
-        ind = which(cl != as.numeric(input$valueStatus))
-        return(cl[ind])
+        dataTmp <- dataM()
+        if (is.null(dataTmp) || is.null(input$statusVar) || input$statusVar == "" || is.null(input$valueStatus) || input$valueStatus == ""){
+          return(NULL)
+        }
+        resolveTagHealthy(statusValues = dataTmp[, input$statusVar], eventValue = input$valueStatus)
     })
     
     
@@ -1237,4 +1239,3 @@ content = function(file) {
 ######################  End Sample SizeTab   ###############################
 
 })
-

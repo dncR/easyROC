@@ -17,6 +17,7 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 - easyROC icin yaln kural protokolu kurulumu baslatildi.
 - "Simdi cerceve sonra icerik" yaklasimi resmi kural haline getirildi (OP-009).
 - Sprint 0 baseline artefaktlari olusturuldu (`docs/baseline.md`, referans cikti seti, teknik borc envanteri, branch/PR kurallari).
+- Sprint 1 P0 adiminda `EASY-006/007/008` kapsami uygulandi: status/event uyumlulugu duzeltildi, `:::` kullanimlari temizlendi, temel input dogrulama kontrolleri ve birim testler eklendi.
 
 ## Netlesmemis Kararlar
 

@@ -1,0 +1,7 @@
+repo_root <- normalizePath(file.path("..", ".."), mustWork = TRUE)
+.libPaths(c(file.path(repo_root, ".Rlib"), .libPaths()))
+
+source(file.path(repo_root, "R", "rocdata.R"))
+source(file.path(repo_root, "R", "mROC.R"))
+source(file.path(repo_root, "R", "pAUC.R"))
+source(file.path(repo_root, "R", "status_utils.R"))
