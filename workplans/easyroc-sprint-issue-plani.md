@@ -57,7 +57,7 @@ Sprint hedefi: Üretimi etkileyebilecek kırılgan noktaları kapatmak.
 | [x] | EASY-006 | `status/event` karakter-faktör uyum düzeltmesi | P0 | 5 | EASY-004 | Karakter/faktör durumlarda hata yok |
 | [x] | EASY-007 | `:::` kullanımını public API ile değiştir | P0 | 5 | EASY-004 | Non-exported çağrı kalmadı |
 | [x] | EASY-008 | Hatalı input kontrollerini düzelt | P0 | 3 | EASY-004 | Yanlış koşullar güncellendi |
-| [ ] | EASY-009 | Ölü/yarım akışları temizle | P1 | 3 | EASY-004 | Kullanılmayan yol kalmadı |
+| [x] | EASY-009 | Ölü/yarım akışları temizle | P1 | 3 | EASY-004 | Kullanılmayan yol kalmadı |
 | [x] | EASY-010 | Dosya yükleme doğrulama katmanı ekle | P1 | 5 | EASY-008 | Hatalı dosyalar anlamlı mesajla yakalanıyor |
 | [x] | EASY-011 | Kritik bugfix birim testlerini ekle | P0 | 5 | EASY-006, EASY-007 | Bugfix’ler testle korunuyor |
 | [ ] | EASY-012 | Geriye uyumluluk notlarını yaz | P2 | 2 | EASY-006..011 | `docs/compatibility.md` güncel |

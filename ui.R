@@ -15,8 +15,6 @@ shinyUI(pageWithSidebar(
 
 		# Tab: Data Upload
 		conditionalPanel(condition="input.tabs1 == 'Data upload'",
-			# h4("Input data"),
-			#radioButtons("dataInput", "", list("Load example data"=1, "Upload a file"=2, "Paste your data"=3), selected=1),
 			radioButtons("dataInput", "", list("Load example data" = 1, "Upload a file" = 2), selected = 1),
 			
 			conditionalPanel(condition = "input.dataInput == '1'",
@@ -46,20 +44,6 @@ shinyUI(pageWithSidebar(
 				HTML('<p>You can upload your data separated by comma, tab, semicolon or space.</p>'),
 				HTML('<p><b>Note</b>: First row must be the header including the variable names.</p>'),
         uiOutput("uploadValidationMessage")
-			),
-			
-			conditionalPanel(condition = "input.dataInput == '3'",
-				h5("Paste or enter your data below:"),
-				tags$textarea(id = "myData", rows = 10, cols = 5, ""),
-				actionButton('clearText_button','Clear data'),
-				HTML('<br>'),
-				HTML('<br>'),
-
-				radioButtons("fileSepP", "Separator:", 
-				             list("Comma" = 1, "Tab" = 2, "Semicolon" = 3), 
-				             selected = 2),
-				HTML('<p>You can paste or manually enter your data as separated by comma, tab or semicolon.</p>'),
-				HTML('<p>Note: First row must be header.</p>')
 			),
 			
 			HTML('<br>'),

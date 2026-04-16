@@ -17,12 +17,6 @@ shinyServer(function(input, output, session) {
   library(pROC)
 	library(plyr)
   library(OptimalCutpoints)
-
-	## Paste Data bölümünü kontrol eden kod.
-	#observe({
-	#	if (input$clearText_button == 0) return()
-	#	isolate({updateTextInput(session, "myData", label = ",", value = "")})
-	#})
       
     
 
@@ -31,6 +25,8 @@ shinyServer(function(input, output, session) {
   uploadError <- reactiveVal(NULL)
 
 	dataM <- reactive({  ## Data input.
+    data <- NULL
+
 		if (input$dataInput == 1){  ## Load example data.
       if (input$sampleData == 1){
 				data <- read.table("data/mayo.txt", header=TRUE)
@@ -62,24 +58,7 @@ shinyServer(function(input, output, session) {
 
       uploadError(NULL)
       data <- parsed$data
-		} 
-		
-		#else {  ## Paste data.
-		#	if(is.null(input$myData)) {return(NULL)}
-		#	
-		#	tmp <- matrix(strsplit(input$myData, "\n")[[1]])
-		#	mySep <- switch(input$fileSepP, '1'=",",'2'="\t",'3'=";")
-		#	myColnames <- strsplit(tmp[1], mySep)[[1]]
-		#	data <- matrix(0, length(tmp), length(myColnames))
-		#	colnames(data) <- myColnames
-        #   
-		#	for(i in 2:length(tmp)){
-		#		myRow <- as.numeric(strsplit(paste(tmp[i],mySep,mySep,sep=""), mySep)[[1]])
-		#		data[i-1,] <- myRow[-length(myRow)]
-		#	}
-		#	
-        #   data <- data.frame(data)
-		#}
+		}
 		
 		return(data)   
 	})

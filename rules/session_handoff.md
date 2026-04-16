@@ -19,6 +19,7 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 - Sprint 0 baseline artefaktlari olusturuldu (`docs/baseline.md`, referans cikti seti, teknik borc envanteri, branch/PR kurallari).
 - Sprint 1 P0 adiminda `EASY-006/007/008` kapsami uygulandi: status/event uyumlulugu duzeltildi, `:::` kullanimlari temizlendi, temel input dogrulama kontrolleri ve birim testler eklendi.
 - Sprint 1 `EASY-010` tamamlandi: dosya yukleme dogrulama katmani eklendi, UI uzerinden anlamli hata mesaji yansitildi ve ilgili birim testleri yazildi.
+- Sprint 1 `EASY-009` tamamlandi: artik UI'da sunulmayan "paste data" akisina ait erisilemeyen kod bloklari temizlendi.
 
 ## Netlesmemis Kararlar
 
@@ -33,6 +34,6 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 
 ## Bir Sonraki Onerilen Adim
 
-1. Sprint 1 kalan issue'larina devam et (`EASY-009`, `EASY-012`).
+1. Sprint 1 kalan issue'larina devam et (`EASY-012`).
 2. Sprint-1 issue'larini PR dilimlerine map et.
 3. Stabilizasyon degisiklikleri icin test baseline setini netlestir.
