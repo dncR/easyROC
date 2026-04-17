@@ -60,6 +60,7 @@ See:
 - `docs/container-runtime-recipe.md`
 - `docs/env-secret-management.md`
 - `docs/observability.md`
+- `docs/healthchecks.md`
 
 # License
 

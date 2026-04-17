@@ -22,6 +22,7 @@ Bu dokuman, `docs/deployment-target-architecture.md` icindeki container-first ka
 - `.env.secrets.example`
 - `scripts/deploy_compose.sh`
 - `scripts/validate_env.sh`
+- `scripts/healthcheck.R`
 
 ## 3) Hazirlik
 
@@ -31,7 +32,7 @@ Bu dokuman, `docs/deployment-target-architecture.md` icindeki container-first ka
 cp .env.staging.example .env.staging
 ```
 
-2. Gerekirse `EASYROC_IMAGE`, `EASYROC_IMAGE_TAG`, `EASYROC_HOST_PORT`, `EASYROC_LOG_LEVEL` degerlerini duzenle.
+2. Gerekirse `EASYROC_IMAGE`, `EASYROC_IMAGE_TAG`, `EASYROC_HOST_PORT`, `EASYROC_LOG_LEVEL`, `EASYROC_HEALTHCHECK_WAIT_SECONDS` degerlerini duzenle.
 3. (Opsiyonel) secret degiskenleri icin ayri dosya kullan:
 
 ```bash
@@ -81,3 +82,4 @@ docker compose --env-file .env.staging -f docker-compose.yml -f docker-compose.s
 - Bagimliliklar `renv.lock` uzerinden restore edilir.
 - Production deploy'da rebuild kapali oldugu icin immutable promote modeli korunur.
 - Deploy oncesi env validation `scripts/validate_env.sh` ile zorunlu olarak uygulanir.
+- Deploy sonrasi readiness kapisi `scripts/deploy_compose.sh` ile container `healthy` durumuna gecisi bekler.

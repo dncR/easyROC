@@ -20,6 +20,7 @@ Hedef: staging/prod ortamlarinda konfig ve secret drift riskini azaltmak.
 | `R_CONFIG_ACTIVE` | yes | no | env file | `staging` veya `production` |
 | `EASYROC_LOG_LEVEL` | no | no | env file | `DEBUG/INFO/WARN/ERROR` |
 | `EASYROC_LOG_FILE` | no | no | env file | Opsiyonel log file sink |
+| `EASYROC_HEALTHCHECK_WAIT_SECONDS` | no | no | env file | Deploy script health wait timeout (sn) |
 | `SHINY_HOST` | optional | no | compose default | Varsayilan: `0.0.0.0` |
 | `SHINY_PORT` | optional | no | compose default | Varsayilan: `3838` |
 

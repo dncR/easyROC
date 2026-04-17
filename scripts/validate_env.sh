@@ -75,6 +75,13 @@ if [[ -n "${EASYROC_LOG_LEVEL:-}" ]]; then
   esac
 fi
 
+if [[ -n "${EASYROC_HEALTHCHECK_WAIT_SECONDS:-}" ]]; then
+  if ! [[ "${EASYROC_HEALTHCHECK_WAIT_SECONDS}" =~ ^[0-9]+$ ]]; then
+    echo "EASYROC_HEALTHCHECK_WAIT_SECONDS must be numeric." >&2
+    exit 1
+  fi
+fi
+
 if [[ "${target}" == "production" ]]; then
   if rg -n "^[[:space:]]*[A-Za-z0-9_]*(PASSWORD|TOKEN|SECRET|KEY)[A-Za-z0-9_]*[[:space:]]*=" "${env_file}" >/dev/null 2>&1; then
     echo "Potential secret detected in ${env_file}. Keep production secrets in secret store / secret env file." >&2

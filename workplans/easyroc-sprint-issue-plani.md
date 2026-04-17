@@ -137,7 +137,7 @@ Sprint hedefi: Dağıtım ve operasyonel hazırlığın tamamlanması.
 | [x] | EASY-040 | Container/çalıştırma reçetesi standardizasyonu | P0 | 5 | EASY-039 | `Dockerfile`, compose override'lari ve `scripts/deploy_compose.sh` ile tekrarlanabilir deploy adimlari tanimlandi |
 | [x] | EASY-041 | Ortam değişkeni ve gizli bilgi yönetimi | P0 | 3 | EASY-039 | `docs/env-secret-management.md` + `scripts/validate_env.sh` ile secret/env yonetimi standardize edildi |
 | [x] | EASY-042 | Loglama ve hata izleme iyileştirmeleri | P1 | 5 | EASY-040 | `R/logging_utils.R` + `docs/observability.md` ile operasyonel teshis sinyalleri standardize edildi |
-| [ ] | EASY-043 | Health-check ve readiness kontrolleri | P1 | 3 | EASY-040 | Sistem sağlık doğrulaması var |
+| [x] | EASY-043 | Health-check ve readiness kontrolleri | P1 | 3 | EASY-040 | `scripts/healthcheck.R` + compose `healthcheck` + deploy readiness wait ile sistem saglik dogrulamasi devrede |
 | [ ] | EASY-044 | Runbook ve deployment dokümantasyonu | P0 | 3 | EASY-040..043 | `docs/deployment.md` ve `docs/runbook.md` hazır |
 
 Sprint çıkış kriteri: Staging’de release adayı doğrulandı ve Rule Refactor Review checkpoint tamamlandı.
