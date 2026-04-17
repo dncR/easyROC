@@ -1,3 +1,7 @@
+if (!exists("pAUC", mode = "function")) {
+  source("R/pAUC.R")
+}
+
 compute_partial_auc_result <- function(data, marker_names, status_var, lowhigh,
                                        point_a, point_b, sens_spec) {
   if (is.null(data) || is.null(status_var) || status_var == "" ||

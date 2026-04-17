@@ -1,3 +1,11 @@
+if (!exists("readDelimitedUpload", mode = "function")) {
+  source("R/data_input_utils.R")
+}
+if (!exists("createSharedState", mode = "function") ||
+    !exists("validateSharedState", mode = "function")) {
+  source("R/shared_state.R")
+}
+
 mod_data_upload_ui <- function(id) {
   ns <- shiny::NS(id)
 

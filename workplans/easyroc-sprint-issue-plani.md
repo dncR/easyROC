@@ -91,7 +91,7 @@ Sprint hedefi: Ana işlevleri modüllere taşımak.
 | [x] | EASY-022 | `mod_cut_points` çıkarımı | P0 | 8 | EASY-016 | Cut-off tabı modüler çalışıyor |
 | [x] | EASY-023 | `mod_sample_size` çıkarımı | P1 | 3 | EASY-016 | Sample size hesapları modülde |
 | [x] | EASY-024 | Plot options ortak servisleştirme | P1 | 5 | EASY-020, EASY-022 | Tekrarlı kod azaltıldı |
-| [ ] | EASY-025 | Legacy `ui.R/server.R` bağımlılık temizliği | P1 | 3 | EASY-020..023 | Monolitik bağımlılıklar kaldırıldı |
+| [x] | EASY-025 | Legacy `ui.R/server.R` bağımlılık temizliği | P1 | 3 | EASY-020..023 | Monolitik bağımlılıklar kaldırıldı |
 | [ ] | EASY-026 | Faz-2 migration notu | P2 | 2 | EASY-025 | `docs/migration-phase2.md` hazır |
 
 Sprint çıkış kriteri: Tüm ana sekmeler modül yapısında çalışır.

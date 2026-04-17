@@ -1,3 +1,13 @@
+if (!exists("SampleSizeSingleTest", mode = "function")) {
+  source("R/SampleSizeSingleTest.R")
+}
+if (!exists("SampleSizeTwoTests", mode = "function")) {
+  source("R/SampleSizeTwoTests.R")
+}
+if (!exists("SampleSizeStandardvsNew", mode = "function")) {
+  source("R/SampleSizeStandardvsNew.R")
+}
+
 mod_sample_size_ui <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(

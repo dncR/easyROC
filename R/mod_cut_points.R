@@ -1,3 +1,13 @@
+if (!exists("resolveTagHealthy", mode = "function")) {
+  source("R/status_utils.R")
+}
+if (!exists("rocdata", mode = "function")) {
+  source("R/rocdata.R")
+}
+if (!exists("mROC", mode = "function")) {
+  source("R/mROC.R")
+}
+
 compute_cutoff_direction <- function(lowhigh) {
   ifelse(isTRUE(lowhigh), "<", ">")
 }
@@ -126,6 +136,22 @@ compute_optimal_cutpoint <- function(data, status_var, marker_name, event_value,
   )
 }
 
+compute_cutoff_roc_coordinates <- function(data, status_var, marker_names, event_value, lowhigh) {
+  if (is.null(data) || is.null(status_var) || status_var == "" ||
+      is.null(marker_names) || length(marker_names) == 0 ||
+      is.null(event_value) || event_value == "") {
+    return(NULL)
+  }
+
+  mROC(
+    data = data,
+    statusName = status_var,
+    markerName = marker_names,
+    event = event_value,
+    diseaseHigher = lowhigh
+  )$plotdata
+}
+
 mod_cut_points_ui <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(shiny::div(id = ns("root")))
@@ -166,10 +192,25 @@ mod_cut_points_server <- function(id, shared_state = NULL, root_input = NULL) {
       )
     })
 
+    cutoff_roc_coordinates <- shiny::reactive({
+      if (!is_active()) {
+        return(NULL)
+      }
+
+      compute_cutoff_roc_coordinates(
+        data = shared_state$data(),
+        status_var = shared_state$status_var(),
+        marker_names = root_input$markerInput,
+        event_value = shared_state$event_value(),
+        lowhigh = root_input$lowhigh
+      )
+    })
+
     list(
       is_active = is_active,
       control_opts = control_opts,
-      optimal_cutpoint = optimal_cutpoint
+      optimal_cutpoint = optimal_cutpoint,
+      cutoff_roc_coordinates = cutoff_roc_coordinates
     )
   })
 }

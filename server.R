@@ -2,8 +2,6 @@
 options(shiny.maxRequestSize = 30*1024^2)
 
 shinyServer(function(input, output, session) {
-	source("R/mROC.R")
-	source("R/rocdata.R")
   source("R/mod_data_upload.R")
   source("R/mod_roc_analysis.R")
   source("R/mod_partial_auc.R")
@@ -12,19 +10,8 @@ shinyServer(function(input, output, session) {
   source("R/plot_options_service.R")
   source("R/mod_downloads.R")
   source("R/shared_state.R")
-  source("R/data_input_utils.R")
-  source("R/pAUC.R")
-  source("R/SampleSizeSingleTest.R")
-  source("R/SampleSizeStandardvsNew.R")
-  source("R/SampleSizeTwoTests.R")
-  source("R/status_utils.R")
   source("R/ROCplot.R")
   source("R/printCutOff.R")
-  source("R/parametricROC.R")
-  
-  library(pROC)
-	library(plyr)
-  library(OptimalCutpoints)
       
     
 
@@ -185,12 +172,12 @@ shinyServer(function(input, output, session) {
 					if (!input$cutoffPlotsOpts) opts = grphPrmtrsDefault()
 					if (input$cutoffPlotsOpts) opts = grphPrmtrs()
 					
-						results <- mROC(data=dataM(), statusName=statusVar(), markerName=input$markerInput, event=valueStatus(), diseaseHigher=input$lowhigh)$plotdata
-						cut.results <- cut_points$optimal_cutpoint()
-						if (is.null(cut.results)) {
-							dev.off()
-							return(invisible(NULL))
-						}
+							results <- cut_points$cutoff_roc_coordinates()
+							cut.results <- cut_points$optimal_cutpoint()
+							if (is.null(results) || is.null(cut.results)) {
+								dev.off()
+								return(invisible(NULL))
+							}
 						data = dataM()
 					
 					coord = results[results[,"Marker"] == input$cutoffMarker,]
@@ -501,16 +488,7 @@ shinyServer(function(input, output, session) {
 	
 	output$ROCplot <- renderPlot({
 		if(isTRUE(roc_analysis$is_active())){
-		  
-# 		  if (input$rocEstimationType == "nonParametricROC"){
-# 		    # Nonparametric ROC
-#   			results <- mROC(data=dataM(), statusName=statusVar(), markerName=input$markerInput, 
-#   			                event=valueStatus(), diseaseHigher=input$lowhigh)$plotdata
-# 		  } else {
-# 		    # Parametric ROC
-# 		    
-# 		  }
-# 		  
+
       results <- roc_analysis$roc_coordinates()
 		  
 			if (input$ROCplotOpts){
@@ -603,12 +581,11 @@ shinyServer(function(input, output, session) {
 			if (!input$cutoffPlotsOpts) opts = grphPrmtrsDefault()
 			if (input$cutoffPlotsOpts) opts = grphPrmtrs()
 			
-				results <- mROC(data=dataM(), statusName=statusVar(), markerName=input$markerInput, 
-				                event=valueStatus(), diseaseHigher=input$lowhigh)$plotdata
-				cut.results <- cut_points$optimal_cutpoint()
-				if (is.null(cut.results)) {
-					return(invisible(NULL))
-				}
+					results <- cut_points$cutoff_roc_coordinates()
+					cut.results <- cut_points$optimal_cutpoint()
+					if (is.null(results) || is.null(cut.results)) {
+						return(invisible(NULL))
+					}
 				data = dataM()
 			
 			coord = results[results[ ,"Marker"] == input$cutoffMarker, ]

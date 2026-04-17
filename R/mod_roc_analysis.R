@@ -1,3 +1,13 @@
+if (!exists("rocdata", mode = "function")) {
+  source("R/rocdata.R")
+}
+if (!exists("mROC", mode = "function")) {
+  source("R/mROC.R")
+}
+if (!exists("parametricROC", mode = "function")) {
+  source("R/parametricROC.R")
+}
+
 compute_roc_statistics <- function(data, status_var, marker_names, event_value, lowhigh,
                                    roc_estimation_type, conf_int, std_err, advanced,
                                    alpha, conf_int_parametric, alpha_parametric) {
