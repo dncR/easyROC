@@ -6,6 +6,7 @@ shinyServer(function(input, output, session) {
 	source("R/rocdata.R")
   source("R/mod_data_upload.R")
   source("R/mod_roc_analysis.R")
+  source("R/mod_partial_auc.R")
   source("R/mod_downloads.R")
   source("R/shared_state.R")
   source("R/data_input_utils.R")
@@ -30,6 +31,7 @@ shinyServer(function(input, output, session) {
   validateSharedState(shared_state)
   mod_data_upload_server("data_upload", shared_state = shared_state)
   roc_analysis <- mod_roc_analysis_server("roc_analysis", shared_state = shared_state, root_input = input)
+  partial_auc <- mod_partial_auc_server("partial_auc", shared_state = shared_state, root_input = input)
 
   dataM <- reactive(shared_state$data())
   statusVar <- reactive(shared_state$status_var())
@@ -563,8 +565,8 @@ shinyServer(function(input, output, session) {
     
     output$resultPAuc <- renderDataTable(options = list(iDisplayLength = 10),
     {
-        if(isTRUE(roc_analysis$is_active()))
-          roc_analysis$pauc_result()
+        if(isTRUE(partial_auc$is_active()))
+          partial_auc$pauc_result()
         }
     )
 	

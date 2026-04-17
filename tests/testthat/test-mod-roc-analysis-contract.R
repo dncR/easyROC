@@ -91,23 +91,3 @@ test_that("compute_roc_plot_bundle and comparisons keep ROC core outputs availab
   expect_equal(nrow(comparisons), 1)
   expect_true(all(c("Marker1 (I)", "Marker2 (J)", "p-value") %in% colnames(comparisons)))
 })
-
-test_that("compute_partial_auc_result returns marker-level partial AUC table", {
-  skip_if_not_installed("pROC")
-
-  mayo <- utils::read.table(file.path(repo_root, "data", "mayo.txt"), header = TRUE)
-
-  out <- compute_partial_auc_result(
-    data = mayo,
-    marker_names = c("mayoscore4", "mayoscore5"),
-    status_var = "censor",
-    lowhigh = TRUE,
-    point_a = 0.5,
-    point_b = 1,
-    sens_spec = "Sensitivity"
-  )
-
-  expect_s3_class(out, "data.frame")
-  expect_equal(nrow(out), 2)
-  expect_true(all(c("Marker", "Partial AUC") %in% colnames(out)))
-})

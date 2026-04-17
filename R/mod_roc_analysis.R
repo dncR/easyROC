@@ -153,25 +153,6 @@ compute_roc_comparisons <- function(data, status_var, marker_names, event_value,
   comparisons
 }
 
-compute_partial_auc_result <- function(data, marker_names, status_var, lowhigh,
-                                       point_a, point_b, sens_spec) {
-  if (is.null(data) || is.null(status_var) || status_var == "" ||
-      is.null(marker_names) || length(marker_names) == 0) {
-    return(NULL)
-  }
-
-  pAUC(
-    data = data,
-    range = c(point_a, point_b),
-    criteria = sens_spec,
-    correct = TRUE,
-    percent = FALSE,
-    markers = marker_names,
-    status = status_var,
-    direction = ifelse(lowhigh, "<", ">")
-  )
-}
-
 mod_roc_analysis_ui <- function(id) {
   ns <- shiny::NS(id)
   shiny::tagList(shiny::div(id = ns("root")))
@@ -256,29 +237,12 @@ mod_roc_analysis_server <- function(id, shared_state = NULL, root_input = NULL) 
       )
     })
 
-    pauc_result <- shiny::reactive({
-      if (!is_active()) {
-        return(NULL)
-      }
-
-      compute_partial_auc_result(
-        data = shared_state$data(),
-        marker_names = root_input$markerInput,
-        status_var = shared_state$status_var(),
-        lowhigh = root_input$lowhigh,
-        point_a = root_input$pointA,
-        point_b = root_input$pointB,
-        sens_spec = root_input$sensSpec
-      )
-    })
-
     list(
       is_active = is_active,
       roc_statistics = roc_statistics,
       roc_bundle = roc_bundle,
       roc_coordinates = roc_coordinates,
-      roc_comparisons = roc_comparisons,
-      pauc_result = pauc_result
+      roc_comparisons = roc_comparisons
     )
   })
 }
