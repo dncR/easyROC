@@ -93,7 +93,6 @@ Bu noktalar mevcut davranisi korumak icin bilincli olarak Sprint 4+ kapsaminda e
 
 ## 9) Next Actions
 
-1. EASY-028: domain test kapsam genisletme  
-2. EASY-029: kritik UI akislarinda `shinytest2` otomasyonu  
-3. EASY-030: lint ve statik kontrol adimi  
-4. EASY-031: PR zorunlu CI hattinin devreye alinmasi
+1. EASY-029: kritik UI akislarinda `shinytest2` otomasyonu  
+2. EASY-030: lint ve statik kontrol adimi  
+3. EASY-031: PR zorunlu CI hattinin devreye alinmasi

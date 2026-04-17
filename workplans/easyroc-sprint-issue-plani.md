@@ -103,7 +103,7 @@ Sprint hedefi: Test/kalite hattını üretim standardına çıkarmak.
 | Done | ID | Issue | Öncelik | SP | Bağımlılık | Kabul Kriteri |
 |---|---|---|---:|---:|---|---|
 | [x] | EASY-027 | `renv` kurulumu ve lockfile oluştur | P0 | 3 | EASY-026 | `renv.lock` olusturuldu ve repo takibine eklendi |
-| [ ] | EASY-028 | `testthat` ile domain testleri | P0 | 8 | EASY-020..023 | Çekirdek fonksiyon test kapsamı arttı |
+| [x] | EASY-028 | `testthat` ile domain testleri | P0 | 8 | EASY-020..023 | Çekirdek fonksiyon test kapsamı arttı |
 | [ ] | EASY-029 | `shinytest2` kritik akış testleri | P0 | 8 | EASY-020..023 | Kritik UI akışları otomasyon altında |
 | [ ] | EASY-030 | Lint ve statik kontrol ekle | P1 | 3 | EASY-027 | CI’da lint adımı aktif |
 | [ ] | EASY-031 | GitHub Actions CI pipeline | P0 | 5 | EASY-028..030 | PR’da test/lint zorunlu |
