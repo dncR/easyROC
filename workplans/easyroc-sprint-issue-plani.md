@@ -121,7 +121,7 @@ Sprint hedefi: UI/UX ve erişilebilirlik modernizasyonu.
 | [x] | EASY-034 | Form akışlarını sadeleştir | P1 | 5 | EASY-033 | Uzun input blokları daha anlaşılır |
 | [x] | EASY-035 | Mesajlar ve validasyon UX iyileştirmesi | P1 | 3 | EASY-033 | Hata mesajları eylem odaklı |
 | [x] | EASY-036 | Mobil responsive düzenleme | P0 | 5 | EASY-033 | Mobilde kritik akış tamamlanabiliyor |
-| [ ] | EASY-037 | Erişilebilirlik iyileştirmeleri | P1 | 3 | EASY-033 | Label/kontrast/klavye akışı iyileşti |
+| [x] | EASY-037 | Erişilebilirlik iyileştirmeleri | P1 | 3 | EASY-033 | Label/kontrast/klavye akışı iyileşti |
 | [ ] | EASY-038 | UI yönerge dokümanı | P2 | 2 | EASY-033..037 | `docs/ui-guidelines.md` tamam |
 
 Sprint çıkış kriteri: Yeni UI ile kritik akışlarda kullanılabilirlik onayı.

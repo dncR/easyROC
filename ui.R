@@ -17,6 +17,11 @@ easyroc_theme <- function() {
 
 shinyUI(fluidPage(
   theme = easyroc_theme(),
+  tags$a(
+    href = "#easyroc-main-content",
+    class = "easyroc-skip-link",
+    "Skip to main content"
+  ),
 
   titlePanel("easyROC: a web-tool for ROC curve analysis (ver. 1.3.1)"),
 
@@ -25,7 +30,7 @@ shinyUI(fluidPage(
 	sidebarPanel(width = 3, class = "easyroc-sidebar",
 		conditionalPanel(condition="input.tabs1=='Introduction'",
 		  tags$p(
-		    tags$img(src = "multi.png", width = 300, height = 300)
+		    tags$img(src = "multi.png", width = 300, height = 300, alt = "easyROC logo")
 		  ),
       tags$head(
         includeScript("js/google-analytics.js")
@@ -125,10 +130,14 @@ shinyUI(fluidPage(
           
         HTML('<br>'),
           
-        selectizeInput("subGrpsRC", "", choices = c("Edit x-axis" = "xAxis", 
-                                                    "Edit y-axis" = "yAxis",
-                                                    "Other options" = "others"), 
-                                        selected = "xAxis"),
+        selectizeInput(
+          "subGrpsRC",
+          tags$span(class = "visually-hidden", "Select ROC plot option group"),
+          choices = c("Edit x-axis" = "xAxis", 
+                      "Edit y-axis" = "yAxis",
+                      "Other options" = "others"), 
+          selected = "xAxis"
+        ),
           
         conditionalPanel(condition = "input.subGrpsRC == 'others'",
           fluidRow(
@@ -239,10 +248,10 @@ shinyUI(fluidPage(
 
     conditionalPanel(condition="input.tabs1=='Cut points'",
 			h5("1. Select a marker"),
-      selectizeInput("cutoffMarker", "", choices = NULL, multiple = FALSE),
+      selectizeInput("cutoffMarker", "Marker", choices = NULL, multiple = FALSE),
       HTML('<br>'),
       h5("2. Select a method for optimal cut-off (*)"),
-      selectizeInput("cutOffMethods", "", 
+      selectizeInput("cutOffMethods", "Cut-off method", 
         choices = c("Youden", "CB", "MCT", "MinValueSp", "MinValueSe", "ValueSe", "ValueSp", "MinValueSpSe", 
 										"MaxSp", "MaxSe", "MaxSpSe", "MaxProdSpSe", "ROC01", "SpEqualSe", "MaxEfficiency", 
 										"Minimax", "MaxDOR", "MaxKappa", "MinValueNPV", "MinValuePPV", "ValueNPV", "ValuePPV", 
@@ -465,12 +474,22 @@ shinyUI(fluidPage(
 														      "Corier New" = "mono"), selected = "sans"))
 				),
 
-				radioButtons("selectedGraph", "", list("Top Left \U2003 \U2003" = 1, "Top Right \U2003 \U2003" = 2, 
-														"Bottom Left \U2002\U2008" = 3, "Bottom Right" = 4), selected = 1),
+				radioButtons(
+          "selectedGraph",
+          tags$span(class = "visually-hidden", "Select graph panel"),
+          list("Top Left \U2003 \U2003" = 1, "Top Right \U2003 \U2003" = 2, 
+							 "Bottom Left \U2002\U2008" = 3, "Bottom Right" = 4),
+          selected = 1
+        ),
 				
 				HTML('<br>'),
 				
-				selectizeInput("subGrps", "", choices = NULL, selected = NULL),
+				selectizeInput(
+          "subGrps",
+          tags$span(class = "visually-hidden", "Select graph options section"),
+          choices = NULL,
+          selected = NULL
+        ),
 				
 				## First graph options (11)
 				conditionalPanel(condition = "input.selectedGraph == '1'",
@@ -976,20 +995,20 @@ shinyUI(fluidPage(
     ),   ## End for Sample Size tab.
 
 
-    conditionalPanel(condition="input.tabs1=='Manual'",
-		  HTML('<p align="center"><img src="manual.png" width=200 height=200></p>')
+		conditionalPanel(condition="input.tabs1=='Manual'",
+		  HTML('<p align="center"><img src="manual.png" width=200 height=200 alt="Manual cover image"></p>')
 		),
-
-		conditionalPanel(condition="input.tabs1=='Authors & News'",
-	    HTML('<p align="center"> <a href="https://www.erciyes.edu.tr/home/index" target="_blank"><img src="eru_logo.png" width=150 height=150></a> </p>')
-		)
+	
+	  conditionalPanel(condition="input.tabs1=='Authors & News'",
+	    HTML('<p align="center"> <a href="https://www.erciyes.edu.tr/home/index" target="_blank"><img src="eru_logo.png" width=150 height=150 alt="Erciyes University logo"></a> </p>')
+	  )
 
 #     conditionalPanel(condition="input.tabs1=='Options'",
 #       selectInput(inputId = "Deneme", label = "Deneme", choices = c("A", "B"), selected = "A")
 #     )
 	),
 
-	mainPanel(
+	mainPanel(id = "easyroc-main-content", tabindex = "-1",
 		tabsetPanel(
 			tabPanel(title="Introduction", 
         h5("The easiest way to perform ROC analysis!"),
@@ -1006,7 +1025,7 @@ shinyUI(fluidPage(
               For this task, we made use of <a href="http://cran.r-project.org/web/packages/OptimalCutpoints/index.html" target="_blank">OptimalCutpoints</a> 
               package (Lopez-Raton et al, 2014) of R [1].</p>'),
 
-        HTML('<p><div align="center"><table cellpadding="0" cellspacing="0"><tr><td><img src="ROCplot.png" width="300" height="300" border="10000"></td><td><img src="CutOff_Plots.png" width="400" height="400" border="70"></td></tr></table></div></p>'),
+        HTML('<p><div align="center"><table cellpadding="0" cellspacing="0"><tr><td><img src="ROCplot.png" width="300" height="300" border="10000" alt="ROC plot example"></td><td><img src="CutOff_Plots.png" width="400" height="400" border="70" alt="Cut-off plots example"></td></tr></table></div></p>'),
 
         h6("[1] Monica Lopez-Raton, Maria Xose Rodriguez-Alvarez, Carmen Cadarso Suarez, Francisco Gude Sampedro (2014). OptimalCutpoints: An R Package for Selecting Optimal Cutpoints in Diagnostic Tests. Journal of Statistical Software, 61(8), 1-36."),
         
@@ -1192,6 +1211,23 @@ shinyUI(fluidPage(
 
     tags$head(
       tags$style(type = "text/css", "
+        .easyroc-skip-link {
+          position: absolute;
+          left: 8px;
+          top: -48px;
+          z-index: 2000;
+          background: #0F5C78;
+          color: #ffffff;
+          padding: 8px 12px;
+          border-radius: 6px;
+          text-decoration: none;
+          font-weight: 600;
+        }
+
+        .easyroc-skip-link:focus {
+          top: 8px;
+        }
+
         label.radio { display: inline-block; }
         .radio input[type='radio'] { float: none; }
 
@@ -1200,6 +1236,19 @@ shinyUI(fluidPage(
         .easyroc-sidebar .jslider { max-width: 200px; }
         .easyroc-sidebar .well { max-width: 330px; }
         .easyroc-sidebar .span4 { max-width: 330px; }
+        .easyroc-sidebar .help-block { color: #243b53; }
+
+        a:focus-visible,
+        button:focus-visible,
+        .btn:focus-visible,
+        input:focus-visible,
+        select:focus-visible,
+        textarea:focus-visible,
+        .selectize-input.focus {
+          outline: 3px solid #0F5C78 !important;
+          outline-offset: 2px;
+          box-shadow: none !important;
+        }
 
         .tab-content img {
           max-width: 100%;

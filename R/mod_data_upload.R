@@ -107,7 +107,12 @@ mod_data_upload_server <- function(id, shared_state = NULL) {
       if (is.null(msg) || msg == "") {
         return(NULL)
       }
-      shiny::tags$p(style = "color:#b22222; font-weight:600; margin-top:8px;", msg)
+      shiny::tags$p(
+        style = "color:#b22222; font-weight:600; margin-top:8px;",
+        role = "alert",
+        `aria-live` = "polite",
+        msg
+      )
     })
 
     shiny::observe({
