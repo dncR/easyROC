@@ -45,5 +45,18 @@ Rscript --vanilla tests/testthat.R
 
 ## 4) CI Integration
 
-- Lint + static checks run in GitHub Actions via `.github/workflows/lint.yml`.
-- Test + full PR gate enforcement is handled in `EASY-031`.
+- Lint + static checks + test suite run in GitHub Actions via `.github/workflows/ci.yml`.
+- CI jobs:
+  - `lint` job: `scripts/lint.R` + `scripts/static_checks.R`
+  - `test` job: `tests/testthat.R`
+
+## 5) Required PR Checks
+
+Branch protection tarafinda su check adlari zorunlu tutulmalidir:
+
+- `CI / lint`
+- `CI / test`
+
+Not:
+
+- Bu zorunluluk repository ayarindan uygulanir (GitHub UI).

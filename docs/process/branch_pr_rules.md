@@ -37,6 +37,7 @@ Issue baglantili calisma varsa:
 - [ ] Regresyon riski notu eklendi
 - [ ] CI adimlari (varsa) gecti
 - [ ] `docs/process/quality_gates.md` altindaki lint + static check komutlari lokalde yesil
+- [ ] PR check listesinde `CI / lint` ve `CI / test` gecmis
 
 ## 5) Merge Kosullari
 

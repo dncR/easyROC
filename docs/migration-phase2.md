@@ -89,9 +89,8 @@ Bu noktalar mevcut davranisi korumak icin bilincli olarak Sprint 4+ kapsaminda e
 - [x] Baseline esdegerligi testlerle korunuyor
 - [x] Legacy bootstrap bagimliliklari temizlendi
 - [x] `renv.lock` olusturuldu (EASY-027)
-- [ ] CI/Test pipeline zorunlu hale getirilecek (lint kapisi eklendi: EASY-030, pipeline tamamlanacak: EASY-031)
+- [x] CI/Test pipeline zorunlu hale getirildi (lint kapisi: EASY-030, pipeline: EASY-031)
 
 ## 9) Next Actions
 
-1. EASY-031: PR zorunlu CI hattinin devreye alinmasi  
-2. EASY-032: test raporu dokumani
+1. EASY-032: test raporu dokumani

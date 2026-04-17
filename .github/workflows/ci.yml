@@ -1,4 +1,4 @@
-name: Lint
+name: CI
 
 on:
   pull_request:
@@ -24,3 +24,19 @@ jobs:
 
       - name: Run static checks
         run: Rscript --vanilla scripts/static_checks.R
+
+  test:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Setup renv
+        uses: r-lib/actions/setup-renv@v2
+
+      - name: Run testthat suite
+        run: Rscript --vanilla tests/testthat.R

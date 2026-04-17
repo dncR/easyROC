@@ -106,7 +106,7 @@ Sprint hedefi: Test/kalite hattını üretim standardına çıkarmak.
 | [x] | EASY-028 | `testthat` ile domain testleri | P0 | 8 | EASY-020..023 | Çekirdek fonksiyon test kapsamı arttı |
 | [x] | EASY-029 | `shinytest2` kritik akış testleri | P0 | 8 | EASY-020..023 | Kritik UI akışları otomasyon altında |
 | [x] | EASY-030 | Lint ve statik kontrol ekle | P1 | 3 | EASY-027 | CI’da lint adımı aktif |
-| [ ] | EASY-031 | GitHub Actions CI pipeline | P0 | 5 | EASY-028..030 | PR’da test/lint zorunlu |
+| [x] | EASY-031 | GitHub Actions CI pipeline | P0 | 5 | EASY-028..030 | PR’da test/lint zorunlu |
 | [ ] | EASY-032 | Test raporu üret | P1 | 2 | EASY-028..031 | `docs/test-report.md` yayımlandı |
 
 Sprint çıkış kriteri: CI yeşil, kritik regresyon yok.
