@@ -8,6 +8,7 @@ shinyServer(function(input, output, session) {
   source("R/mod_roc_analysis.R")
   source("R/mod_partial_auc.R")
   source("R/mod_cut_points.R")
+  source("R/mod_sample_size.R")
   source("R/mod_downloads.R")
   source("R/shared_state.R")
   source("R/data_input_utils.R")
@@ -34,6 +35,7 @@ shinyServer(function(input, output, session) {
   roc_analysis <- mod_roc_analysis_server("roc_analysis", shared_state = shared_state, root_input = input)
   partial_auc <- mod_partial_auc_server("partial_auc", shared_state = shared_state, root_input = input)
   cut_points <- mod_cut_points_server("cut_points", shared_state = shared_state, root_input = input)
+  sample_size <- mod_sample_size_server("sample_size", root_input = input)
 
   dataM <- reactive(shared_state$data())
   statusVar <- reactive(shared_state$status_var())
@@ -1006,28 +1008,20 @@ shinyServer(function(input, output, session) {
 ######################  Begin Sample SizeTab   ###############################
 
 
-SampleSize <- reactive({
-  if(input$sampleSizeMethod == 1){
-    SampleSizeSingleTest(input$alpha1, input$power1, input$auc, input$ratio)
-    
-  } else if (input$sampleSizeMethod == 2){
-    SampleSizeTwoTests(input$alpha2, input$power2, input$auc01, input$auc02, input$auc11, input$auc12, input$ratio2)
-    
-  } else if (input$sampleSizeMethod == 3){
-    SampleSizeStandardvsNew(input$alpha3, input$power3, input$aucs,input$aucn, input$sd, input$ratio3)
+output$SampleSizeForRoc<- renderPrint({
+  if (isTRUE(sample_size$is_active())) {
+    sample_size$sample_size_result()
   }
 })
-
-output$SampleSizeForRoc<- renderPrint({ SampleSize() })
 
 download_specs$downloadSampleSizeResults <- create_download_handler_spec(
 filename = function() { "Sample_Size_Results.txt" },
 content = function(file) {
-    #if(input$tabs1 == "Sample size"){
-        result = SampleSize()
-        out <- capture.output(result)
+        out <- sample_size$sample_size_lines()
+        if (is.null(out)) {
+          return(invisible(NULL))
+        }
         write.table(out, file, row.names=F, col.names=F, quote=F)
-    #}
 }
 )
 
