@@ -1,9 +1,26 @@
 source("R/mod_data_upload.R")
 
-shinyUI(pageWithSidebar(
+easyroc_theme <- function() {
+  bslib::bs_theme(
+    version = 5,
+    bootswatch = "flatly",
+    primary = "#0F5C78",
+    secondary = "#2B6777",
+    success = "#2A9D8F",
+    info = "#457B9D",
+    warning = "#E9C46A",
+    danger = "#C44536",
+    bg = "#F4F7F8",
+    fg = "#102A43"
+  )
+}
+
+shinyUI(fluidPage(
+  theme = easyroc_theme(),
 
   titlePanel("easyROC: a web-tool for ROC curve analysis (ver. 1.3.1)"),
-  
+
+  sidebarLayout(
   # Left-side panel, including options and inputs for each tab.
 	sidebarPanel(width = 3,
 		conditionalPanel(condition="input.tabs1=='Introduction'",
@@ -1173,3 +1190,4 @@ shinyUI(pageWithSidebar(
     )
   )
 ))
+)
