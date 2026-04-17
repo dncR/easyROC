@@ -7,7 +7,7 @@ Status: active
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | CR-001 | `rules/current/core_rules.md` | core | active | strict | team | 2026-04-16 | Istatistiksel davranis esdegerligi |
 | CR-002 | `rules/current/core_rules.md` | core | active | strict | team | 2026-04-16 | Yikici komut guvenlik kapisi |
-| CR-003 | `rules/current/core_rules.md` | core | active | strict | team | 2026-04-16 | Moduler hedef mimariyi koruma |
+| CR-003 | `rules/current/core_rules.md` | core | active | strict | team | 2026-04-17 | Steady-state donemde moduler hedef mimariyi koruma (EASY-049 revize) |
 | CR-004 | `rules/current/core_rules.md` | core | active | strict | team | 2026-04-16 | Tekrarlanabilir bagimlilik disiplini |
 | CR-005 | `rules/current/core_rules.md` | core | active | strict | team | 2026-04-16 | Test + dokumantasyon birlikte |
 | CR-006 | `rules/current/core_rules.md` | core | active | strict | team | 2026-04-16 | `tmp/` template, baglayici degil |
@@ -20,5 +20,6 @@ Status: active
 | OP-006 | `rules/current/operational_rules.md` | operational | active | flexible | team | 2026-04-16 | Session handoff bakimi |
 | OP-007 | `rules/current/operational_rules.md` | operational | active | flexible | team | 2026-04-16 | Registry + changelog zorunlulugu |
 | OP-008 | `rules/current/operational_rules.md` | operational | active | flexible | team | 2026-04-16 | Sprint/issue izlenebilirligi |
-| OP-009 | `rules/current/operational_rules.md` | operational | active | flexible | team | 2026-04-17 | Post-modernizasyon kural revizyon tetikleyicisi |
+| OP-009 | `rules/current/operational_rules.md` | operational | deprecated | flexible | team | 2026-04-17 | Tek seferlik Rule Refactor Review tetikleyicisi EASY-049 ile tamamlandi |
 | OP-010 | `rules/current/operational_rules.md` | operational | active | flexible | team | 2026-04-17 | Gorev sonu background process kontrolu + manuel kill raporu (varsayilan); acik talep ile otomatik kill |
+| OP-011 | `rules/current/operational_rules.md` | operational | active | flexible | team | 2026-04-17 | Post-modernizasyon kural review cadence'i (mini + tam review) |

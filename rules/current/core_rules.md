@@ -9,7 +9,7 @@ Bu kurallar stabil ve degisimi kontrollu kurallardir.
 | --- | --- | --- | --- | --- | --- |
 | CR-001 | easyROC modernizasyonunda istatistiksel davranis esdegerligi korunur; domain hesap mantigi degisikligi test ve acik onay olmadan kalici hale getirilmez. | active | strict | team | 2026-04-16 |
 | CR-002 | Acik talep olmadan yikici git/dosya komutlari (`reset --hard`, geri alinamaz silme vb.) uygulanmaz. | active | strict | team | 2026-04-16 |
-| CR-003 | Monolitik yapida kalici yeni genisleme yerine moduler hedef mimari (`app.R`, `R/mod_*`, `R/domain/*`) korunur; acil hotfix disinda teknik borcu buyuten eklemeler yapilmaz. | active | strict | team | 2026-04-16 |
+| CR-003 | Modernizasyon ve sonrasi steady-state donemde moduler hedef mimari (`app.R`, `R/mod_*`, `R/domain/*`, `R/services/*`) korunur; acil hotfix disinda teknik borcu buyuten monolitik eklemeler yapilmaz. | active | strict | team | 2026-04-17 |
 | CR-004 | Paket veya calisma ortami degisiklikleri surumlenebilir ve tekrarlanabilir olmak zorundadir; bagimlilik yonetimi dokumante edilir. | active | strict | team | 2026-04-16 |
 | CR-005 | Davranis degisikligi olusturan her teknik degisiklikte ilgili test ve dokumantasyon ayni degisiklik setinde guncellenir. | active | strict | team | 2026-04-16 |
 | CR-006 | `tmp/` klasoru template referansidir; easyROC icin baglayici kural kaynagi olarak kullanilmaz. | active | strict | team | 2026-04-16 |

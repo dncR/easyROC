@@ -79,6 +79,7 @@ Her kural kaydinda asgari alanlar:
 - Bu kural seti modernizasyon fazini guvence altina almak icin tasarlanmistir.
 - Detayli "post-modernizasyon steady-state" kural icerigi simdiden kesinlestirilmez.
 - Zorunlu tetikleyici: modernizasyon ilerleme durumu `%70+` oldugunda veya Sprint 6 basinda bir "Rule Refactor Review" yapilir.
+- Tetikleyici uygulanma kaydi: Sprint 6 `EASY-049` (2026-04-17) tamamlandi; kararlar `rules/current/rule_refactor_review_2026-04-17.md` dokumaninda tutulur.
 - Bu gozden gecirmede:
   - Gecis-donemi kurallari `deprecated`/`active` olarak yeniden siniflanir.
   - Kalici operasyon kurallari netlestirilir.

@@ -48,6 +48,7 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 - Sprint 5 `EASY-037` tamamlandi: erisilebilirlik icin klavye ve etiket iyilestirmeleri uygulandi. `ui.R` seviyesinde skip-link + belirgin focus stili eklendi, bos etiketli secimler icin ekran-okuyucu etiketleri tanimlandi, temel gorsellere `alt` metinleri verildi ve upload hata mesaji `role=alert` + `aria-live` ile duyurulur hale getirildi.
 - Sprint 5 `EASY-038` tamamlandi: UI kararlarini standartlastiran yonerge dokumani yayinlandi (`docs/ui-guidelines.md`). Tema/token kullanimi, form/mesaj kurallari, responsive beklentiler, erisilebilirlik taban cizgisi ve PR checklist'i yazili hale getirildi.
 - Sprint 6 `EASY-039` tamamlandi: deployment hedef mimarisi `docs/deployment-target-architecture.md` ile kabul edildi. Container-first topoloji, staging/prod ayrimi, immutable image promote modeli ve rollback sinirlari netlestirildi.
+- Sprint 6 `EASY-049` tamamlandi: Rule Refactor Review checkpoint'i uygulandi. `keep/deprecate/revise` kararlari `rules/current/rule_refactor_review_2026-04-17.md` ile kayit altina alindi; OP-009 deprecated yapildi, OP-011 aktive edildi, CR-003 steady-state icin revize edildi.
 
 ## Netlesmemis Kararlar
 
@@ -62,6 +63,6 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 
 ## Bir Sonraki Onerilen Adim
 
-1. Sprint 6 icin `EASY-049` adimina gecip Rule Refactor Review checkpoint'ini tamamla.
-2. `EASY-040` ile container/calistirma recetesini `docs/deployment-target-architecture.md` kararlarina gore uygula.
+1. Sprint 6 icin `EASY-040` adimina gecip container/calistirma recetesini standardize et.
+2. `EASY-041` ile ortam degiskeni ve secret yonetimini deployment hedef mimarisiyla hizala.
 3. Repository branch protection ayarinda `CI / lint` ve `CI / test` check'lerini required olarak isaretle.
