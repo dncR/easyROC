@@ -1,0 +1,6 @@
+services:
+  easyroc:
+    container_name: easyroc-staging
+    environment:
+      R_CONFIG_ACTIVE: staging
+

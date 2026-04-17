@@ -46,6 +46,19 @@ easyROC is available through Docker Container. The docker image can be pulled fr
 
     docker pull dncr/biosoft:app-easyroc-latest
 
+### Modern Container Runtime (Sprint 6)
+
+For reproducible staging/production runs in this repository, use the standardized container recipe:
+
+- `Dockerfile`
+- `docker-compose.yml` + `docker-compose.staging.yml` / `docker-compose.production.yml`
+- `scripts/deploy_compose.sh`
+
+See:
+
+- `docs/deployment-target-architecture.md`
+- `docs/container-runtime-recipe.md`
+
 # License
 
 easyROC web-tool as a whole is distributed under GPL-3 (General Public License Version 3). For furter details, see LICENSE.txt

@@ -1,0 +1,17 @@
+.git
+.github
+.Rlib
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.DS_Store
+
+renv/staging
+renv/cache
+
+tests/testthat/_snaps
+tests/shinytest2/_snaps
+
+tmp
+

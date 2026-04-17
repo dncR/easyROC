@@ -93,4 +93,4 @@ Bu noktalar mevcut davranisi korumak icin bilincli olarak Sprint 4+ kapsaminda e
 
 ## 9) Next Actions
 
-1. EASY-040: Container/calistirma recetesini `docs/deployment-target-architecture.md` kararlarina gore standardize et
+1. EASY-041: Ortam degiskeni ve secret yonetimini deployment topolojisine gore standardize et

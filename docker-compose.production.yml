@@ -1,0 +1,6 @@
+services:
+  easyroc:
+    container_name: easyroc-production
+    environment:
+      R_CONFIG_ACTIVE: production
+

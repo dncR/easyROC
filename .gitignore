@@ -4,3 +4,6 @@
 .Ruserdata
 .DS_Store
 .Rlib/
+.env
+.env.*
+!.env.example
