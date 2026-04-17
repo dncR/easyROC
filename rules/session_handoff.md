@@ -9,6 +9,7 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 
 - R-first modernizasyon planinin (workplan + sprint plani) kural tabanli yurutulmesi.
 - Monolitik yapiyi kontrollu ve testli sekilde moduler hedef mimariye tasima.
+- Sprint 7 `EASY-047` post-release izleme penceresinin tamamlanmasi (60 dk health/log tarama + incident/hotfix karari).
 
 ## Son Tamamlananlar
 
@@ -70,6 +71,6 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 
 ## Bir Sonraki Onerilen Adim
 
-1. Sprint 7 icin `EASY-047` adimina gecip post-release izleme ve hizli duzeltme penceresini uygula.
+1. `docs/post-release-monitoring-rc-20260417193256.md` icindeki 60 dk checkpoint'i tamamla ve EASY-047'yi kapat.
 2. Repository branch protection ayarinda `CI / lint` ve `CI / test` check'lerini required olarak isaretle.
 3. `EASY-048` icin changelog ve kapanis raporu girislerini release kanitlariyla birlikte hazirla.

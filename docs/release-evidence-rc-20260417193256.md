@@ -56,3 +56,8 @@ Deployment gating uncovered containerization gaps. Final release image fix inclu
   - Added `RENV_CONFIG_AUTOLOADER_ENABLED=FALSE` to avoid runtime bootstrap drift
 
 These fixes are tracked in `Dockerfile`.
+
+## 7) Post-Release Monitoring Link (EASY-047)
+
+- Monitoring report:
+  - `docs/post-release-monitoring-rc-20260417193256.md`
