@@ -7,6 +7,7 @@ shinyServer(function(input, output, session) {
   source("R/mod_data_upload.R")
   source("R/mod_roc_analysis.R")
   source("R/mod_partial_auc.R")
+  source("R/mod_cut_points.R")
   source("R/mod_downloads.R")
   source("R/shared_state.R")
   source("R/data_input_utils.R")
@@ -32,6 +33,7 @@ shinyServer(function(input, output, session) {
   mod_data_upload_server("data_upload", shared_state = shared_state)
   roc_analysis <- mod_roc_analysis_server("roc_analysis", shared_state = shared_state, root_input = input)
   partial_auc <- mod_partial_auc_server("partial_auc", shared_state = shared_state, root_input = input)
+  cut_points <- mod_cut_points_server("cut_points", shared_state = shared_state, root_input = input)
 
   dataM <- reactive(shared_state$data())
   statusVar <- reactive(shared_state$status_var())
@@ -46,38 +48,6 @@ shinyServer(function(input, output, session) {
 	#heightsizeCutoff <- reactive(600)
 	#widthsizeCutoff <- reactive(800)
 	
-	direct <- reactive({
-    ifelse(input$lowhigh, "<", ">")
-  })
-    
-  CFP = reactive({input$CFP})
-    
-    ctrl <- reactive({  ### control options for optimal cutpoints.
-        if (input$cutOffMethods == "Youden") return(control.cutpoints(CFP = input$CFP_Youden, CFN = input$CFN_Youden, generalized.Youden = input$generalized_Youden, costs.benefits.Youden = input$costs_benefits_Youden))
-        if (input$cutOffMethods == "CB") return(control.cutpoints(costs.ratio = input$costs_ratio))
-        if (input$cutOffMethods == "MCT") return(control.cutpoints(CFP = input$CFP_MCT, CFN = input$CFN_MCT))
-        if (input$cutOffMethods == "MinValueSp") return(control.cutpoints(valueSp = input$valueSp_MVSp))
-        if (input$cutOffMethods == "MinValueSe") return(control.cutpoints(valueSe = input$valueSe_MVSe))
-        if (input$cutOffMethods == "ValueSe") return(control.cutpoints(valueSe = input$valueSe_VSe))
-        if (input$cutOffMethods == "ValueSp") return(control.cutpoints(valueSp = input$valueSp_VSp))
-        if (input$cutOffMethods == "MinValueSpSe") return(control.cutpoints(valueSp = input$valueSp_MVSpSe, valueSe = input$valueSe_MVSpSe, maxSp = input$maxSp_MVSpSe))
-        if (input$cutOffMethods == "MaxKappa") return(control.cutpoints(CFP = input$CFP_MK, CFN = input$CFN_MK, weighted.Kappa = input$weighted_Kappa))
-        if (input$cutOffMethods == "MaxEfficiency") return(control.cutpoints(costs.benefits.Efficiency = input$costs_benefits_Efficiency, standard.deviation.accuracy = input$standard_deviation_accuracy))
-        if (input$cutOffMethods == "MinValueNPV") return(control.cutpoints(valueNPV = input$valueNPV_MVNPV))
-        if (input$cutOffMethods == "MinValuePPV") return(control.cutpoints(valuePPV = input$valuePPV_MVPPV))
-        if (input$cutOffMethods == "ValueNPV") return(control.cutpoints(valueNPV = input$valueNPV_VNPV))
-        if (input$cutOffMethods == "ValuePPV") return(control.cutpoints(valuePPV = input$valuePPV_VPPV))
-        if (input$cutOffMethods == "MinValueNPVPPV") return(control.cutpoints(valueNPV = input$valueNPV_MVNPVPPV, valuePPV = input$valuePPV_MVNPVPPV, maxNPV = input$maxNPV_MVNPVPPV))
-        if (input$cutOffMethods == "ValueDLR.Negative") return(control.cutpoints(valueDLR.Negative = input$valueDLR_Negative))
-        if (input$cutOffMethods == "ValueDLR.Positive") return(control.cutpoints(valueDLR.Positive = input$valueDLR_Positive))
-        if (input$cutOffMethods == "MinPvalue") return(control.cutpoints(adjusted.pvalue = input$adjusted_pvalue))
-        if (!(input$cutOffMethods %in% c("Youden","CB","MCT","MinValueSp", "MinValueSe", "ValueSe", "ValueSp", "MinValueSpSe",
-                                         "MaxKappa", "MaxEfficiency", "MinValueNPV", "MinValuePPV", "ValueNPV", "ValuePPV",
-                                         "MinValueNPVPPV", "ValueDLR.Negative", "ValueDLR.Positive", "MinPvalue"))){
-            return(control.cutpoints())
-        }
-    })
-    
 }
 
 ###  END REACTIVE FUNCTIONS ###
@@ -212,9 +182,13 @@ shinyServer(function(input, output, session) {
 					if (!input$cutoffPlotsOpts) opts = grphPrmtrsDefault()
 					if (input$cutoffPlotsOpts) opts = grphPrmtrs()
 					
-					results <- mROC(data=dataM(), statusName=statusVar(), markerName=input$markerInput, event=valueStatus(), diseaseHigher=input$lowhigh)$plotdata
-					cut.results <- optimal.cutpoint()
-					data = dataM()
+						results <- mROC(data=dataM(), statusName=statusVar(), markerName=input$markerInput, event=valueStatus(), diseaseHigher=input$lowhigh)$plotdata
+						cut.results <- cut_points$optimal_cutpoint()
+						if (is.null(cut.results)) {
+							dev.off()
+							return(invisible(NULL))
+						}
+						data = dataM()
 					
 					coord = results[results[,"Marker"] == input$cutoffMarker,]
 					cutvals = coord[ ,"Cutpoint"]
@@ -444,7 +418,10 @@ shinyServer(function(input, output, session) {
         filename = function() { "CutOff_Results.txt" },
         content = function(file) {
             if (!is.null(input$markerInput) & input$tabs1 == "Cut points"){
-                res = optimal.cutpoint()
+                res = cut_points$optimal_cutpoint()
+                if (is.null(res)) {
+                  return(invisible(NULL))
+                }
                 out = printCutOff2(res)
             }
             write.table(out, file, row.names=F, col.names=TRUE, quote=F, sep="\t")
@@ -586,22 +563,12 @@ shinyServer(function(input, output, session) {
 ########################	 Cut Off Tab 	  ###########################
 {
     
-    tagHealthy <- reactive({
-        dataTmp <- dataM()
-        if (is.null(dataTmp) || is.null(statusVar()) || statusVar() == "" || is.null(valueStatus()) || valueStatus() == ""){
-          return(NULL)
-        }
-        resolveTagHealthy(statusValues = dataTmp[, statusVar()], eventValue = valueStatus())
-    })
-    
-    
-	optimal.cutpoint <- reactive(optimal.cutpoints(X = input$cutoffMarker, status = statusVar(), tag.healthy = tagHealthy(), methods = input$cutOffMethods, 
-											  data = dataM(), direction = direct(), pop.prev = NULL, categorical.cov = NULL, 
-											  control = ctrl(), ci.fit = TRUE, conf.level = 0.95, trace = FALSE))
-											   
     output$cutPoints <- renderPrint({
-        if (!is.null(input$markerInput) & input$tabs1 == "Cut points"){
-			res = optimal.cutpoint()
+        if (isTRUE(cut_points$is_active())){
+			res = cut_points$optimal_cutpoint()
+			if (is.null(res)) {
+			  return(invisible(NULL))
+			}
 			printCutOff(res)
         }
     })
@@ -890,10 +857,13 @@ shinyServer(function(input, output, session) {
 			if (!input$cutoffPlotsOpts) opts = grphPrmtrsDefault()
 			if (input$cutoffPlotsOpts) opts = grphPrmtrs()
 			
-			results <- mROC(data=dataM(), statusName=statusVar(), markerName=input$markerInput, 
-			                event=valueStatus(), diseaseHigher=input$lowhigh)$plotdata
-			cut.results <- optimal.cutpoint()
-			data = dataM()
+				results <- mROC(data=dataM(), statusName=statusVar(), markerName=input$markerInput, 
+				                event=valueStatus(), diseaseHigher=input$lowhigh)$plotdata
+				cut.results <- cut_points$optimal_cutpoint()
+				if (is.null(cut.results)) {
+					return(invisible(NULL))
+				}
+				data = dataM()
 			
 			coord = results[results[ ,"Marker"] == input$cutoffMarker, ]
 			cutvals = coord[ ,"Cutpoint"]

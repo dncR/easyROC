@@ -30,6 +30,7 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 - Sprint 2 `EASY-019` tamamlandi: baseline referans ciktisina dayali refactor smoke testleri eklendi; `app.R` boot + ROC/pAUC/cutoff ana akislarinin davranis esdegerligi testle guvenceye alindi.
 - Sprint 3 `EASY-020` tamamlandi: ROC hesaplama/akıs katmani `mod_roc_analysis` modülüne taşındı; `server.R` ROC stats/coordinates/comparison ve ilgili download/pAUC akışları modül çıktıları üzerinden çalışacak şekilde güncellendi.
 - Sprint 3 `EASY-021` tamamlandi: pAUC sorumlulugu `mod_roc_analysis` modülünden ayrıştırılıp `mod_partial_auc` modülüne taşındı; `resultPAuc` çıktısı yeni modül üzerinden servis edilmeye başlandı ve baseline eşdeğerliği testle doğrulandı.
+- Sprint 3 `EASY-022` tamamlandi: cut-point hesaplama kontratı `mod_cut_points` modülüne taşındı; `server.R` cut-off sonuç üretimi ve ilgili download/plot akışlarında modül reaktifleri kullanılmaya başlandı. Cut-point baseline eşdeğerliği yeni kontrat testleriyle doğrulandı.
 
 ## Netlesmemis Kararlar
 
@@ -44,6 +45,6 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 
 ## Bir Sonraki Onerilen Adim
 
-1. Sprint 3 icin `EASY-022` (`mod_cut_points`) adimina gecip cut-off akisini modul seviyesine tasi.
-2. Cut-point modulunde ROC verisi, status/event ve plot-option bagimliliklarini acik kontratlarla ayristir.
-3. Cut-point akisina ozel baseline/smoke testlerini ekleyip davranis esdegerligini koru.
+1. Sprint 3 icin `EASY-023` (`mod_sample_size`) adimina gecip sample size hesap akislarini modullerle ayristir.
+2. `EASY-024` oncesi ROC ve cut-point plot option bagimliliklarini ortak servis kontratina hazirla.
+3. Sprint 3 kapanisinda moduler gecis etkilerini (legacy bagimliliklar + test kapsami) tekrar degerlendir.
