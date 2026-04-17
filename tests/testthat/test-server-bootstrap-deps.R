@@ -21,7 +21,7 @@ test_that("server bootstrap no longer sources legacy domain scripts directly", {
 test_that("server bootstrap no longer requires legacy global library calls", {
   lines <- readLines(file.path(repo_root, "server.R"), warn = FALSE)
 
-  expect_false(any(grepl('library\\(pROC\\)', lines)))
-  expect_false(any(grepl('library\\(plyr\\)', lines)))
-  expect_false(any(grepl('library\\(OptimalCutpoints\\)', lines)))
+  expect_false(any(grepl("library\\(pROC\\)", lines)))
+  expect_false(any(grepl("library\\(plyr\\)", lines)))
+  expect_false(any(grepl("library\\(OptimalCutpoints\\)", lines)))
 })

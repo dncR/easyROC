@@ -36,6 +36,7 @@ Issue baglantili calisma varsa:
 - [ ] Dokuman guncellendi (`workplans`, `docs`, gerekiyorsa `rules`)
 - [ ] Regresyon riski notu eklendi
 - [ ] CI adimlari (varsa) gecti
+- [ ] `docs/process/quality_gates.md` altindaki lint + static check komutlari lokalde yesil
 
 ## 5) Merge Kosullari
 

@@ -1,0 +1,26 @@
+name: Lint
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Setup renv
+        uses: r-lib/actions/setup-renv@v2
+
+      - name: Run lint
+        run: Rscript --vanilla scripts/lint.R
+
+      - name: Run static checks
+        run: Rscript --vanilla scripts/static_checks.R
