@@ -1,10 +1,10 @@
 SampleSizeStandardvsNew = function(alpha, power, aucs, aucn, sd, ratio) {
   
-  if (alpha <= 0 || alpha >= 1) {stop("Type I error must be between 0 and 1.")}
-  if (power <= 0 || power >= 1) {stop("Power must be between 0 and 1.")}
-  if (aucs < 0.5 || aucs >= 1) {stop("AUC must be between 0.5 and 1.")}
-  if (aucn < 0.5 || aucn >= 1) {stop("AUC must be between 0.5 and 1.")}
-  if (ratio <= 0) {stop("Allocation ratio can not be zero negative.")}
+  if (alpha <= 0 || alpha >= 1) {stop("Type I error must be between 0 and 1 (exclusive).")}
+  if (power <= 0 || power >= 1) {stop("Power must be between 0 and 1 (exclusive).")}
+  if (aucs < 0.5 || aucs >= 1) {stop("AUC must be between 0.5 and 1 (check aucs).")}
+  if (aucn < 0.5 || aucn >= 1) {stop("AUC must be between 0.5 and 1 (check aucn).")}
+  if (ratio <= 0) {stop("Allocation ratio must be greater than 0.")}
   
   
   Za = qnorm(alpha, lower.tail = F)

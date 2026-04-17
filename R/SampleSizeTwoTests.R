@@ -1,12 +1,12 @@
 SampleSizeTwoTests = function(alpha, power, auc01, auc02, auc11, auc12, ratio) {
   
-  if (alpha <= 0 || alpha >= 1) {stop("Type I error must be between 0 and 1.")}
-  if (power <= 0 || power >= 1) {stop("Power must be between 0 and 1.")}
-  if (auc01 < 0.5 || auc01 >= 1) {stop("AUC must be between 0.5 and 1.")}
-  if (auc02 < 0.5 || auc02 >= 1) {stop("AUC must be between 0.5 and 1.")}
-  if (auc11 < 0.5 || auc11 >= 1) {stop("AUC must be between 0.5 and 1.")}
-  if (auc12 < 0.5 || auc12 >= 1) {stop("AUC must be between 0.5 and 1.")}
-  if (ratio <= 0) {stop("Allocation ratio can not be zero negative.")}
+  if (alpha <= 0 || alpha >= 1) {stop("Type I error must be between 0 and 1 (exclusive).")}
+  if (power <= 0 || power >= 1) {stop("Power must be between 0 and 1 (exclusive).")}
+  if (auc01 < 0.5 || auc01 >= 1) {stop("AUC must be between 0.5 and 1 (check auc01).")}
+  if (auc02 < 0.5 || auc02 >= 1) {stop("AUC must be between 0.5 and 1 (check auc02).")}
+  if (auc11 < 0.5 || auc11 >= 1) {stop("AUC must be between 0.5 and 1 (check auc11).")}
+  if (auc12 < 0.5 || auc12 >= 1) {stop("AUC must be between 0.5 and 1 (check auc12).")}
+  if (ratio <= 0) {stop("Allocation ratio must be greater than 0.")}
   
   
   Za = qnorm(alpha/2, lower.tail = F)

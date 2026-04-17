@@ -14,7 +14,7 @@ mROC <- function(data, statusName = NULL, markerName = NULL, event = NULL, event
   }
 
   if (is.null(markerName) || length(markerName) == 0){
-    stop("Marker variable is not specified.")
+    stop("Marker variable is not specified. Please select at least one marker.")
   }
 
   if (!all(markerName %in% colnames(data))){
@@ -26,7 +26,7 @@ mROC <- function(data, statusName = NULL, markerName = NULL, event = NULL, event
   }
 
   if (is.null(event) || length(event) == 0){
-    stop("Event value is not specified.")
+    stop("Event value is not specified. Please select the case category.")
   }
 
   mrknames <- markerName

@@ -1,9 +1,9 @@
 SampleSizeSingleTest = function(alpha, power, auc, ratio) {
   
-  if (alpha <= 0 || alpha >= 1) {stop("Type I error must be between 0 and 1.")}
-  if (power <= 0 || power >= 1) {stop("Power must be between 0 and 1.")}
-  if (auc <= 0.5 || auc >= 1) {stop("AUC must be between 0.5 and 1.")}
-  if (ratio <= 0) {stop("Allocation ratio can not be zero or negative.")}
+  if (alpha <= 0 || alpha >= 1) {stop("Type I error must be between 0 and 1 (exclusive).")}
+  if (power <= 0 || power >= 1) {stop("Power must be between 0 and 1 (exclusive).")}
+  if (auc <= 0.5 || auc >= 1) {stop("AUC must be between 0.5 and 1 (exclusive upper bound).")}
+  if (ratio <= 0) {stop("Allocation ratio must be greater than 0.")}
   
   
   Za = qnorm(alpha, lower.tail = F)

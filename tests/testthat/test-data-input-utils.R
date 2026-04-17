@@ -5,7 +5,7 @@ test_that("readDelimitedUpload rejects missing, missing-file, and oversized uplo
 
   missing_file <- readDelimitedUpload(filePath = tempfile("does-not-exist-"))
   expect_null(missing_file$data)
-  expect_match(missing_file$error, "can not be found", fixed = TRUE)
+  expect_match(missing_file$error, "cannot be found", fixed = TRUE)
 
   tmp <- tempfile(fileext = ".tsv")
   writeLines("status\tmarker\n0\t0.1\n1\t0.9", tmp)
@@ -16,7 +16,7 @@ test_that("readDelimitedUpload rejects missing, missing-file, and oversized uplo
     maxBytes = 10
   )
   expect_null(oversized$data)
-  expect_match(oversized$error, "bigger than 30MB", fixed = TRUE)
+  expect_match(oversized$error, "larger than 30MB", fixed = TRUE)
 })
 
 test_that("readDelimitedUpload catches empty file and delimiter mismatch", {

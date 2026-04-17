@@ -57,6 +57,14 @@ compute_sample_size_lines <- function(root_input) {
   utils::capture.output(compute_sample_size_result(root_input))
 }
 
+format_sample_size_error_lines <- function(err) {
+  c(
+    "Sample size calculation could not be completed.",
+    paste0("Reason: ", conditionMessage(err)),
+    "Please review the input ranges and try again."
+  )
+}
+
 mod_sample_size_server <- function(id, shared_state = NULL, root_input = NULL) {
   shiny::moduleServer(id, function(input, output, session) {
     if (is.null(root_input)) {
@@ -71,14 +79,25 @@ mod_sample_size_server <- function(id, shared_state = NULL, root_input = NULL) {
       if (!is_active()) {
         return(NULL)
       }
-      compute_sample_size_result(root_input = root_input)
+      tryCatch(
+        compute_sample_size_result(root_input = root_input),
+        error = function(e) {
+          cat(paste(format_sample_size_error_lines(e), collapse = "\n"), "\n", sep = "")
+          invisible(NULL)
+        }
+      )
     })
 
     sample_size_lines <- shiny::reactive({
       if (!is_active()) {
         return(NULL)
       }
-      compute_sample_size_lines(root_input = root_input)
+      tryCatch(
+        compute_sample_size_lines(root_input = root_input),
+        error = function(e) {
+          format_sample_size_error_lines(e)
+        }
+      )
     })
 
     list(

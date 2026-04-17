@@ -93,4 +93,4 @@ Bu noktalar mevcut davranisi korumak icin bilincli olarak Sprint 4+ kapsaminda e
 
 ## 9) Next Actions
 
-1. EASY-035: Mesajlar ve validasyon UX iyilestirmesi
+1. EASY-036: Mobil responsive duzenleme
