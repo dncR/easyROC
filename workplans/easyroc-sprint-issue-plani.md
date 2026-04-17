@@ -118,7 +118,7 @@ Sprint hedefi: UI/UX ve erişilebilirlik modernizasyonu.
 | Done | ID | Issue | Öncelik | SP | Bağımlılık | Kabul Kriteri |
 |---|---|---|---:|---:|---|---|
 | [x] | EASY-033 | `bslib` tabanlı tema altyapısı | P0 | 5 | EASY-031 | Modern tema tüm sekmelerde aktif |
-| [ ] | EASY-034 | Form akışlarını sadeleştir | P1 | 5 | EASY-033 | Uzun input blokları daha anlaşılır |
+| [x] | EASY-034 | Form akışlarını sadeleştir | P1 | 5 | EASY-033 | Uzun input blokları daha anlaşılır |
 | [ ] | EASY-035 | Mesajlar ve validasyon UX iyileştirmesi | P1 | 3 | EASY-033 | Hata mesajları eylem odaklı |
 | [ ] | EASY-036 | Mobil responsive düzenleme | P0 | 5 | EASY-033 | Mobilde kritik akış tamamlanabiliyor |
 | [ ] | EASY-037 | Erişilebilirlik iyileştirmeleri | P1 | 3 | EASY-033 | Label/kontrast/klavye akışı iyileşti |

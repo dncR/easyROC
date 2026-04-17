@@ -42,6 +42,7 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 - Sprint 4 `EASY-031` tamamlandi: GitHub Actions tek pipeline yapisi `.github/workflows/ci.yml` altinda birlestirildi; `lint` (lint + static checks) ve `test` (`tests/testthat.R`) job'lari PR/push tetiklerinde calisacak sekilde tanimlandi. Required check adlari (`CI / lint`, `CI / test`) dokumante edildi.
 - Sprint 4 `EASY-032` tamamlandi: test raporu `docs/test-report.md` olarak yayimlandi. Lint/static/test komut ciktilari, test envanteri, kritik UI akis kaniti ve residual riskler rapora islenerek Sprint 4 kalite kapanisi yazili hale getirildi.
 - Sprint 5 `EASY-033` tamamlandi: `ui.R` icinde `bslib::bs_theme()` tabanli tema katmani (`easyroc_theme`) devreye alindi ve uygulama kabugu `fluidPage(theme = ...)` yapisina tasinarak modern tema tum sekmelere uygulanir hale getirildi.
+- Sprint 5 `EASY-034` tamamlandi: uzun sidebar formlarinda adim bazli akis netlestirildi; ROC tarafinda advanced/plot bloklari accordion yapisina alindi, Cut points ve Sample size formlarina yonlendirici adim/hint metinleri eklendi.
 
 ## Netlesmemis Kararlar
 
@@ -56,6 +57,6 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 
 ## Bir Sonraki Onerilen Adim
 
-1. Sprint 5 icin `EASY-034` adimina gecip uzun form akislari sadelestirilsin.
+1. Sprint 5 icin `EASY-035` adimina gecip mesajlar ve validasyon UX iyilestirmeleri yapilsin.
 2. Repository branch protection ayarinda `CI / lint` ve `CI / test` check'lerini required olarak isaretle.
 3. CI calisma suresini izleyip gerekirse cache/parallel iyilestirmelerini planla.

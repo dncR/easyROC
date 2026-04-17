@@ -39,6 +39,7 @@ shinyUI(fluidPage(
 		
 		# Tab: ROC Curve
 		conditionalPanel(condition = "input.tabs1 == 'ROC curve'",
+      h5("1. Marker selection"),
       selectizeInput("markerInput", "Select markers (*)", choices = NULL, multiple = TRUE),
       checkboxInput("lowhigh", "Higher values indicate risks", TRUE),
 			
@@ -47,16 +48,21 @@ shinyUI(fluidPage(
       HTML('<br>'),
       
       conditionalPanel(condition = "input.navbarROCcurve == 'Multiple Comparisons'",
+        h5("2. Multiple comparison setup"),
         selectInput(inputId = "MultipleCompMethod", label = "Multiple Comparison Method", selected = "bonferroni",
                     choices = c("Bonferroni" = "bonferroni", "False discovery rate" = "fdr", "None" = "none")),
         HTML('<br>')
       ),
 
-      
-			checkboxInput(inputId = "advanced", label = "Advanced options", value = FALSE),
+      bslib::accordion(
+        id = "roc_sidebar_flow",
+        multiple = TRUE,
+        bslib::accordion_panel(
+          "3. Advanced analysis options",
+          checkboxInput(inputId = "advanced", label = "Enable advanced options", value = FALSE),
 			
-			# Use this to add vertical spaces.
-  		conditionalPanel(condition = "input.advanced",
+			    # Use this to add vertical spaces.
+  		    conditionalPanel(condition = "input.advanced",
         ## Use this code block to add bold label.
         tags$style('.bottom-three { 
                       margin-bottom: 1.2em; 
@@ -94,9 +100,11 @@ shinyUI(fluidPage(
           helpText("[+]: Default options."),
           HTML('<br>')
   		  )
-			),
-            
-			checkboxInput(inputId = "ROCplotOpts", label = "Plot options", value = FALSE),
+			    )
+        ),
+        bslib::accordion_panel(
+          "4. ROC plot options",
+          checkboxInput(inputId = "ROCplotOpts", label = "Enable plot options", value = FALSE),
 
       conditionalPanel(condition = "input.ROCplotOpts",
         fluidRow(
@@ -212,6 +220,8 @@ shinyUI(fluidPage(
             column(6, numericInput("ycex.axisRC", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
           )
         )
+        )
+      ),
       ),
 
       conditionalPanel(condition = "input.navbarROCcurve == 'Partial AUC'",
@@ -240,6 +250,8 @@ shinyUI(fluidPage(
 										"ValueDLR.Negative", "ValueDLR.Positive", "MinPvalue", "ObservedPrev", "MeanPrev", 
 										"PrevalenceMatching"), 
         multiple = FALSE),
+      helpText("Continue with method-specific parameters and optional plotting settings below."),
+      h5("3. Method-specific parameters"),
 
       conditionalPanel(condition="input.cutOffMethods=='Youden'",
         HTML('<p><b>Youden:</b> Youden index</p>'),
@@ -430,6 +442,7 @@ shinyUI(fluidPage(
       HTML('<p>(*) See <a href="http://cran.r-project.org/web/packages/OptimalCutpoints/index.html" target="_blank"> OptimalCutpoints</a> package from R</p>'),
       HTML('<br>'),
             
+      h5("4. Plot settings (optional)"),
       checkboxInput("showPlots", "Include plots.", FALSE),
             
       conditionalPanel(condition="input.showPlots",
@@ -921,12 +934,13 @@ shinyUI(fluidPage(
 			)
     ), # End for Cut Points tab.
 
-    conditionalPanel(condition="input.tabs1=='Sample size'",
+	    conditionalPanel(condition="input.tabs1=='Sample size'",
 #       h5("Choose one of the following methods (*):"),
 #       HTML('<br>'),
-      selectInput(inputId = "sampleSizeMethod", label = "Select Method (*)", 
-                  choices = c("Single test" = 1, "Comparison of two tests" = 2, "Non-inferiority" = 3), 
-                  selected = 1, multiple = FALSE, selectize = TRUE),
+	      selectInput(inputId = "sampleSizeMethod", label = "Select Method (*)", 
+	                  choices = c("Single test" = 1, "Comparison of two tests" = 2, "Non-inferiority" = 3), 
+	                  selected = 1, multiple = FALSE, selectize = TRUE),
+	      helpText("Select one method and fill only the fields shown for the chosen method."),
       
       HTML('<br>'),
       

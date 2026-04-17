@@ -93,4 +93,4 @@ Bu noktalar mevcut davranisi korumak icin bilincli olarak Sprint 4+ kapsaminda e
 
 ## 9) Next Actions
 
-1. EASY-034: Form akislarini sadelestir
+1. EASY-035: Mesajlar ve validasyon UX iyilestirmesi
