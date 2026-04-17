@@ -63,6 +63,7 @@ See:
 - `docs/healthchecks.md`
 - `docs/deployment.md`
 - `docs/runbook.md`
+- `docs/release-checklist.md`
 
 # License
 

@@ -103,4 +103,4 @@ scripts/deploy_compose.sh production .env.production .env.secrets.production
 - `docs/observability.md`
 - `docs/healthchecks.md`
 - `docs/runbook.md`
-
+- `docs/release-checklist.md`

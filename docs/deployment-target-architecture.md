@@ -94,6 +94,7 @@ Bu hedefler Sprint 6 sonunda asgari cizgi olarak kabul edilir:
 - EASY-042: Loglama ve hata izleme katmani bu topolojiye eklenmistir.
 - EASY-043: Readiness/health check kontratlari tanimlanmistir.
 - EASY-044: Deployment ve runbook dokumanlari bu karar setine gore finalize edilmistir.
+- EASY-045: Release checklist bu karar setiyle hizali sekilde finalize edilmistir.
 
 EASY-040 implementation note (2026-04-17):
 
@@ -114,3 +115,7 @@ EASY-043 implementation note (2026-04-17):
 EASY-044 implementation note (2026-04-17):
 
 - Operasyonel deployment/runbook dokumanlari `docs/deployment.md` ve `docs/runbook.md` ile tamamlanmistir.
+
+EASY-045 implementation note (2026-04-17):
+
+- Release gate checklist'i `docs/release-checklist.md` ile finalize edilmistir.
