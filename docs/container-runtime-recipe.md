@@ -17,17 +17,26 @@ Bu dokuman, `docs/deployment-target-architecture.md` icindeki container-first ka
 - `docker-compose.staging.yml`
 - `docker-compose.production.yml`
 - `.env.example`
+- `.env.staging.example`
+- `.env.production.example`
+- `.env.secrets.example`
 - `scripts/deploy_compose.sh`
+- `scripts/validate_env.sh`
 
 ## 3) Hazirlik
 
 1. Env dosyasi olustur:
 
 ```bash
-cp .env.example .env.staging
+cp .env.staging.example .env.staging
 ```
 
 2. Gerekirse `EASYROC_IMAGE`, `EASYROC_IMAGE_TAG`, `EASYROC_HOST_PORT` degerlerini duzenle.
+3. (Opsiyonel) secret degiskenleri icin ayri dosya kullan:
+
+```bash
+cp .env.secrets.example .env.secrets.staging
+```
 
 ## 4) Staging Deploy (Build + Run)
 
@@ -47,9 +56,9 @@ Bu komut altta su compose setini kullanir:
 Production adiminda ayni image tag/digest kullanilir, rebuild edilmez:
 
 ```bash
-cp .env.example .env.production
+cp .env.production.example .env.production
 # .env.production icinde EASYROC_IMAGE_TAG degerini staging'de dogrulanan tag'e cekin
-scripts/deploy_compose.sh production .env.production
+scripts/deploy_compose.sh production .env.production .env.secrets.production
 ```
 
 Bu komut altta su compose setini kullanir:
@@ -70,4 +79,4 @@ docker compose --env-file .env.staging -f docker-compose.yml -f docker-compose.s
 - Container non-root user (`appuser`) ile calistirilir.
 - Bagimliliklar `renv.lock` uzerinden restore edilir.
 - Production deploy'da rebuild kapali oldugu icin immutable promote modeli korunur.
-
+- Deploy oncesi env validation `scripts/validate_env.sh` ile zorunlu olarak uygulanir.

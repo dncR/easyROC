@@ -90,7 +90,7 @@ Bu hedefler Sprint 6 sonunda asgari cizgi olarak kabul edilir:
 ## 8) Sonraki Issue'lara Baglanti
 
 - EASY-040: Bu mimariye uygun container/runtime recetesi uygulanmistir.
-- EASY-041: Secret/env yonetimi bu dokumandaki sinirlara gore yazilacak.
+- EASY-041: Secret/env yonetimi bu dokumandaki sinirlara gore standardize edilmistir.
 - EASY-042: Loglama ve hata izleme katmani bu topolojiye eklenecek.
 - EASY-043: Readiness/health check kontratlari tanimlanacak.
 - EASY-044: Deployment ve runbook dokumanlari bu karar setine gore final edilecek.
@@ -98,3 +98,7 @@ Bu hedefler Sprint 6 sonunda asgari cizgi olarak kabul edilir:
 EASY-040 implementation note (2026-04-17):
 
 - Container/runtime recetesi `Dockerfile`, `docker-compose*.yml`, `.env.example`, `scripts/deploy_compose.sh` ve `docs/container-runtime-recipe.md` ile uygulanmistir.
+
+EASY-041 implementation note (2026-04-17):
+
+- Env + secret yonetimi `docs/env-secret-management.md`, `scripts/validate_env.sh` ve `*.env.*.example` dosyalari ile standardize edilmistir.

@@ -50,6 +50,7 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 - Sprint 6 `EASY-039` tamamlandi: deployment hedef mimarisi `docs/deployment-target-architecture.md` ile kabul edildi. Container-first topoloji, staging/prod ayrimi, immutable image promote modeli ve rollback sinirlari netlestirildi.
 - Sprint 6 `EASY-049` tamamlandi: Rule Refactor Review checkpoint'i uygulandi. `keep/deprecate/revise` kararlari `rules/current/rule_refactor_review_2026-04-17.md` ile kayit altina alindi; OP-009 deprecated yapildi, OP-011 aktive edildi, CR-003 steady-state icin revize edildi.
 - Sprint 6 `EASY-040` tamamlandi: container/calistirma recetesi standardize edildi (`Dockerfile`, `docker-compose*.yml`, `.env.example`, `scripts/deploy_compose.sh`, `docs/container-runtime-recipe.md`). Staging icin build+run, production icin rebuildsiz promote akisi yazili hale getirildi.
+- Sprint 6 `EASY-041` tamamlandi: ortam degiskeni ve secret yonetimi standardize edildi (`docs/env-secret-management.md`, `scripts/validate_env.sh`, `.env.staging.example`, `.env.production.example`, `.env.secrets.example`). Deploy scriptine env validation kapisi eklendi.
 
 ## Netlesmemis Kararlar
 
@@ -64,6 +65,6 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 
 ## Bir Sonraki Onerilen Adim
 
-1. Sprint 6 icin `EASY-041` adimina gecip ortam degiskeni ve secret yonetimini standardize et.
-2. `EASY-042` ile loglama/hata izleme iyilestirmelerini container topolojisiyle hizala.
+1. Sprint 6 icin `EASY-042` adimina gecip loglama/hata izleme iyilestirmelerini container topolojisiyle hizala.
+2. `EASY-043` ile health-check/readiness kontratini devreye al.
 3. Repository branch protection ayarinda `CI / lint` ve `CI / test` check'lerini required olarak isaretle.
