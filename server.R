@@ -5,6 +5,7 @@ shinyServer(function(input, output, session) {
 	source("R/mROC.R")
 	source("R/rocdata.R")
   source("R/mod_data_upload.R")
+  source("R/mod_roc_analysis.R")
   source("R/mod_downloads.R")
   source("R/shared_state.R")
   source("R/data_input_utils.R")
@@ -28,6 +29,7 @@ shinyServer(function(input, output, session) {
   shared_state <- createSharedState()
   validateSharedState(shared_state)
   mod_data_upload_server("data_upload", shared_state = shared_state)
+  roc_analysis <- mod_roc_analysis_server("roc_analysis", shared_state = shared_state, root_input = input)
 
   dataM <- reactive(shared_state$data())
   statusVar <- reactive(shared_state$status_var())
@@ -45,10 +47,6 @@ shinyServer(function(input, output, session) {
 	direct <- reactive({
     ifelse(input$lowhigh, "<", ">")
   })
-    
-	nMarkerInput <- reactive({
-    length(input$markerInput)
-	})
     
   CFP = reactive({input$CFP})
     
@@ -361,30 +359,16 @@ shinyServer(function(input, output, session) {
     download_specs$downloadROCStats <- create_download_handler_spec(
         filename = function() { "ROC_Statistics.txt" },
         content = function(file) {
-          if (!is.null(input$markerInput) & input$tabs1 == "ROC curve"){
-            out <- if (input$rocEstimationType == "nonParametricROC"){
-                      # Nonparametric ROC
-                      mROC(data = dataM(), statusName = statusVar(), markerName = input$markerInput, 
-                           event = valueStatus(), diseaseHigher = input$lowhigh, ci.method = input$ConfInt,
-                           se.method = input$StdErr, advanced = input$advanced, alpha = input$alpha)$stats
-                    } else {
-                      # Parametric ROC
-                      tmp <- lapply(input$markerInput, function(x){
-                        parametricROC(data = dataM(), marker = x, status = statusVar(),
-                                      event = valueStatus(), returnROCdata = TRUE,
-                                      higherValuesPositives = input$lowhigh, confidence.level = 1 - input$alphaParametric,
-                                      plot = FALSE, exact = ifelse(input$ConfIntParametric == "Exact", TRUE, FALSE))$stats
-                      })
-                      names(tmp) <- input$markerInput
-                      
-                      tmp <- plyr::ldply(tmp, rbind)[ ,-1]
-                      tmp <- tmp[ ,-c(2:5)]
-                      
-                      colnames(tmp) <- c("Marker", "AUC", "SE.AUC", "LowerLimit", paste("UpperLimit (*)", sep=""), "z", "p-value")
-                      tmp
-                    }
+          if (isTRUE(roc_analysis$is_active())) {
+            out <- roc_analysis$roc_statistics()
+          } else {
+            out <- NULL
           }
-          
+
+          if (is.null(out)) {
+            return(invisible(NULL))
+          }
+
           colnames(out) <- c("Marker","AUC","SE.AUC","LowerLimit","UpperLimit","z","p-value")
           out[,-1] <- round(out[,-1], 5)
           write.table(out, file, row.names=FALSE, col.names=TRUE, quote=FALSE, sep="\t") 
@@ -396,9 +380,15 @@ shinyServer(function(input, output, session) {
   download_specs$downloadROCData <- create_download_handler_spec(
     filename = function() { "ROC_Coordinates.txt" },
     content = function(file) {
-      
-      if (!is.null(input$markerInput) & input$tabs1 == "ROC curve"){
-       out <-  ROCstats()$plotdata
+
+      if (isTRUE(roc_analysis$is_active())) {
+        out <- roc_analysis$roc_coordinates()
+      } else {
+        out <- NULL
+      }
+
+      if (is.null(out)) {
+        return(invisible(NULL))
       }
       write.table(out, file, row.names=FALSE, col.names=TRUE, quote=FALSE, sep="\t") 
     }
@@ -412,8 +402,8 @@ shinyServer(function(input, output, session) {
         content = function(file){
             pdf(file, height = input$myheightCutoff/96, width = input$mywidthCutoff/96)
           
-            if(!is.null(input$markerInput) & input$tabs1 == "ROC curve"){
-              results <- ROCstats()$plotdata
+            if (isTRUE(roc_analysis$is_active())){
+              results <- roc_analysis$roc_coordinates()
               if (input$ROCplotOpts){
                 opts = grphPrmtrsRC()
               } else if (!input$ROCplotOpts){
@@ -472,113 +462,25 @@ shinyServer(function(input, output, session) {
 	})
 	
   output$ROCstatistics <- renderDataTable(options = list(iDisplayLength = 10),{
-		if (!is.null(input$markerInput) & input$tabs1 == "ROC curve"){
-		  if (input$rocEstimationType == "nonParametricROC"){
-		    # Nonparametric ROC
-		    mROC(data = dataM(), statusName = statusVar(), markerName = input$markerInput, 
-		         event = valueStatus(), diseaseHigher = input$lowhigh, ci.method = input$ConfInt,
-		         se.method = input$StdErr, advanced = input$advanced, alpha = input$alpha)$stats
-		  } else {
-		    # Parametric ROC
-		    tmp <- lapply(input$markerInput, function(x){
-		      parametricROC(data = dataM(), marker = x, status = statusVar(),
-		                    event = valueStatus(), returnROCdata = TRUE,
-		                    higherValuesPositives = input$lowhigh, confidence.level = 1 - input$alphaParametric,
-		                    plot = FALSE, exact = ifelse(input$ConfIntParametric == "Exact", TRUE, FALSE))$stats
-		    })
-		    names(tmp) <- input$markerInput
-		    
-		    tmp <- plyr::ldply(tmp, rbind)[ ,-1]
-		    tmp <- tmp[ ,-c(2:5)]
-		    
-		    colnames(tmp) <- c("Marker", "AUC", "SE.AUC", "LowerLimit", paste("UpperLimit (*)", sep=""), "z", "p-value")
-		    tmp
-		  }
-		} 
+		if (isTRUE(roc_analysis$is_active())){
+		  roc_analysis$roc_statistics()
+		}
 			
 	})
-  
-  ROCstats <- reactive ({
-    # Nonparametric ROC
-    if (input$rocEstimationType == "nonParametricROC"){
-      mROC(data=dataM(), statusName=statusVar(), markerName=input$markerInput,
-           event=valueStatus(), diseaseHigher=input$lowhigh)
-    } else {
-      # Parametric ROC
-      tmp <- lapply(input$markerInput, function(x){
-        tmp2 <- parametricROC(data = dataM(), marker = x, status = statusVar(),
-                              event = valueStatus(), returnROCdata = TRUE,
-                              higherValuesPositives = input$lowhigh, confidence.level = 1 - input$alphaParametric,
-                              plot = FALSE, exact = FALSE)$plotdata
-        
-        tmp2 <- round(tmp2, 4)
-        tmp2 <- tmp2[order(tmp2$FPR, tmp2$TPR),]
-        
-        if (input$lowhigh){
-          tmp2 = rbind(data.frame(Cutpoint = Inf, FPR = 0, TPR = 0), tmp2)
-          tmp2 = rbind(tmp2, data.frame(Cutpoint = -Inf, FPR = 1, TPR = 1))
-        } else {
-          tmp2 = rbind(data.frame(Cutpoint = -Inf, FPR = 0, TPR = 0), tmp2)
-          tmp2 = rbind(tmp2, data.frame(Cutpoint = Inf, FPR = 1, TPR = 1))
-        }
-        return(tmp2)
-      })
-      names(tmp) <- input$markerInput
-      
-      tmp <- plyr::ldply(tmp, rbind)
-      colnames(tmp)[1] <- "Marker"
-      
-      tmp <- dplyr::arrange(tmp, Marker, Cutpoint)
-      
-      tmp <- list(plotdata = as.data.frame(tmp))
-      tmp
-    }
-  })
 	
 	output$ROCcoordinates <- renderDataTable(options = list(iDisplayLength = 10), {
-	  if (!is.null(input$markerInput) & input$tabs1 == "ROC curve"){
-      ROCstats()$plotdata
+	  if (isTRUE(roc_analysis$is_active())){
+      roc_analysis$roc_coordinates()
 	  }
 	})
 		
     
     output$ROCcomparisons <- renderDataTable(options = list(iDisplayLength = 10),
 		{
-        if(length(input$markerInput) >= 2 & input$tabs1 == "ROC curve"){
-			
-			combs = data.frame(combn(length(input$markerInput), 2))  ## pairwise combinations (index)
-            nCol = ifelse(nMarkerInput() > 2, 9, 8)
-		
-			Comparisons = data.frame(matrix(NA, nrow = ncol(combs), ncol = nCol))
-			if (nCol == 9){
-                colnames(Comparisons) = c("Marker1 (I)", "Marker2 (J)", "AUC(I)", "AUC(J)", "|I - J|", "SE(|I - J|)", "z", "p-value", "p-value (adj.)")
-			}
-            if(nCol == 8){
-                colnames(Comparisons) = c("Marker1 (I)", "Marker2 (J)", "AUC(I)", "AUC(J)", "|I - J|", "SE(|I - J|)", "z", "p-value")
-            }
-			
-			Comparisons[,1] = input$markerInput[as.numeric(combs[1,])]
-			Comparisons[,2] = input$markerInput[as.numeric(combs[2,])]
-						
-			stats = mROC(data=dataM(), statusName=statusVar(), markerName=input$markerInput, 
-						 event=valueStatus(), diseaseHigher=input$lowhigh, ci.method=input$ConfInt,
-						 se.method=input$StdErr, advanced=input$advanced, alpha=input$alpha)$stats
-			
-			stats.tmp = stats[,1:3]
-			
-			Comparisons[,3] = stats.tmp[as.numeric(combs[1,]),2]
-			Comparisons[,4] = stats.tmp[as.numeric(combs[2,]),2]
-
-			Comparisons[,5] = abs(Comparisons[,4] - Comparisons[,3])
-			Comparisons[,6] = sqrt(stats.tmp[as.numeric(combs[1,]),3]^2 + stats.tmp[as.numeric(combs[2,]),3]^2)
-			Comparisons[,7] = Comparisons[,5] / Comparisons[,6]
-			Comparisons[,8] = 2*(1 - pnorm(Comparisons[,7]))
-			
-            if (nCol == 9) {Comparisons[,9] = p.adjust(Comparisons[,8], method = input$MultipleCompMethod)}
-			            
-			Comparisons[, -c(1,2)] = round(Comparisons[, -c(1,2)], 4)
-			Comparisons
-        }}
+        if (isTRUE(roc_analysis$is_active()) && length(input$markerInput) >= 2){
+          roc_analysis$roc_comparisons()
+        }
+      }
     )
     	
 	output$CIreminderLine1 <- renderText({
@@ -616,7 +518,7 @@ shinyServer(function(input, output, session) {
 	})
 	
 	output$ROCplot <- renderPlot({
-		if(!is.null(input$markerInput) & input$tabs1 == "ROC curve"){
+		if(isTRUE(roc_analysis$is_active())){
 		  
 # 		  if (input$rocEstimationType == "nonParametricROC"){
 # 		    # Nonparametric ROC
@@ -627,7 +529,7 @@ shinyServer(function(input, output, session) {
 # 		    
 # 		  }
 # 		  
-      results <- ROCstats()$plotdata
+      results <- roc_analysis$roc_coordinates()
 		  
 			if (input$ROCplotOpts){
 			  opts = grphPrmtrsRC()
@@ -659,21 +561,10 @@ shinyServer(function(input, output, session) {
 	}, height = heightsize, width = widthsize)
     
     
-    pAUCresult <- reactive({
-        
-        pAUC(data = dataM(), range = c(input$pointA, input$pointB), 
-             criteria = input$sensSpec, correct = TRUE, percent = FALSE, markers = input$markerInput,
-             status = statusVar(), direction = ifelse(input$lowhigh, "<", ">"))
-        
-    })
-    
-    
     output$resultPAuc <- renderDataTable(options = list(iDisplayLength = 10),
     {
-        if(!is.null(input$markerInput) & input$tabs1 == "ROC curve")
-            
-            pAUCresult()
-            
+        if(isTRUE(roc_analysis$is_active()))
+          roc_analysis$pauc_result()
         }
     )
 	

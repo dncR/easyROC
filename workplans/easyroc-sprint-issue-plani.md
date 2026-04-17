@@ -86,7 +86,7 @@ Sprint hedefi: Ana işlevleri modüllere taşımak.
 
 | Done | ID | Issue | Öncelik | SP | Bağımlılık | Kabul Kriteri |
 |---|---|---|---:|---:|---|---|
-| [ ] | EASY-020 | `mod_roc_analysis` çıkarımı | P0 | 8 | EASY-016 | ROC stats/coordinates/comparison çalışıyor |
+| [x] | EASY-020 | `mod_roc_analysis` çıkarımı | P0 | 8 | EASY-016 | ROC stats/coordinates/comparison çalışıyor |
 | [ ] | EASY-021 | `mod_partial_auc` çıkarımı | P0 | 5 | EASY-020 | pAUC sonuçları eşdeğer |
 | [ ] | EASY-022 | `mod_cut_points` çıkarımı | P0 | 8 | EASY-016 | Cut-off tabı modüler çalışıyor |
 | [ ] | EASY-023 | `mod_sample_size` çıkarımı | P1 | 3 | EASY-016 | Sample size hesapları modülde |
