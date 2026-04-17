@@ -93,4 +93,4 @@ Bu noktalar mevcut davranisi korumak icin bilincli olarak Sprint 4+ kapsaminda e
 
 ## 9) Next Actions
 
-1. EASY-044: Deployment ve runbook dokumanlarini finalize et
+1. EASY-045: Release checklist finalizasyonunu tamamla

@@ -93,7 +93,7 @@ Bu hedefler Sprint 6 sonunda asgari cizgi olarak kabul edilir:
 - EASY-041: Secret/env yonetimi bu dokumandaki sinirlara gore standardize edilmistir.
 - EASY-042: Loglama ve hata izleme katmani bu topolojiye eklenmistir.
 - EASY-043: Readiness/health check kontratlari tanimlanmistir.
-- EASY-044: Deployment ve runbook dokumanlari bu karar setine gore final edilecek.
+- EASY-044: Deployment ve runbook dokumanlari bu karar setine gore finalize edilmistir.
 
 EASY-040 implementation note (2026-04-17):
 
@@ -110,3 +110,7 @@ EASY-042 implementation note (2026-04-17):
 EASY-043 implementation note (2026-04-17):
 
 - Health-check/readiness kontrati `scripts/healthcheck.R`, compose `healthcheck` ayari ve `docs/healthchecks.md` ile devreye alinmistir.
+
+EASY-044 implementation note (2026-04-17):
+
+- Operasyonel deployment/runbook dokumanlari `docs/deployment.md` ve `docs/runbook.md` ile tamamlanmistir.

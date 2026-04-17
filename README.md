@@ -61,6 +61,8 @@ See:
 - `docs/env-secret-management.md`
 - `docs/observability.md`
 - `docs/healthchecks.md`
+- `docs/deployment.md`
+- `docs/runbook.md`
 
 # License
 

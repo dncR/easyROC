@@ -73,8 +73,12 @@ docker compose --env-file .env.staging -f docker-compose.yml -f docker-compose.s
 
 ## 7) Next Step Link
 
-- EASY-043: health-check/readiness metrikleri devreye alinarak log + health sinyali birlikte izlenecek.
+- EASY-044: deployment ve runbook dokumanlari uzerinden log + health operasyon akisi standardize edilecek.
 
 EASY-043 update (2026-04-17):
 
 - Health-check/readiness kontrati `docs/healthchecks.md` ve `scripts/healthcheck.R` ile devreye alinmistir.
+
+EASY-044 update (2026-04-17):
+
+- Operasyon akisi `docs/deployment.md` ve `docs/runbook.md` ile finalize edilmistir.

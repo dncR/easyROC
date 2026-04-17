@@ -53,6 +53,7 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 - Sprint 6 `EASY-041` tamamlandi: ortam degiskeni ve secret yonetimi standardize edildi (`docs/env-secret-management.md`, `scripts/validate_env.sh`, `.env.staging.example`, `.env.production.example`, `.env.secrets.example`). Deploy scriptine env validation kapisi eklendi.
 - Sprint 6 `EASY-042` tamamlandi: loglama ve hata izleme taban cizgisi devreye alindi (`R/logging_utils.R`, `docs/observability.md`). Session acilis/kapanis, upload parse hatalari ve sample size hesaplama hatalari structured log olarak izlenir hale getirildi.
 - Sprint 6 `EASY-043` tamamlandi: health-check/readiness kontrati devreye alindi (`scripts/healthcheck.R`, compose healthcheck ayari, `docs/healthchecks.md`). Deploy scripti container `healthy` durumunu bekleyecek sekilde guncellendi.
+- Sprint 6 `EASY-044` tamamlandi: deployment/runbook dokumanlari finalize edildi (`docs/deployment.md`, `docs/runbook.md`). Staging/prod deploy, verification ve rollback operasyon adimlari tek bir standarda baglandi.
 
 ## Netlesmemis Kararlar
 
@@ -67,6 +68,6 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 
 ## Bir Sonraki Onerilen Adim
 
-1. Sprint 6 icin `EASY-044` adimina gecip deployment/runbook dokumanlarini finalize et.
+1. Sprint 7 icin `EASY-045` adimina gecip release checklist finalizasyonunu yap.
 2. Repository branch protection ayarinda `CI / lint` ve `CI / test` check'lerini required olarak isaretle.
-3. Sprint 7 girisinde release checklist (`EASY-045`) oncesi staging dry-run kanitlarini topla.
+3. `EASY-046` production release oncesi staging dry-run kanitlarini topla.
