@@ -22,7 +22,7 @@ shinyUI(fluidPage(
 
   sidebarLayout(
   # Left-side panel, including options and inputs for each tab.
-	sidebarPanel(width = 3,
+	sidebarPanel(width = 3, class = "easyroc-sidebar",
 		conditionalPanel(condition="input.tabs1=='Introduction'",
 		  tags$p(
 		    tags$img(src = "multi.png", width = 300, height = 300)
@@ -1191,12 +1191,67 @@ shinyUI(fluidPage(
       ), id = "tabs1", type = "pills"),
 
     tags$head(
-      tags$style(type="text/css", "label.radio{display: inline-block}", ".radio input[type=\"radio\"] {float: none}"),
-      tags$style(type="text/css", "select{max-width: 200px}"),
-      tags$style(type="text/css", "textarea{max-width: 185px}"),
-      tags$style(type="text/css", ".jslider{max-width: 200px}"),
-      tags$style(type='text/css', ".well{max-width: 330px}"),
-      tags$style(type='text/css', ".span4{max-width: 330px}")
+      tags$style(type = "text/css", "
+        label.radio { display: inline-block; }
+        .radio input[type='radio'] { float: none; }
+
+        .easyroc-sidebar select { max-width: 200px; }
+        .easyroc-sidebar textarea { max-width: 185px; }
+        .easyroc-sidebar .jslider { max-width: 200px; }
+        .easyroc-sidebar .well { max-width: 330px; }
+        .easyroc-sidebar .span4 { max-width: 330px; }
+
+        .tab-content img {
+          max-width: 100%;
+          height: auto;
+        }
+
+        @media (max-width: 768px) {
+          .easyroc-sidebar select,
+          .easyroc-sidebar textarea,
+          .easyroc-sidebar .jslider,
+          .easyroc-sidebar .well,
+          .easyroc-sidebar .span4 {
+            max-width: 100%;
+            width: 100% !important;
+          }
+
+          .easyroc-sidebar .form-group,
+          .easyroc-sidebar .shiny-input-container {
+            margin-bottom: 14px;
+          }
+
+          .easyroc-sidebar .accordion-button {
+            font-size: 14px;
+          }
+
+          .nav.nav-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+          }
+
+          .nav.nav-pills > li {
+            float: none;
+            margin: 0;
+          }
+
+          .nav.nav-pills > li > a {
+            padding: 8px 10px;
+          }
+
+          .dataTables_wrapper {
+            overflow-x: auto;
+          }
+
+          .shiny-download-link {
+            display: block;
+            width: 100%;
+            margin-bottom: 8px;
+            text-align: center;
+          }
+        }
+      ")
     ),
 
     tags$head(

@@ -44,6 +44,7 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 - Sprint 5 `EASY-033` tamamlandi: `ui.R` icinde `bslib::bs_theme()` tabanli tema katmani (`easyroc_theme`) devreye alindi ve uygulama kabugu `fluidPage(theme = ...)` yapisina tasinarak modern tema tum sekmelere uygulanir hale getirildi.
 - Sprint 5 `EASY-034` tamamlandi: uzun sidebar formlarinda adim bazli akis netlestirildi; ROC tarafinda advanced/plot bloklari accordion yapisina alindi, Cut points ve Sample size formlarina yonlendirici adim/hint metinleri eklendi.
 - Sprint 5 `EASY-035` tamamlandi: kullaniciya donen validasyon/hata mesajlari eylem odakli hale getirildi (`data_input_utils`, `mROC`, sample size guard mesajlari). `mod_sample_size` tarafinda hata durumlari icin okunabilir yonlendirme satirlari eklendi ve cikti/download akisinda sert hata yerine acik mesaj donusu saglandi.
+- Sprint 5 `EASY-036` tamamlandi: mobil responsive duzenlemeler `ui.R` seviyesinde devreye alindi. Sidebar form kontrolleri mobilde tam-genislik calisacak sekilde duzenlendi, tab navigasyonu wrap destegi kazandi, data table yatay scroll davranisi eklendi ve manuel/icerik gorselleri responsive hale getirildi.
 
 ## Netlesmemis Kararlar
 
@@ -58,6 +59,6 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 
 ## Bir Sonraki Onerilen Adim
 
-1. Sprint 5 icin `EASY-036` adimina gecip mobil responsive duzenlemeler yapilsin.
+1. Sprint 5 icin `EASY-037` adimina gecip erisilebilirlik iyilestirmeleri yapilsin.
 2. Repository branch protection ayarinda `CI / lint` ve `CI / test` check'lerini required olarak isaretle.
 3. CI calisma suresini izleyip gerekirse cache/parallel iyilestirmelerini planla.
