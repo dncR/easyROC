@@ -55,6 +55,7 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 - Sprint 6 `EASY-043` tamamlandi: health-check/readiness kontrati devreye alindi (`scripts/healthcheck.R`, compose healthcheck ayari, `docs/healthchecks.md`). Deploy scripti container `healthy` durumunu bekleyecek sekilde guncellendi.
 - Sprint 6 `EASY-044` tamamlandi: deployment/runbook dokumanlari finalize edildi (`docs/deployment.md`, `docs/runbook.md`). Staging/prod deploy, verification ve rollback operasyon adimlari tek bir standarda baglandi.
 - Sprint 7 `EASY-045` tamamlandi: release checklist finalize edildi (`docs/release-checklist.md`). Production release oncesi zorunlu gate, kanit ve go/no-go onay adimlari yazili hale getirildi.
+- Sprint 7 `EASY-046` tamamlandi: release adayi (`easyroc-release:rc-20260417193256`) staging'de build+healthcheck ile dogrulandi ve production ortamina promote edildi. Release kaniti `docs/release-evidence-rc-20260417193256.md` dosyasina eklendi.
 
 ## Netlesmemis Kararlar
 
@@ -69,6 +70,6 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 
 ## Bir Sonraki Onerilen Adim
 
-1. Sprint 7 icin `EASY-046` adimina gecip production release'i kontrollu sekilde uygula.
+1. Sprint 7 icin `EASY-047` adimina gecip post-release izleme ve hizli duzeltme penceresini uygula.
 2. Repository branch protection ayarinda `CI / lint` ve `CI / test` check'lerini required olarak isaretle.
-3. `EASY-047` icin post-release izleme penceresi ve hotfix hazirlik planini ac.
+3. `EASY-048` icin changelog ve kapanis raporu girislerini release kanitlariyla birlikte hazirla.
