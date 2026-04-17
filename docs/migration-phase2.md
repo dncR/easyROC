@@ -93,4 +93,4 @@ Bu noktalar mevcut davranisi korumak icin bilincli olarak Sprint 4+ kapsaminda e
 
 ## 9) Next Actions
 
-1. EASY-048: Changelog ve kapanis raporunu release kanitlariyla tamamla
+1. Modernizasyon programi kapanisindan sonra warning-cleanup backlog'unu ac ve onceliklendir.

@@ -1,8 +1,8 @@
 Workplan ID: WP-EASYROC-MOD-001
-Status: active
+Status: completed
 Scope: architecture, refactor, testing, deployment, governance
 Owner: team
-Last updated: 2026-04-16
+Last updated: 2026-04-18
 
 # easyROC R-First Modernizasyon İş Planı
 
@@ -196,6 +196,8 @@ Yaklaşım: R-first (Shiny ekosistemi içinde modernizasyon, davranış eşdeğe
 ### Çıkış Kriteri
 
 - Hypercare sonunda kritik açık issue kalmaması.
+
+Durum: tamamlandi (`EASY-046`, `EASY-047`, `EASY-048`).
 
 ## 6. İş Kırılım Yapısı (Epic Bazlı)
 

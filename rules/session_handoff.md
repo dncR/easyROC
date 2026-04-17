@@ -1,6 +1,6 @@
 # Oturum Devri - easyROC
 
-Last updated: 2026-04-17
+Last updated: 2026-04-18
 Status: active
 
 Bu dosya oturumlar arasi baglam devri icin kullanilir.
@@ -9,7 +9,7 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 
 - R-first modernizasyon planinin (workplan + sprint plani) kural tabanli yurutulmesi.
 - Monolitik yapiyi kontrollu ve testli sekilde moduler hedef mimariye tasima.
-- Sprint 7 `EASY-047` post-release izleme penceresinin tamamlanmasi (60 dk health/log tarama + incident/hotfix karari).
+- Sprint 7 kapanisindan sonra operasyonel iyilestirme backlog'unun yonetimi.
 
 ## Son Tamamlananlar
 
@@ -58,6 +58,7 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 - Sprint 7 `EASY-045` tamamlandi: release checklist finalize edildi (`docs/release-checklist.md`). Production release oncesi zorunlu gate, kanit ve go/no-go onay adimlari yazili hale getirildi.
 - Sprint 7 `EASY-046` tamamlandi: release adayi (`easyroc-release:rc-20260417193256`) staging'de build+healthcheck ile dogrulandi ve production ortamina promote edildi. Release kaniti `docs/release-evidence-rc-20260417193256.md` dosyasina eklendi.
 - Sprint 7 `EASY-047` tamamlandi: post-release izleme penceresi tamamlandi (`docs/post-release-monitoring-rc-20260417193256.md`). Production container `healthy`, restart `0`, P0/P1 incident yok; hotfix gereksinimi olusmadi.
+- Sprint 7 `EASY-048` tamamlandi: `CHANGELOG.md` olusturuldu ve post-release kapanis raporu yayinlandi (`docs/post-release-closure-rc-20260417193256.md`).
 
 ## Netlesmemis Kararlar
 
@@ -72,6 +73,6 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 
 ## Bir Sonraki Onerilen Adim
 
-1. Sprint 7 icin `EASY-048` adimina gecip `CHANGELOG.md` ve kapanis raporunu release kanitlariyla birlikte tamamla.
-2. Repository branch protection ayarinda `CI / lint` ve `CI / test` check'lerini required olarak isaretle.
-3. EASY-047 izleme notlarindaki non-blocking warningler (`legend`, DT deprecation) icin backlog issue ac.
+1. Repository branch protection ayarinda `CI / lint` ve `CI / test` check'lerini required olarak isaretle.
+2. EASY-047 izleme notlarindaki non-blocking warningler (`legend`, DT deprecation) icin backlog issue ac.
+3. Operasyonel warning budget ve alert esiklerini netlestir.

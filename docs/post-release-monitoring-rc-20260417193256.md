@@ -51,3 +51,4 @@ Observed non-critical warnings:
 - EASY-047 status: completed
 - Next sprint issue: EASY-048 (Changelog ve kapanis raporu)
 - Follow-up recommendation (non-blocking): `legend` runtime warning ve DT deprecation uyarilari icin backlog issue acilmasi
+- Closure report: `docs/post-release-closure-rc-20260417193256.md`

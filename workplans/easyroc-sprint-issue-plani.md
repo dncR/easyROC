@@ -151,7 +151,7 @@ Sprint hedefi: Üretim yayını ve kontrollü hypercare.
 | [x] | EASY-045 | Release checklist finalizasyonu | P0 | 2 | EASY-044 | `docs/release-checklist.md` ile release gate checklist'i finalize edildi |
 | [x] | EASY-046 | Production release | P0 | 3 | EASY-045 | Sürüm canlıya alındı |
 | [x] | EASY-047 | Post-release izleme ve hızlı düzeltme | P0 | 5 | EASY-046 | Kritik hata yok, varsa hotfix tamam |
-| [ ] | EASY-048 | Changelog ve kapanış raporu | P1 | 2 | EASY-046 | `CHANGELOG.md` + post-release raporu güncel |
+| [x] | EASY-048 | Changelog ve kapanış raporu | P1 | 2 | EASY-046 | `CHANGELOG.md` + post-release raporu güncel |
 
 Sprint çıkış kriteri: Hypercare başlangıcında P0/P1 açık issue olmaması.
 
