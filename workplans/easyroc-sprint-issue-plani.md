@@ -122,7 +122,7 @@ Sprint hedefi: UI/UX ve erişilebilirlik modernizasyonu.
 | [x] | EASY-035 | Mesajlar ve validasyon UX iyileştirmesi | P1 | 3 | EASY-033 | Hata mesajları eylem odaklı |
 | [x] | EASY-036 | Mobil responsive düzenleme | P0 | 5 | EASY-033 | Mobilde kritik akış tamamlanabiliyor |
 | [x] | EASY-037 | Erişilebilirlik iyileştirmeleri | P1 | 3 | EASY-033 | Label/kontrast/klavye akışı iyileşti |
-| [ ] | EASY-038 | UI yönerge dokümanı | P2 | 2 | EASY-033..037 | `docs/ui-guidelines.md` tamam |
+| [x] | EASY-038 | UI yönerge dokümanı | P2 | 2 | EASY-033..037 | `docs/ui-guidelines.md` tamam |
 
 Sprint çıkış kriteri: Yeni UI ile kritik akışlarda kullanılabilirlik onayı.
 
@@ -132,7 +132,7 @@ Sprint hedefi: Dağıtım ve operasyonel hazırlığın tamamlanması.
 
 | Done | ID | Issue | Öncelik | SP | Bağımlılık | Kabul Kriteri |
 |---|---|---|---:|---:|---|---|
-| [ ] | EASY-039 | Deployment hedef mimarisini kesinleştir | P0 | 3 | EASY-031 | Staging/prod stratejisi net |
+| [x] | EASY-039 | Deployment hedef mimarisini kesinleştir | P0 | 3 | EASY-031 | `docs/deployment-target-architecture.md` ile staging/prod stratejisi netlestirildi |
 | [ ] | EASY-049 | Rule Refactor Review Checkpoint (Post-modernizasyon tetikleyici kapısı) | P0 | 3 | EASY-039 | Sprint 6 başında kural seti gözden geçirildi; geçiş-dönemi kurallar için `keep/deprecate/revise` kararı yazılı hale getirildi; sonuçlar `rules/current/*` ve `rules/current/rules_changelog.md` ile senkronlandı |
 | [ ] | EASY-040 | Container/çalıştırma reçetesi standardizasyonu | P0 | 5 | EASY-039 | Tekrarlanabilir deploy adımları var |
 | [ ] | EASY-041 | Ortam değişkeni ve gizli bilgi yönetimi | P0 | 3 | EASY-039 | Secret yönetimi dokümante |

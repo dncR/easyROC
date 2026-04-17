@@ -93,4 +93,4 @@ Bu noktalar mevcut davranisi korumak icin bilincli olarak Sprint 4+ kapsaminda e
 
 ## 9) Next Actions
 
-1. EASY-038: UI yonerge dokumani
+1. EASY-049: Rule Refactor Review checkpoint'ini Sprint 6 basinda tamamla
