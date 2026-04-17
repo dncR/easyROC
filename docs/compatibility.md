@@ -66,4 +66,4 @@ Calistirma komutu:
 ## 6) Open Items
 
 - Sprint 2+ refactor surecinde API degisimi olursa bu dosya revize edilmelidir.
-- Faz-2 migration notlari olustugunda (`docs/migration-phase2.md`) bu dokumanla capraz referans verilmelidir.
+- Faz-2 migration notlari olusturuldu (`docs/migration-phase2.md`); sonraki fazlarda iki dokuman birlikte guncellenmelidir.

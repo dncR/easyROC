@@ -16,6 +16,7 @@ Bu kurallar surece gore guncellenebilir.
 | OP-007 | Kural dosyalarinda degisiklik yapildiysa `rule_registry` ve `rules_changelog` dosyalari ayni patchte guncellenir. | active | flexible | team | 2026-04-16 |
 | OP-008 | Sprint/issue odakli ilerlemede workplanlar ile issue kimlikleri birlikte izlenir ve kapanis kriteri net yazilir. | active | flexible | team | 2026-04-16 |
 | OP-009 | Post-modernizasyon kural icerigi simdiden detaylandirilmaz; modernizasyon `%70+` seviyesine geldiginde veya Sprint 6 basinda zorunlu "Rule Refactor Review" yapilir ve sonucunda kural seti yeniden siniflandirilir. | active | flexible | team | 2026-04-17 |
+| OP-010 | Her gorev sonunda bu oturumda baslatilan background process'ler kontrol edilir; kilitlenen veya artik gereksiz calisan (ortak kullanilmayan) prosesler PID/komut ile raporlanir ve manuel kill komutu onerilir. Varsayilan mod manuel kapanistir; otomatik kill sadece kullanici promptta acikca isterse veya ilgili kural dosyasi manuelden otomatiye cekilirse uygulanir. | active | flexible | team | 2026-04-17 |
 
 ## Degisim Is Akisi
 

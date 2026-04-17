@@ -34,6 +34,8 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 - Sprint 3 `EASY-023` tamamlandi: sample size hesaplama akışı `mod_sample_size` modülüne taşındı; UI çıktısı ve indirme akışı modül kontratı üzerinden çalışacak şekilde güncellendi. Üç sample size modu için baseline eşdeğerliği testle doğrulandı.
 - Sprint 3 `EASY-024` tamamlandi: ROC ve cut-point plot option üretimi `R/plot_options_service.R` altında ortak servis fonksiyonlarına taşındı; `server.R` tarafındaki tekrarlı option builder blokları sadeleştirildi ve servis kontrat testleri eklendi.
 - Sprint 3 `EASY-025` tamamlandi: legacy `server.R` icindeki modulerlesmis alanlara ait dogrudan domain source/library bagimliliklari temizlendi; cut-point ROC koordinat akisi modul kontrati uzerinden beslendi. Monolitik bagimlilik temizligi icin statik test (`test-server-bootstrap-deps.R`) eklendi.
+- Sprint 3 `EASY-026` tamamlandi: Faz-2 migration notu `docs/migration-phase2.md` olarak olusturuldu; gecis ozeti, kanitlar, kalan legacy footprint ve Sprint 4 giris checklist'i yazili hale getirildi.
+- Sprint 4 `EASY-027` tamamlandi: `renv` proje aktivasyonu (`.Rprofile`, `renv/activate.R`) ve `renv.lock` olusturuldu; eksik runtime paketleri (`pROC`, `plyr`, `OptimalCutpoints`) lockfile'a dahil edildi. Test suiti tekrar calistirilip yesil dogrulandi.
 
 ## Netlesmemis Kararlar
 
@@ -48,6 +50,6 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 
 ## Bir Sonraki Onerilen Adim
 
-1. Sprint 3 icin `EASY-026` adimina gecip Faz-2 migration notunu olustur.
-2. Sprint 3 kapanisinda moduler gecis etkilerini (legacy bagimliliklar + test kapsami) tekrar degerlendir.
-3. Sprint 4 oncesi CI/lint/test hat kurulumu icin mevcut test kapsam envanterini hazirla.
+1. Sprint 4 icin `EASY-028` adimina gecip domain fonksiyonlari icin `testthat` kapsamini arttir.
+2. `EASY-029` kapsaminda kritik UI akislari icin `shinytest2` test senaryolarini cikar.
+3. `EASY-031` icin CI pipeline tanimini (test + lint zorunlulugu) netlestir.

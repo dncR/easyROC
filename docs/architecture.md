@@ -104,4 +104,4 @@ Hedef moduller:
 ## 9) Out of Scope (This Draft)
 
 - Cizim araci tabanli final mimari diyagram exportlari (png/svg)
-- Faz-2 migration ayrintili adim dokumani (`docs/migration-phase2.md`)
+- Faz-2 migration ayrintili adimlari bu dokumanin disinda detaylandirilir (`docs/migration-phase2.md`)

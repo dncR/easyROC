@@ -21,3 +21,4 @@ Status: active
 | OP-007 | `rules/current/operational_rules.md` | operational | active | flexible | team | 2026-04-16 | Registry + changelog zorunlulugu |
 | OP-008 | `rules/current/operational_rules.md` | operational | active | flexible | team | 2026-04-16 | Sprint/issue izlenebilirligi |
 | OP-009 | `rules/current/operational_rules.md` | operational | active | flexible | team | 2026-04-17 | Post-modernizasyon kural revizyon tetikleyicisi |
+| OP-010 | `rules/current/operational_rules.md` | operational | active | flexible | team | 2026-04-17 | Gorev sonu background process kontrolu + manuel kill raporu (varsayilan); acik talep ile otomatik kill |

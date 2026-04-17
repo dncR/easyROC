@@ -92,7 +92,7 @@ Sprint hedefi: Ana işlevleri modüllere taşımak.
 | [x] | EASY-023 | `mod_sample_size` çıkarımı | P1 | 3 | EASY-016 | Sample size hesapları modülde |
 | [x] | EASY-024 | Plot options ortak servisleştirme | P1 | 5 | EASY-020, EASY-022 | Tekrarlı kod azaltıldı |
 | [x] | EASY-025 | Legacy `ui.R/server.R` bağımlılık temizliği | P1 | 3 | EASY-020..023 | Monolitik bağımlılıklar kaldırıldı |
-| [ ] | EASY-026 | Faz-2 migration notu | P2 | 2 | EASY-025 | `docs/migration-phase2.md` hazır |
+| [x] | EASY-026 | Faz-2 migration notu | P2 | 2 | EASY-025 | `docs/migration-phase2.md` hazır |
 
 Sprint çıkış kriteri: Tüm ana sekmeler modül yapısında çalışır.
 
@@ -102,7 +102,7 @@ Sprint hedefi: Test/kalite hattını üretim standardına çıkarmak.
 
 | Done | ID | Issue | Öncelik | SP | Bağımlılık | Kabul Kriteri |
 |---|---|---|---:|---:|---|---|
-| [ ] | EASY-027 | `renv` kurulumu ve lockfile oluştur | P0 | 3 | EASY-026 | `renv.lock` commit edildi |
+| [x] | EASY-027 | `renv` kurulumu ve lockfile oluştur | P0 | 3 | EASY-026 | `renv.lock` olusturuldu ve repo takibine eklendi |
 | [ ] | EASY-028 | `testthat` ile domain testleri | P0 | 8 | EASY-020..023 | Çekirdek fonksiyon test kapsamı arttı |
 | [ ] | EASY-029 | `shinytest2` kritik akış testleri | P0 | 8 | EASY-020..023 | Kritik UI akışları otomasyon altında |
 | [ ] | EASY-030 | Lint ve statik kontrol ekle | P1 | 3 | EASY-027 | CI’da lint adımı aktif |

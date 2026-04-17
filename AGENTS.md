@@ -72,6 +72,7 @@ Her kural kaydinda asgari alanlar:
 - Kritik akislarda regresyon riski varsa kod degisikligi tek basina birakilmaz; test/dokuman birlikte guncellenir.
 - Acik talep olmadan yikici git veya dosya komutlari kullanilmaz.
 - Agent bu depoda otomatik `git commit` veya `git push` islemi yapmaz; commit/push adimini kullanici manuel olarak calistirir.
+- Her gorev sonunda background process hijyeni uygulanir: bu oturumda baslatilan kilitli/gereksiz prosesler (ortak kullanilmiyorsa) raporlanir ve manuel kill komutu sunulur. Varsayilan manuel kapanistir; otomatik kill ancak acik kullanici talebi veya kural degisikligi ile uygulanir.
 
 ## Post-Modernizasyon Cerceve Notu
 
