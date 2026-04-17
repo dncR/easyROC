@@ -93,4 +93,4 @@ Bu noktalar mevcut davranisi korumak icin bilincli olarak Sprint 4+ kapsaminda e
 
 ## 9) Next Actions
 
-1. EASY-032: test raporu dokumani
+1. EASY-033: `bslib` tabanli tema altyapisi

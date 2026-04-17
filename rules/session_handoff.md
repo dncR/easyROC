@@ -40,6 +40,7 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 - Sprint 4 `EASY-029` tamamlandi: `shinytest2` ile kritik UI smoke otomasyonu eklendi (`tests/testthat/test-shiny-critical-flows.R`). Data upload, ROC stats, Partial AUC, Cut points ve Sample size akislari AppDriver uzerinden dogrulandi. `tests/shinytest2/app.R` fixture launcher ile app.R/server.R cift-entrypoint kisiti asildi. `renv.lock` shinytest2 + chromote zinciri ile guncellendi.
 - Sprint 4 `EASY-030` tamamlandi: lint + statik kontrol kapilari eklendi (`scripts/lint.R`, `scripts/static_checks.R`). Lint adimi icin dusuk-gurultulu migration profili tanimlandi, static check kurallari netlestirildi ve kalite kapilari dokumante edildi (`docs/process/quality_gates.md`).
 - Sprint 4 `EASY-031` tamamlandi: GitHub Actions tek pipeline yapisi `.github/workflows/ci.yml` altinda birlestirildi; `lint` (lint + static checks) ve `test` (`tests/testthat.R`) job'lari PR/push tetiklerinde calisacak sekilde tanimlandi. Required check adlari (`CI / lint`, `CI / test`) dokumante edildi.
+- Sprint 4 `EASY-032` tamamlandi: test raporu `docs/test-report.md` olarak yayimlandi. Lint/static/test komut ciktilari, test envanteri, kritik UI akis kaniti ve residual riskler rapora islenerek Sprint 4 kalite kapanisi yazili hale getirildi.
 
 ## Netlesmemis Kararlar
 
@@ -54,6 +55,6 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 
 ## Bir Sonraki Onerilen Adim
 
-1. Sprint 4 icin `EASY-032` adimina gecip test raporu dokumanini hazirla.
+1. Sprint 5 icin `EASY-033` adimina gecip `bslib` tema altyapisini devreye al.
 2. Repository branch protection ayarinda `CI / lint` ve `CI / test` check'lerini required olarak isaretle.
 3. CI calisma suresini izleyip gerekirse cache/parallel iyilestirmelerini planla.
