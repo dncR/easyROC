@@ -57,6 +57,7 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 - Sprint 6 `EASY-044` tamamlandi: deployment/runbook dokumanlari finalize edildi (`docs/deployment.md`, `docs/runbook.md`). Staging/prod deploy, verification ve rollback operasyon adimlari tek bir standarda baglandi.
 - Sprint 7 `EASY-045` tamamlandi: release checklist finalize edildi (`docs/release-checklist.md`). Production release oncesi zorunlu gate, kanit ve go/no-go onay adimlari yazili hale getirildi.
 - Sprint 7 `EASY-046` tamamlandi: release adayi (`easyroc-release:rc-20260417193256`) staging'de build+healthcheck ile dogrulandi ve production ortamina promote edildi. Release kaniti `docs/release-evidence-rc-20260417193256.md` dosyasina eklendi.
+- Sprint 7 `EASY-047` tamamlandi: post-release izleme penceresi tamamlandi (`docs/post-release-monitoring-rc-20260417193256.md`). Production container `healthy`, restart `0`, P0/P1 incident yok; hotfix gereksinimi olusmadi.
 
 ## Netlesmemis Kararlar
 
@@ -71,6 +72,6 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 
 ## Bir Sonraki Onerilen Adim
 
-1. `docs/post-release-monitoring-rc-20260417193256.md` icindeki 60 dk checkpoint'i tamamla ve EASY-047'yi kapat.
+1. Sprint 7 icin `EASY-048` adimina gecip `CHANGELOG.md` ve kapanis raporunu release kanitlariyla birlikte tamamla.
 2. Repository branch protection ayarinda `CI / lint` ve `CI / test` check'lerini required olarak isaretle.
-3. `EASY-048` icin changelog ve kapanis raporu girislerini release kanitlariyla birlikte hazirla.
+3. EASY-047 izleme notlarindaki non-blocking warningler (`legend`, DT deprecation) icin backlog issue ac.

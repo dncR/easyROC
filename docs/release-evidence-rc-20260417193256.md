@@ -61,3 +61,5 @@ These fixes are tracked in `Dockerfile`.
 
 - Monitoring report:
   - `docs/post-release-monitoring-rc-20260417193256.md`
+- Monitoring outcome:
+  - EASY-047 completed (`2026-04-18 02:07 +03`), no P0/P1 incident, no hotfix required

@@ -93,4 +93,4 @@ Bu noktalar mevcut davranisi korumak icin bilincli olarak Sprint 4+ kapsaminda e
 
 ## 9) Next Actions
 
-1. EASY-047: Post-release izleme ve hizli duzeltme adimini release checklist hand-off'a gore uygula
+1. EASY-048: Changelog ve kapanis raporunu release kanitlariyla tamamla
