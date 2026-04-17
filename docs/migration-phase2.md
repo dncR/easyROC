@@ -93,4 +93,4 @@ Bu noktalar mevcut davranisi korumak icin bilincli olarak Sprint 4+ kapsaminda e
 
 ## 9) Next Actions
 
-1. EASY-042: Loglama ve hata izleme iyilestirmelerini deployment topolojisine gore uygula
+1. EASY-043: Health-check ve readiness kontratini deployment topolojisine gore devreye al

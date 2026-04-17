@@ -64,6 +64,17 @@ if [[ "${target}" == "production" && "${EASYROC_IMAGE_TAG}" == "local" ]]; then
   exit 1
 fi
 
+if [[ -n "${EASYROC_LOG_LEVEL:-}" ]]; then
+  level_upper="$(printf "%s" "${EASYROC_LOG_LEVEL}" | tr '[:lower:]' '[:upper:]')"
+  case "${level_upper}" in
+    DEBUG|INFO|WARN|ERROR) ;;
+    *)
+      echo "EASYROC_LOG_LEVEL must be one of DEBUG, INFO, WARN, ERROR." >&2
+      exit 1
+      ;;
+  esac
+fi
+
 if [[ "${target}" == "production" ]]; then
   if rg -n "^[[:space:]]*[A-Za-z0-9_]*(PASSWORD|TOKEN|SECRET|KEY)[A-Za-z0-9_]*[[:space:]]*=" "${env_file}" >/dev/null 2>&1; then
     echo "Potential secret detected in ${env_file}. Keep production secrets in secret store / secret env file." >&2
@@ -72,4 +83,3 @@ if [[ "${target}" == "production" ]]; then
 fi
 
 echo "Env validation passed for target '${target}'."
-

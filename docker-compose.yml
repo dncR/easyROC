@@ -10,5 +10,6 @@ services:
       SHINY_HOST: 0.0.0.0
       SHINY_PORT: 3838
       R_CONFIG_ACTIVE: ${R_CONFIG_ACTIVE:-staging}
+      EASYROC_LOG_LEVEL: ${EASYROC_LOG_LEVEL:-INFO}
+      EASYROC_LOG_FILE: ${EASYROC_LOG_FILE:-}
     restart: unless-stopped
-

@@ -31,7 +31,7 @@ Bu dokuman, `docs/deployment-target-architecture.md` icindeki container-first ka
 cp .env.staging.example .env.staging
 ```
 
-2. Gerekirse `EASYROC_IMAGE`, `EASYROC_IMAGE_TAG`, `EASYROC_HOST_PORT` degerlerini duzenle.
+2. Gerekirse `EASYROC_IMAGE`, `EASYROC_IMAGE_TAG`, `EASYROC_HOST_PORT`, `EASYROC_LOG_LEVEL` degerlerini duzenle.
 3. (Opsiyonel) secret degiskenleri icin ayri dosya kullan:
 
 ```bash
@@ -72,6 +72,7 @@ Bu komut altta su compose setini kullanir:
 docker compose --env-file .env.staging -f docker-compose.yml -f docker-compose.staging.yml logs -f
 docker compose --env-file .env.staging -f docker-compose.yml -f docker-compose.staging.yml ps
 docker compose --env-file .env.staging -f docker-compose.yml -f docker-compose.staging.yml down
+docker compose --env-file .env.staging -f docker-compose.yml -f docker-compose.staging.yml logs easyroc | rg "level=(WARN|ERROR)"
 ```
 
 ## 7) Guvence Notlari

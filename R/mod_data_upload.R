@@ -64,14 +64,30 @@ mod_data_upload_server <- function(id, shared_state = NULL) {
     }
     validateSharedState(shared_state)
 
+    log_event <- function(level, event, context = list()) {
+      if (!exists("easyroc_log", mode = "function")) {
+        return(invisible(NULL))
+      }
+      easyroc_log(
+        level = level,
+        event = event,
+        context = c(
+          list(module = "mod_data_upload", session = session$token),
+          context
+        )
+      )
+    }
+
     dataM <- shiny::reactive({
       data <- NULL
 
       if (input$dataInput == 1) {
         if (input$sampleData == 1) {
           data <- utils::read.table("data/mayo.txt", header = TRUE)
+          log_event("INFO", "example_dataset_loaded", list(dataset = "mayo", rows = nrow(data), cols = ncol(data)))
         } else if (input$sampleData == 2) {
           data <- utils::read.table("data/pbc.txt", header = TRUE)
+          log_event("INFO", "example_dataset_loaded", list(dataset = "pbc", rows = nrow(data), cols = ncol(data)))
         }
         shared_state$upload_error(NULL)
       } else if (input$dataInput == 2) {
@@ -92,11 +108,35 @@ mod_data_upload_server <- function(id, shared_state = NULL) {
 
         if (!is.null(parsed$error)) {
           shared_state$upload_error(parsed$error)
+          file_name <- if (is.null(inFile$name) || inFile$name == "") "unknown" else inFile$name
+          file_size <- if (is.null(inFile$size)) NA else inFile$size
+          log_event(
+            "WARN",
+            "upload_parse_failed",
+            list(
+              file_name = file_name,
+              file_size = file_size,
+              sep = mySep,
+              error = parsed$error
+            )
+          )
           return(NULL)
         }
 
         shared_state$upload_error(NULL)
         data <- parsed$data
+        file_name <- if (is.null(inFile$name) || inFile$name == "") "unknown" else inFile$name
+        file_size <- if (is.null(inFile$size)) NA else inFile$size
+        log_event(
+          "INFO",
+          "upload_parsed",
+          list(
+            file_name = file_name,
+            file_size = file_size,
+            rows = nrow(data),
+            cols = ncol(data)
+          )
+        )
       }
 
       data

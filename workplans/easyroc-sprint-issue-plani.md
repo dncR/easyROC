@@ -136,7 +136,7 @@ Sprint hedefi: Dağıtım ve operasyonel hazırlığın tamamlanması.
 | [x] | EASY-049 | Rule Refactor Review Checkpoint (Post-modernizasyon tetikleyici kapısı) | P0 | 3 | EASY-039 | `rules/current/rule_refactor_review_2026-04-17.md` ile `keep/deprecate/revise` kararlari yazildi; `core_rules`, `operational_rules`, `rule_registry`, `rules_changelog` senkronlandi |
 | [x] | EASY-040 | Container/çalıştırma reçetesi standardizasyonu | P0 | 5 | EASY-039 | `Dockerfile`, compose override'lari ve `scripts/deploy_compose.sh` ile tekrarlanabilir deploy adimlari tanimlandi |
 | [x] | EASY-041 | Ortam değişkeni ve gizli bilgi yönetimi | P0 | 3 | EASY-039 | `docs/env-secret-management.md` + `scripts/validate_env.sh` ile secret/env yonetimi standardize edildi |
-| [ ] | EASY-042 | Loglama ve hata izleme iyileştirmeleri | P1 | 5 | EASY-040 | Operasyonel teşhis mümkün |
+| [x] | EASY-042 | Loglama ve hata izleme iyileştirmeleri | P1 | 5 | EASY-040 | `R/logging_utils.R` + `docs/observability.md` ile operasyonel teshis sinyalleri standardize edildi |
 | [ ] | EASY-043 | Health-check ve readiness kontrolleri | P1 | 3 | EASY-040 | Sistem sağlık doğrulaması var |
 | [ ] | EASY-044 | Runbook ve deployment dokümantasyonu | P0 | 3 | EASY-040..043 | `docs/deployment.md` ve `docs/runbook.md` hazır |
 

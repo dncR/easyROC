@@ -51,6 +51,7 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 - Sprint 6 `EASY-049` tamamlandi: Rule Refactor Review checkpoint'i uygulandi. `keep/deprecate/revise` kararlari `rules/current/rule_refactor_review_2026-04-17.md` ile kayit altina alindi; OP-009 deprecated yapildi, OP-011 aktive edildi, CR-003 steady-state icin revize edildi.
 - Sprint 6 `EASY-040` tamamlandi: container/calistirma recetesi standardize edildi (`Dockerfile`, `docker-compose*.yml`, `.env.example`, `scripts/deploy_compose.sh`, `docs/container-runtime-recipe.md`). Staging icin build+run, production icin rebuildsiz promote akisi yazili hale getirildi.
 - Sprint 6 `EASY-041` tamamlandi: ortam degiskeni ve secret yonetimi standardize edildi (`docs/env-secret-management.md`, `scripts/validate_env.sh`, `.env.staging.example`, `.env.production.example`, `.env.secrets.example`). Deploy scriptine env validation kapisi eklendi.
+- Sprint 6 `EASY-042` tamamlandi: loglama ve hata izleme taban cizgisi devreye alindi (`R/logging_utils.R`, `docs/observability.md`). Session acilis/kapanis, upload parse hatalari ve sample size hesaplama hatalari structured log olarak izlenir hale getirildi.
 
 ## Netlesmemis Kararlar
 
@@ -65,6 +66,6 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 
 ## Bir Sonraki Onerilen Adim
 
-1. Sprint 6 icin `EASY-042` adimina gecip loglama/hata izleme iyilestirmelerini container topolojisiyle hizala.
-2. `EASY-043` ile health-check/readiness kontratini devreye al.
+1. Sprint 6 icin `EASY-043` adimina gecip health-check/readiness kontratini devreye al.
+2. `EASY-044` ile deployment/runbook dokumanlarini finalize et.
 3. Repository branch protection ayarinda `CI / lint` ve `CI / test` check'lerini required olarak isaretle.

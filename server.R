@@ -2,6 +2,7 @@
 options(shiny.maxRequestSize = 30*1024^2)
 
 shinyServer(function(input, output, session) {
+  source("R/logging_utils.R")
   source("R/mod_data_upload.R")
   source("R/mod_roc_analysis.R")
   source("R/mod_partial_auc.R")
@@ -12,6 +13,24 @@ shinyServer(function(input, output, session) {
   source("R/shared_state.R")
   source("R/ROCplot.R")
   source("R/printCutOff.R")
+
+  easyroc_log(
+    level = "INFO",
+    event = "session_started",
+    context = list(
+      module = "server",
+      session = session$token,
+      r_config = Sys.getenv("R_CONFIG_ACTIVE", "unset")
+    )
+  )
+
+  session$onSessionEnded(function() {
+    easyroc_log(
+      level = "INFO",
+      event = "session_ended",
+      context = list(module = "server", session = session$token)
+    )
+  })
       
     
 

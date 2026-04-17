@@ -71,6 +71,20 @@ mod_sample_size_server <- function(id, shared_state = NULL, root_input = NULL) {
       stop("root_input must be provided to mod_sample_size_server", call. = FALSE)
     }
 
+    log_event <- function(level, event, context = list()) {
+      if (!exists("easyroc_log", mode = "function")) {
+        return(invisible(NULL))
+      }
+      easyroc_log(
+        level = level,
+        event = event,
+        context = c(
+          list(module = "mod_sample_size", session = session$token),
+          context
+        )
+      )
+    }
+
     is_active <- shiny::reactive({
       root_input$tabs1 == "Sample size"
     })
@@ -82,7 +96,14 @@ mod_sample_size_server <- function(id, shared_state = NULL, root_input = NULL) {
       tryCatch(
         compute_sample_size_result(root_input = root_input),
         error = function(e) {
-          cat(paste(format_sample_size_error_lines(e), collapse = "\n"), "\n", sep = "")
+          log_event(
+            "ERROR",
+            "sample_size_calculation_failed",
+            list(
+              method = as.character(root_input$sampleSizeMethod),
+              reason = conditionMessage(e)
+            )
+          )
           invisible(NULL)
         }
       )
