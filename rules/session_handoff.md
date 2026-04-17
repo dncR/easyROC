@@ -37,6 +37,7 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 - Sprint 3 `EASY-026` tamamlandi: Faz-2 migration notu `docs/migration-phase2.md` olarak olusturuldu; gecis ozeti, kanitlar, kalan legacy footprint ve Sprint 4 giris checklist'i yazili hale getirildi.
 - Sprint 4 `EASY-027` tamamlandi: `renv` proje aktivasyonu (`.Rprofile`, `renv/activate.R`) ve `renv.lock` olusturuldu; eksik runtime paketleri (`pROC`, `plyr`, `OptimalCutpoints`) lockfile'a dahil edildi. Test suiti tekrar calistirilip yesil dogrulandi.
 - Sprint 4 `EASY-028` tamamlandi: domain test kapsami `tests/testthat/test-domain-core-functions.R` ile genisletildi. `rocdata` yon/advanced dallari, `compute_roc_comparisons` 3-marker adj. p-value dali, `parametricROC`, sample size input guardlari ve `printCutOff2` format kontrati test altina alindi.
+- Sprint 4 `EASY-029` tamamlandi: `shinytest2` ile kritik UI smoke otomasyonu eklendi (`tests/testthat/test-shiny-critical-flows.R`). Data upload, ROC stats, Partial AUC, Cut points ve Sample size akislari AppDriver uzerinden dogrulandi. `tests/shinytest2/app.R` fixture launcher ile app.R/server.R cift-entrypoint kisiti asildi. `renv.lock` shinytest2 + chromote zinciri ile guncellendi.
 
 ## Netlesmemis Kararlar
 
@@ -51,6 +52,6 @@ Bu dosya oturumlar arasi baglam devri icin kullanilir.
 
 ## Bir Sonraki Onerilen Adim
 
-1. Sprint 4 icin `EASY-029` adimina gecip kritik UI akislarina `shinytest2` otomasyon kapsamı cikar.
-2. `EASY-030` kapsaminda lint ve statik kontrol adimini devreye al.
-3. `EASY-031` icin CI pipeline tanimini (test + lint zorunlulugu) netlestir.
+1. Sprint 4 icin `EASY-030` adimina gecip lint ve statik kontrol adimini devreye al.
+2. `EASY-031` icin CI pipeline tanimini (test + lint zorunlulugu) netlestir.
+3. `EASY-032` kapsaminda test raporu dokumanini hazirla.
