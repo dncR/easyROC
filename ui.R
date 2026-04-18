@@ -22,1195 +22,1257 @@ shinyUI(fluidPage(
     class = "easyroc-skip-link",
     "Skip to main content"
   ),
-
   titlePanel("easyROC: a web-tool for ROC curve analysis (ver. 1.3.1)"),
-
   sidebarLayout(
-  # Left-side panel, including options and inputs for each tab.
-	sidebarPanel(width = 3, class = "easyroc-sidebar",
-		conditionalPanel(condition="input.tabs1=='Introduction'",
-		  tags$p(
-		    tags$img(src = "multi.png", width = 300, height = 300, alt = "easyROC logo")
-		  ),
-      tags$head(
-        includeScript("js/google-analytics.js")
-      )
-		),
-
-		# Tab: Data Upload
-		conditionalPanel(condition="input.tabs1 == 'Data upload'",
-			mod_data_upload_ui("data_upload")
-		),  # End for Data Upload tab.
-		
-		# Tab: ROC Curve
-		conditionalPanel(condition = "input.tabs1 == 'ROC curve'",
-      h5("1. Marker selection"),
-      selectizeInput("markerInput", "Select markers (*)", choices = NULL, multiple = TRUE),
-      checkboxInput("lowhigh", "Higher values indicate risks", TRUE),
-			
-      HTML('<br>'),
-      helpText("(*) Multiple markers are allowed."),
-      HTML('<br>'),
-      
-      conditionalPanel(condition = "input.navbarROCcurve == 'Multiple Comparisons'",
-        h5("2. Multiple comparison setup"),
-        selectInput(inputId = "MultipleCompMethod", label = "Multiple Comparison Method", selected = "bonferroni",
-                    choices = c("Bonferroni" = "bonferroni", "False discovery rate" = "fdr", "None" = "none")),
-        HTML('<br>')
-      ),
-
-      bslib::accordion(
-        id = "roc_sidebar_flow",
-        multiple = TRUE,
-        bslib::accordion_panel(
-          "3. Advanced analysis options",
-          checkboxInput(inputId = "advanced", label = "Enable advanced options", value = FALSE),
-			
-			    # Use this to add vertical spaces.
-  		    conditionalPanel(condition = "input.advanced",
-        ## Use this code block to add bold label.
-        tags$style('.bottom-three { 
-                      margin-bottom: 1.2em; 
-                      font-weight: bold 
-                   }'),
-        tags$p(class = "bottom-three", ""),
-  		  radioButtons(inputId = "rocEstimationType", label = "Select a method for curve fitting",
-  		               choices = list("Nonparametric" = "nonParametricROC", "Parametric" = "parametricROC"),
-  		               selected = "nonParametricROC"),       
-        
-  		  # Non parametric ROC curve
-  		  conditionalPanel(condition = "input.rocEstimationType == 'nonParametricROC'",
-  		    radioButtons(inputId = "StdErr", label = "1. Select a method for SE estimation", 
-  		                 choices = list("Mann-Whitney" = "MW", "DeLong(1988)[+]" = "DeLong", 
-  		                                "Under Null Hyp." = "Null", "Binomial" = "Binomial"), 
-  		                 selected = "DeLong"),
-  		    
-  		    radioButtons(inputId = "ConfInt", label = "2. Select a method for Conf. Interval", 
-  		                 choices = list("Mann-Whitney" = "MW", "DeLong(1988)[+]" = "DeLong", 
-  		                                "Under Null Hyp." = "Null", "Binomial Exact" = "Exact"), 
-  		                 selected = "DeLong"),
-  		    numericInput(inputId = "alpha", label = "Type I error", value = 0.05, min = 0, max = 1, step = 0.01),
-  		    tags$br(),
-  		    helpText("[+]: Default options."),
-  		    tags$br()
-  		  ),
-  		  
-  		  # Parametric ROC Curve.
-  		  conditionalPanel(condition = "input.rocEstimationType == 'parametricROC'",
-          radioButtons(inputId = "ConfIntParametric", label = "1. Select a method for Conf. Interval", 
-                      choices = list("Asymptotic [+]" = "asymptotic", "Exact" = "Exact"), selected = "asymptotic"),
-          numericInput(inputId = "alphaParametric", label = "Type I error", value = 0.05, min = 0, max = 1, step = 0.01),
-          HTML('<br>'),
-          HTML('<br>'),
-          helpText("[+]: Default options."),
-          HTML('<br>')
-  		  )
-			    )
+    # Left-side panel, including options and inputs for each tab.
+    sidebarPanel(
+      width = 3, class = "easyroc-sidebar",
+      conditionalPanel(
+        condition = "input.tabs1=='Introduction'",
+        tags$p(
+          tags$img(src = "multi.png", width = 300, height = 300, alt = "easyROC logo")
         ),
-        bslib::accordion_panel(
-          "4. ROC plot options",
-          checkboxInput(inputId = "ROCplotOpts", label = "Enable plot options", value = FALSE),
-
-      conditionalPanel(condition = "input.ROCplotOpts",
-        fluidRow(
-          column(6, sliderInput("myheight", "Plot height:", value = 400, min = 200, max = 1200)),
-          # column(2),
-          column(6, sliderInput("mywidth", "Plot width:", value = 400, min = 200, max = 1200 ))
-        ),
-          
-        HTML('<br>'), 
-          
-        fluidRow(
-          column(12, selectizeInput("fontfamilyRC", "Font family", 
-                                    choices = c("Times New Roman" = "serif", 
-                                                "Arial" = "sans", 
-                                                "Corier New" = "mono"),
-                                    selected = "sans"))
-        ),
-          
-        HTML('<br>'),
-          
-        selectizeInput(
-          "subGrpsRC",
-          tags$span(class = "visually-hidden", "Select ROC plot option group"),
-          choices = c("Edit x-axis" = "xAxis", 
-                      "Edit y-axis" = "yAxis",
-                      "Other options" = "others"), 
-          selected = "xAxis"
-        ),
-          
-        conditionalPanel(condition = "input.subGrpsRC == 'others'",
-          fluidRow(
-            column(6, textInput("mainRC", "Graph title", "ROC Curve")),
-            # column(1),
-            column(6, selectizeInput("font.mainRC", "Title font", choices = c("Regular" = "1", 
-                                                                              "Bold" = "2", 
-                                                                              "Italic" = "3", 
-                                                                              "Bold Italic" = "4"), 
-                                                                  selected = "2"))
-          ),
-                         
-          fluidRow(
-            column(6, textInput("col.mainRC", "Title color", "black")),
-            # column(1),
-            column(6, numericInput("cex.mainRC", "Title size", min=0.1, max=5, value = 1.2, step = 0.1))
-          ),
-                         
-          fluidRow(
-            column(6, textInput("ROCcolRC", "ROC line color", value = "")),
-            # column(1),
-            column(6, selectizeInput("ROCltyRC", "ROC line type", 
-                                      choices = c("\U2500\U2500\U2500\U2500\U2500\U2500\U2500" = "1",
-                                                  "\U2574 \U2574 \U2574 \U2574 \U2574 \U2574" = "2", 
-                                                  "\U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7" = "3",
-                                                  "\U2574 \U00B7 \U2574 \U00B7 \U2574 \U00B7 \U2574" = "4",
-                                                  "\U2500 \U2500 \U2500 \U2500 \U2500" = "5",
-                                                  "\U2500 \U2574 \U2500 \U2574 \U2500 \U2574" = "6"),
-                                      selected = "1"))
-          ),
-                         
-          textInput(inputId = "legend.namesRC", label = "Legend names", value = "")
-        ),
-        
-        conditionalPanel(condition = "input.subGrpsRC == 'xAxis'",
-          h5('X-axis options:'),
-                         
-          ## X axis label options
-          fluidRow(
-            column(6, textInput("xlabRC", "Axis label", "1-Specificity")),
-            # column(1),
-            column(6, selectizeInput("xfont.labRC", "Label font", choices = c("Regular" = "1", "Bold" = "2", 
-                                                                               "Italic" = "3", "Bold Italic" = "4"), 
-                                                                  selected = "1"))    
-          ),
-         
-          fluidRow(
-            column(6, textInput("xcol.labRC", "Label color", "black")),
-            # column(1),
-            column(6, numericInput("xcex.labRC", "Label size", min = 0.1, max = 5, value = 1, step = 0.1))
-          ),
-         
-         ## X axis annotation options
-          fluidRow(
-            column(6, textInput("xcol.axisRC", "Annotation color", "black")),
-            # column(1),
-            column(6, numericInput("xcex.axisRC", "Annotation size", min = 0.1, max = 5, value = 1, step = 0.1))
-          )
-         
-         #fluidRow(
-         #  column(5, textInput("xcol11", "Axis color", "black")),
-         #  column(1),
-         #  column(5, textInput("xcol.ticks11", "Tickmarks color", "black"))
-         #),
-        ),
-        
-        conditionalPanel(condition = "input.subGrpsRC == 'yAxis'",
-          h5('Y-axis options:'),
-                         
-         ## Y axis label options
-          fluidRow(
-            column(6, textInput("ylabRC", "Axis label", "Sensitivity")),
-            # column(1),
-            column(6, selectizeInput("yfont.labRC", "Label font", choices = c("Regular" = "1", "Bold" = "2", 
-                                                                               "Italic" = "3", "Bold Italic" = "4"), 
-                                                                  selected = "1"))	
-          ),
-                         
-          fluidRow(
-            column(6, textInput("ycol.labRC", "Label color", "black")),
-            # column(1),
-            column(6, numericInput("ycex.labRC", "Label size", min=0.1, max=5, value = 1, step = 0.1))
-          ),
-                         
-          ## Y axis annotation options
-          fluidRow(
-            column(6, textInput("ycol.axisRC", "Annotation color", "black")),
-            # column(1),
-            column(6, numericInput("ycex.axisRC", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
-          )
-        )
+        tags$head(
+          includeScript("js/google-analytics.js")
         )
       ),
-      ),
 
-      conditionalPanel(condition = "input.navbarROCcurve == 'Partial AUC'",
-        checkboxInput(inputId = "partialAUC", label = "Partial AUC", value = TRUE),
-        conditionalPanel(condition = "input.partialAUC",
-          fluidRow(
-            column(6, numericInput("pointA", "Value 1", min=0, max=1, value = 0.5, step = 0.1)),
-            # column(1),
-            column(6, numericInput("pointB", "Value 2", min=0, max=1, value = 1, step = 0.1))
+      # Tab: Data Upload
+      conditionalPanel(
+        condition = "input.tabs1 == 'Data upload'",
+        mod_data_upload_ui("data_upload")
+      ), # End for Data Upload tab.
+
+      # Tab: ROC Curve
+      conditionalPanel(
+        condition = "input.tabs1 == 'ROC curve'",
+        h5("1. Marker selection"),
+        selectizeInput("markerInput", "Select markers (*)", choices = NULL, multiple = TRUE),
+        checkboxInput("lowhigh", "Higher values indicate risks", TRUE),
+        HTML("<br>"),
+        helpText("(*) Multiple markers are allowed."),
+        HTML("<br>"),
+        conditionalPanel(
+          condition = "input.navbarROCcurve == 'Multiple Comparisons'",
+          h5("2. Multiple comparison setup"),
+          selectInput(
+            inputId = "MultipleCompMethod", label = "Multiple Comparison Method", selected = "bonferroni",
+            choices = c("Bonferroni" = "bonferroni", "False discovery rate" = "fdr", "None" = "none")
           ),
-          selectizeInput("sensSpec", "Select a measure", choices = c("Sensitivity", "Specificity"), multiple = FALSE, selected = "Sensitivity")
-        )   
+          HTML("<br>")
+        ),
+        bslib::accordion(
+          id = "roc_sidebar_flow",
+          multiple = TRUE,
+          bslib::accordion_panel(
+            "3. Advanced analysis options",
+            checkboxInput(inputId = "advanced", label = "Enable advanced options", value = FALSE),
+
+            # Use this to add vertical spaces.
+            conditionalPanel(
+              condition = "input.advanced",
+              ## Use this code block to add bold label.
+              tags$style(".bottom-three {
+                      margin-bottom: 1.2em;
+                      font-weight: bold
+                   }"),
+              tags$p(class = "bottom-three", ""),
+              radioButtons(
+                inputId = "rocEstimationType", label = "Select a method for curve fitting",
+                choices = list("Nonparametric" = "nonParametricROC", "Parametric" = "parametricROC"),
+                selected = "nonParametricROC"
+              ),
+
+              # Non parametric ROC curve
+              conditionalPanel(
+                condition = "input.rocEstimationType == 'nonParametricROC'",
+                radioButtons(
+                  inputId = "StdErr", label = "1. Select a method for SE estimation",
+                  choices = list(
+                    "Mann-Whitney" = "MW", "DeLong(1988)[+]" = "DeLong",
+                    "Under Null Hyp." = "Null", "Binomial" = "Binomial"
+                  ),
+                  selected = "DeLong"
+                ),
+                radioButtons(
+                  inputId = "ConfInt", label = "2. Select a method for Conf. Interval",
+                  choices = list(
+                    "Mann-Whitney" = "MW", "DeLong(1988)[+]" = "DeLong",
+                    "Under Null Hyp." = "Null", "Binomial Exact" = "Exact"
+                  ),
+                  selected = "DeLong"
+                ),
+                numericInput(inputId = "alpha", label = "Type I error", value = 0.05, min = 0, max = 1, step = 0.01),
+                tags$br(),
+                helpText("[+]: Default options."),
+                tags$br()
+              ),
+
+              # Parametric ROC Curve.
+              conditionalPanel(
+                condition = "input.rocEstimationType == 'parametricROC'",
+                radioButtons(
+                  inputId = "ConfIntParametric", label = "1. Select a method for Conf. Interval",
+                  choices = list("Asymptotic [+]" = "asymptotic", "Exact" = "Exact"), selected = "asymptotic"
+                ),
+                numericInput(inputId = "alphaParametric", label = "Type I error", value = 0.05, min = 0, max = 1, step = 0.01),
+                HTML("<br>"),
+                HTML("<br>"),
+                helpText("[+]: Default options."),
+                HTML("<br>")
+              )
+            )
+          ),
+          bslib::accordion_panel(
+            "4. ROC plot options",
+            checkboxInput(inputId = "ROCplotOpts", label = "Enable plot options", value = FALSE),
+            conditionalPanel(
+              condition = "input.ROCplotOpts",
+              fluidRow(
+                column(6, sliderInput("myheight", "Plot height:", value = 400, min = 200, max = 1200)),
+                # column(2),
+                column(6, sliderInput("mywidth", "Plot width:", value = 400, min = 200, max = 1200))
+              ),
+              HTML("<br>"),
+              fluidRow(
+                column(12, selectizeInput("fontfamilyRC", "Font family",
+                  choices = c(
+                    "Times New Roman" = "serif",
+                    "Arial" = "sans",
+                    "Corier New" = "mono"
+                  ),
+                  selected = "sans"
+                ))
+              ),
+              HTML("<br>"),
+              selectizeInput(
+                "subGrpsRC",
+                tags$span(class = "visually-hidden", "Select ROC plot option group"),
+                choices = c(
+                  "Edit x-axis" = "xAxis",
+                  "Edit y-axis" = "yAxis",
+                  "Other options" = "others"
+                ),
+                selected = "xAxis"
+              ),
+              conditionalPanel(
+                condition = "input.subGrpsRC == 'others'",
+                fluidRow(
+                  column(6, textInput("mainRC", "Graph title", "ROC Curve")),
+                  # column(1),
+                  column(6, selectizeInput("font.mainRC", "Title font",
+                    choices = c(
+                      "Regular" = "1",
+                      "Bold" = "2",
+                      "Italic" = "3",
+                      "Bold Italic" = "4"
+                    ),
+                    selected = "2"
+                  ))
+                ),
+                fluidRow(
+                  column(6, textInput("col.mainRC", "Title color", "black")),
+                  # column(1),
+                  column(6, numericInput("cex.mainRC", "Title size", min = 0.1, max = 5, value = 1.2, step = 0.1))
+                ),
+                fluidRow(
+                  column(6, textInput("ROCcolRC", "ROC line color", value = "")),
+                  # column(1),
+                  column(6, selectizeInput("ROCltyRC", "ROC line type",
+                    choices = c(
+                      "\U2500\U2500\U2500\U2500\U2500\U2500\U2500" = "1",
+                      "\U2574 \U2574 \U2574 \U2574 \U2574 \U2574" = "2",
+                      "\U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7" = "3",
+                      "\U2574 \U00B7 \U2574 \U00B7 \U2574 \U00B7 \U2574" = "4",
+                      "\U2500 \U2500 \U2500 \U2500 \U2500" = "5",
+                      "\U2500 \U2574 \U2500 \U2574 \U2500 \U2574" = "6"
+                    ),
+                    selected = "1"
+                  ))
+                ),
+                textInput(inputId = "legend.namesRC", label = "Legend names", value = "")
+              ),
+              conditionalPanel(
+                condition = "input.subGrpsRC == 'xAxis'",
+                h5("X-axis options:"),
+
+                ## X axis label options
+                fluidRow(
+                  column(6, textInput("xlabRC", "Axis label", "1-Specificity")),
+                  # column(1),
+                  column(6, selectizeInput("xfont.labRC", "Label font",
+                    choices = c(
+                      "Regular" = "1", "Bold" = "2",
+                      "Italic" = "3", "Bold Italic" = "4"
+                    ),
+                    selected = "1"
+                  ))
+                ),
+                fluidRow(
+                  column(6, textInput("xcol.labRC", "Label color", "black")),
+                  # column(1),
+                  column(6, numericInput("xcex.labRC", "Label size", min = 0.1, max = 5, value = 1, step = 0.1))
+                ),
+
+                ## X axis annotation options
+                fluidRow(
+                  column(6, textInput("xcol.axisRC", "Annotation color", "black")),
+                  # column(1),
+                  column(6, numericInput("xcex.axisRC", "Annotation size", min = 0.1, max = 5, value = 1, step = 0.1))
+                )
+
+                # fluidRow(
+                #  column(5, textInput("xcol11", "Axis color", "black")),
+                #  column(1),
+                #  column(5, textInput("xcol.ticks11", "Tickmarks color", "black"))
+                # ),
+              ),
+              conditionalPanel(
+                condition = "input.subGrpsRC == 'yAxis'",
+                h5("Y-axis options:"),
+
+                ## Y axis label options
+                fluidRow(
+                  column(6, textInput("ylabRC", "Axis label", "Sensitivity")),
+                  # column(1),
+                  column(6, selectizeInput(
+                    "yfont.labRC",
+                    "Label font",
+                    choices = c(
+                      "Regular" = "1",
+                      "Bold" = "2",
+                      "Italic" = "3",
+                      "Bold Italic" = "4"
+                    ),
+                    selected = "1"
+                  ))
+                ),
+                fluidRow(
+                  column(6, textInput("ycol.labRC", "Label color", "black")),
+                  # column(1),
+                  column(6, numericInput("ycex.labRC", "Label size", min = 0.1, max = 5, value = 1, step = 0.1))
+                ),
+
+                ## Y axis annotation options
+                fluidRow(
+                  column(6, textInput("ycol.axisRC", "Annotation color", "black")),
+                  # column(1),
+                  column(6, numericInput("ycex.axisRC", "Annotation size", min = 0.1, max = 5, value = 1, step = 0.1))
+                )
+              )
+            )
+          ),
+        ),
+        conditionalPanel(
+          condition = "input.navbarROCcurve == 'Partial AUC'",
+          checkboxInput(inputId = "partialAUC", label = "Partial AUC", value = TRUE),
+          conditionalPanel(
+            condition = "input.partialAUC",
+            fluidRow(
+              column(6, numericInput("pointA", "Value 1", min = 0, max = 1, value = 0.5, step = 0.1)),
+              # column(1),
+              column(6, numericInput("pointB", "Value 2", min = 0, max = 1, value = 1, step = 0.1))
+            ),
+            selectizeInput("sensSpec", "Select a measure", choices = c("Sensitivity", "Specificity"), multiple = FALSE, selected = "Sensitivity")
+          )
+        )
+      ), ## End of Roc Curve Tab
+
+      conditionalPanel(
+        condition = "input.tabs1=='Cut points'",
+        h5("1. Select a marker"),
+        selectizeInput("cutoffMarker", "Marker", choices = NULL, multiple = FALSE),
+        HTML("<br>"),
+        h5("2. Select a method for optimal cut-off (*)"),
+        selectizeInput("cutOffMethods", "Cut-off method",
+          choices = c(
+            "Youden", "CB", "MCT", "MinValueSp", "MinValueSe", "ValueSe", "ValueSp", "MinValueSpSe",
+            "MaxSp", "MaxSe", "MaxSpSe", "MaxProdSpSe", "ROC01", "SpEqualSe", "MaxEfficiency",
+            "Minimax", "MaxDOR", "MaxKappa", "MinValueNPV", "MinValuePPV", "ValueNPV", "ValuePPV",
+            "MinValueNPVPPV", "PROC01", "NPVEqualPPV", "MaxNPVPPV", "MaxSumNPVPPV", "MaxProdNPVPPV",
+            "ValueDLR.Negative", "ValueDLR.Positive", "MinPvalue", "ObservedPrev", "MeanPrev",
+            "PrevalenceMatching"
+          ),
+          multiple = FALSE
+        ),
+        helpText("Continue with method-specific parameters and optional plotting settings below."),
+        h5("3. Method-specific parameters"),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='Youden'",
+          HTML("<p><b>Youden:</b> Youden index</p>"),
+          HTML("<br>"),
+          numericInput(inputId = "CFP_Youden", label = "Cost of a False Positive", value = 1, min = 0, max = 9999999),
+          numericInput(inputId = "CFN_Youden", label = "Cost of a False Negative", value = 1, min = 0, max = 9999999),
+          checkboxInput(inputId = "generalized_Youden", label = "Generalized Youden Index", value = FALSE),
+          checkboxInput(inputId = "costs_benefits_Youden", label = "Cost-benefit based Youden Index", value = FALSE)
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='CB'",
+          HTML("<p><b>CB:</b> cost-benefit method</p>"),
+          HTML("<br>"),
+          numericInput(inputId = "costs_ratio", label = "Cost ratio", value = 1, min = 0, max = 99999999)
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='MCT'",
+          HTML("<p><b>MCT:</b> minimizes misclassification cost term</p>"),
+          HTML("<br>"),
+          numericInput(inputId = "CFP_MCT", label = "Cost of a False Positive", value = 1, min = 0, max = 9999999),
+          numericInput(inputId = "CFN_MCT", label = "Cost of a False Negative", value = 1, min = 0, max = 9999999)
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='MinValueSp'",
+          HTML("<p><b>MinValueSp:</b> a minimum value set for specificity</p>"),
+          HTML("<br>"),
+          numericInput(inputId = "valueSp_MVSp", label = "Value of Specificity", value = 0.85, min = 0, max = 1, step = 0.01)
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='MinValueSe'",
+          HTML("<p><b>MinValueSe:</b> a minimum value set for sensitivity</p>"),
+          HTML("<br>"),
+          numericInput(inputId = "valueSe_MVSe", label = "Value of Sensitivity", value = 0.85, min = 0, max = 1, step = 0.01)
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='ValueSe'",
+          HTML("<p><b>ValueSe:</b> a value set for sensitivity</p>"),
+          HTML("<br>"),
+          numericInput(inputId = "valueSe_VSe", label = "Value of Sensitivity", value = 0.85, min = 0, max = 1, step = 0.01)
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='ValueSp'",
+          HTML("<p><b>ValueSp:</b> a value set for specificity</p>"),
+          HTML("<br>"),
+          numericInput(inputId = "valueSp_VSp", label = "Value of Specificity", value = 0.85, min = 0, max = 1, step = 0.01)
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='MinValueSpSe'",
+          HTML("<p><b>MinValueSpSe:</b> a minimum value set for specificity and sensitivity</p>"),
+          HTML("<br>"),
+          numericInput(inputId = "valueSe_MVSpSe", label = "Value of Sensitivity", value = 0.85, min = 0, max = 1, step = 0.01),
+          numericInput(inputId = "valueSp_MVSpSe", label = "Value of Specificity", value = 0.85, min = 0, max = 1, step = 0.01),
+          checkboxInput(inputId = "maxSp_MVSpSe", label = "Maximum specificity", value = TRUE)
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='MaxSp'",
+          HTML("<p><b>MaxSp:</b> maximizes specificity</p>")
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='MaxSe'",
+          HTML("<p><b>MaxSe:</b> maximizes sensitivity</p>")
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='MaxSpSe'",
+          HTML("<p><b>MaxSpSe:</b> maximizes sensitivity and specificity simultaneously</p>")
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='MaxProdSpSe'",
+          HTML("<p><b>MaxProdSpSe:</b> maximizes the product of sensitivity and specificity or accuracy area</p>")
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='ROC01'",
+          HTML("<p><b>ROC01:</b> minimizes distance between ROC plot and point (0,1)</p>")
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='SpEqualSe'",
+          HTML("<p><b>SpEqualSe:</b> sensitivity = specificity</p>")
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='MaxEfficiency'",
+          HTML("<p><b>MaxEfficiency:</b> maximizes efficiency or accuracy, similar to minimize error rate </p>"),
+          HTML("<br>"),
+          checkboxInput(inputId = "costs_benefits_Efficiency", label = "Cost-benefit based Efficiency", value = FALSE),
+          checkboxInput(inputId = "standard_deviation_accuracy", label = "Standart deviation accuracy", value = FALSE)
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='Minimax'",
+          HTML("<p><b>Minimax:</b> minimizes the most frequent error</p>")
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='MaxDOR'",
+          HTML("<p><b>MaxDOR:</b> maximizes diagnostic odds ratio</p>")
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='MaxKappa'",
+          HTML("<p><b>MaxKappa:</b> maximizes kappa index</p>"),
+          HTML("<br>"),
+          numericInput(inputId = "CFP_MK", label = "Cost of a False Positive", value = 1, min = 0, max = 9999999),
+          numericInput(inputId = "CFN_MK", label = "Cost of a False Negative", value = 1, min = 0, max = 9999999),
+          checkboxInput(inputId = "weighted_Kappa", label = "Weighted Kappa", value = FALSE)
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='MinValueNPV'",
+          HTML("<p><b>MinValueNPV:</b> a minimum value set for negative predictive value</p>"),
+          HTML("<br>"),
+          numericInput(inputId = "valueNPV_MVNPV", label = "Value of NPV", value = 0.85, min = 0, max = 1, step = 0.01)
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='MinValuePPV'",
+          HTML("<p><b>MinValuePPV:</b> a minimum value set for positive predictive value</p>"),
+          HTML("<br>"),
+          numericInput(inputId = "valuePPV_MVPPV", label = "Value of PPV", value = 0.85, min = 0, max = 1, step = 0.01)
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='ValueNPV'",
+          HTML("<p><b>ValueNPV:</b> a value set for negative predictive value</p>"),
+          HTML("<br>"),
+          numericInput(inputId = "valueNPV_VNPV", label = "Value of NPV", value = 0.85, min = 0, max = 1, step = 0.01)
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='ValuePPV'",
+          HTML("<p><b>ValuePPV:</b> a value set for positive predictive value</p>"),
+          HTML("<br>"),
+          numericInput(inputId = "valuePPV_VPPV", label = "Value of PPV", value = 0.85, min = 0, max = 1, step = 0.01)
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='MinValueNPVPPV'",
+          HTML("<p><b>MinValueNPVPPV:</b> a minimum value set for predictive values</p>"),
+          HTML("<br>"),
+          numericInput(inputId = "valuePPV_MVNPVPPV", label = "Value of PPV", value = 0.85, min = 0, max = 1, step = 0.01),
+          numericInput(inputId = "valueNPV_MVNPVPPV", label = "Value of NPV", value = 0.85, min = 0, max = 1, step = 0.01),
+          checkboxInput(inputId = "maxNPV_MVNPVPPV", label = "Maximum NPV", value = TRUE)
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='PROC01'",
+          HTML("<p><b>PROC01:</b> minimizes distance between PROC plot and point (0,1)</p>")
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='NPVEqualPPV'",
+          HTML("<p><b>NPVEqualPPV:</b> negative predictive value = positive predictive value</p>")
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='MaxNPVPPV'",
+          HTML("<p><b>MaxNPVPPV:</b> maximizes positive predictive value and negative predictive value simultaneously</p>")
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='MaxSumNPVPPV'",
+          HTML("<p><b>MaxSumNPVPPV:</b> maximizes the sum of the predictive values</p>")
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='MaxProdNPVPPV'",
+          HTML("<p><b>MaxProdNPVPPV:</b> maximizes the product of predictive values</p>")
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='ValueDLR.Negative'",
+          HTML("<p><b>ValueDLR.Negative:</b> a value set for negative diagnostic likelihood ratio</p>"),
+          HTML("<br>"),
+          numericInput(inputId = "valueDLR_Negative", label = "Value of Negative DLR", value = 0.5, min = 0, max = 999999)
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='ValueDLR.Positive'",
+          HTML("<p><b>ValueDLR.Positive:</b> a value set for positive diagnostic likelihood ratio</p>"),
+          HTML("<br>"),
+          numericInput(inputId = "valueDLR_Positive", label = "Value of Positive DLR", value = 2, min = 0, max = 999999)
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='MinPvalue'",
+          HTML("<p><b>MinPvalue:</b> minimizes p-value associated with the statistical Chi-squared test which measures the association between the marker and the binary result obtained on using the cutpoint</p>"),
+          HTML("<br>"),
+          selectInput(
+            inputId = "adjusted_pvalue", label = "Adjustment method for p-value",
+            choices = c("Miller and Siegmund" = "PADJMS", "Altman_5" = "PALT5", "Altman_10" = "PALT10"),
+            multiple = FALSE, selected = "PADJMS"
+          )
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='ObservedPrev'",
+          HTML("<p><b>ObservedPrev:</b> the closest value to observed prevalence</p>")
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='MeanPrev'",
+          HTML("<p><b>MeanPrev:</b> the closest value to the mean of the diagnostic test values</p>")
+        ),
+        conditionalPanel(
+          condition = "input.cutOffMethods=='PrevalenceMatching'",
+          HTML("<p><b>PrevalenceMatching:</b> the value for which predicted prevalence is practically equal to observed prevalence</p>")
+        ),
+        HTML("<br>"),
+        HTML('<p>(*) See <a href="http://cran.r-project.org/web/packages/OptimalCutpoints/index.html" target="_blank"> OptimalCutpoints</a> package from R</p>'),
+        HTML("<br>"),
+        h5("4. Plot settings (optional)"),
+        checkboxInput("showPlots", "Include plots.", FALSE),
+        conditionalPanel(
+          condition = "input.showPlots",
+          fluidRow(
+            # column(1),
+            column(6, sliderInput("myheightCutoff", "Plot height:", value = 600, min = 400, max = 1400)),
+            # column(1),
+            column(6, sliderInput("mywidthCutoff", "Plot width:", value = 800, min = 400, max = 1400))
+          ),
+          HTML("<br>"),
+          checkboxInput("cutoffPlotsOpts", "More plot options (See Manual)", FALSE),
+          HTML("<br>")
+        ),
+        conditionalPanel(
+          condition = "input.cutoffPlotsOpts",
+          fluidRow(
+            column(12, selectizeInput("fontfamily", "Font family",
+              choices = c(
+                "Times New Roman" = "serif", "Arial" = "sans",
+                "Corier New" = "mono"
+              ), selected = "sans"
+            ))
+          ),
+          radioButtons(
+            "selectedGraph",
+            tags$span(class = "visually-hidden", "Select graph panel"),
+            list(
+              "Top Left \U2003 \U2003" = 1, "Top Right \U2003 \U2003" = 2,
+              "Bottom Left \U2002\U2008" = 3, "Bottom Right" = 4
+            ),
+            selected = 1
+          ),
+          HTML("<br>"),
+          selectizeInput(
+            "subGrps",
+            tags$span(class = "visually-hidden", "Select graph options section"),
+            choices = NULL,
+            selected = NULL
+          ),
+
+          ## First graph options (11)
+          conditionalPanel(
+            condition = "input.selectedGraph == '1'",
+            conditionalPanel(
+              condition = "input.subGrps == 'others'",
+              fluidRow(
+                column(6, textInput("main11", "Graph title", "ROC Curve")),
+                # column(1),
+                column(6, selectizeInput("font.main11", "Title font",
+                  choices = c(
+                    "Regular" = "1", "Bold" = "2",
+                    "Italic" = "3", "Bold Italic" = "4"
+                  ),
+                  selected = "2"
+                ))
+              ),
+              fluidRow(
+                column(6, textInput("col.main11", "Title color", "black")),
+                # column(1),
+                column(6, numericInput("cex.main11", "Title size", min = 0.1, max = 5, value = 1.2, step = 0.1))
+              ),
+              fluidRow(
+                column(6, textInput("ROCcol11", "ROC line color", "black")),
+                # column(1),
+                column(6, selectizeInput("ROClty11", "ROC line type",
+                  choices = c(
+                    "\U2500\U2500\U2500\U2500\U2500\U2500\U2500" = "1",
+                    "\U2574 \U2574 \U2574 \U2574 \U2574 \U2574" = "2",
+                    "\U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7" = "3",
+                    "\U2574 \U00B7 \U2574 \U00B7 \U2574 \U00B7 \U2574" = "4",
+                    "\U2500 \U2500 \U2500 \U2500 \U2500" = "5",
+                    "\U2500 \U2574 \U2500 \U2574 \U2500 \U2574" = "6"
+                  ),
+                  selected = "1"
+                ))
+              )
+            ),
+            conditionalPanel(
+              condition = "input.subGrps == 'xAxis'",
+              h5("X-axis options:"),
+
+              ## X axis label options
+              fluidRow(
+                column(6, textInput("xlab11", "Axis label", "1-Specificity")),
+                # column(1),
+                column(6, selectizeInput("xfont.lab11", "Label font",
+                  choices = c(
+                    "Regular" = "1", "Bold" = "2",
+                    "Italic" = "3", "Bold Italic" = "4"
+                  ),
+                  selected = "1"
+                ))
+              ),
+              fluidRow(
+                column(6, textInput("xcol.lab11", "Label color", "black")),
+                # column(1),
+                column(6, numericInput("xcex.lab11", "Label size", min = 0.1, max = 5, value = 1, step = 0.1))
+              ),
+
+              ## X axis annotation options
+              fluidRow(
+                column(6, textInput("xcol.axis11", "Annotation color", "black")),
+                # column(1),
+                column(6, numericInput("xcex.axis11", "Annotation size", min = 0.1, max = 5, value = 1, step = 0.1))
+              )
+
+              # fluidRow(
+              # 	column(5, textInput("xcol11", "Axis color", "black")),
+              # 	column(1),
+              # 	column(5, textInput("xcol.ticks11", "Tickmarks color", "black"))
+              # ),
+            ),
+            conditionalPanel(
+              condition = "input.subGrps == 'yAxis'",
+              h5("Y-axis options:"),
+
+              ## Y axis label options
+              fluidRow(
+                column(6, textInput("ylab11", "Axis label", "Sensitivity")),
+                # column(1),
+                column(6, selectizeInput("yfont.lab11", "Label font",
+                  choices = c(
+                    "Regular" = "1", "Bold" = "2",
+                    "Italic" = "3", "Bold Italic" = "4"
+                  ),
+                  selected = "1"
+                ))
+              ),
+              fluidRow(
+                column(6, textInput("ycol.lab11", "Label color", "black")),
+                # column(1),
+                column(6, numericInput("ycex.lab11", "Label size", min = 0.1, max = 5, value = 1, step = 0.1))
+              ),
+
+              ## Y axis annotation options
+              fluidRow(
+                column(6, textInput("ycol.axis11", "Annotation color", "black")),
+                # column(1),
+                column(6, numericInput("ycex.axis11", "Annotation size", min = 0.1, max = 5, value = 1, step = 0.1))
+              )
+            )
+          ),
+
+          ## Second graph options (12)
+          conditionalPanel(
+            condition = "input.selectedGraph == '2'",
+            conditionalPanel(
+              condition = "input.subGrps == 'others'",
+              fluidRow(
+                column(6, textInput("main12", "Graph title", "Sens. & Spec. Curve")),
+                # column(1),
+                column(6, selectizeInput("font.main12", "Title font",
+                  choices = c(
+                    "Regular" = "1", "Bold" = "2",
+                    "Italic" = "3", "Bold Italic" = "4"
+                  ),
+                  selected = "2"
+                ))
+              ),
+              fluidRow(
+                column(6, textInput("col.main12", "Title color", "black")),
+                # column(1),
+                column(6, numericInput("cex.main12", "Title size", min = 0.1, max = 5, value = 1.2, step = 0.1))
+              ),
+              fluidRow(
+                column(6, textInput("specCol", "Spec. line color", "blue")),
+                # column(1),
+                column(6, selectizeInput("specType", "Spec. line type",
+                  choices = c(
+                    "\U2500\U2500\U2500\U2500\U2500\U2500\U2500" = "1",
+                    "\U2574 \U2574 \U2574 \U2574 \U2574 \U2574" = "2",
+                    "\U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7" = "3",
+                    "\U2574 \U00B7 \U2574 \U00B7 \U2574 \U00B7 \U2574" = "4",
+                    "\U2500 \U2500 \U2500 \U2500 \U2500" = "5",
+                    "\U2500 \U2574 \U2500 \U2574 \U2500 \U2574" = "6"
+                  ),
+                  selected = "1"
+                ))
+              ),
+              fluidRow(
+                column(6, textInput("sensCol", "Sens. line color", "red")),
+                # column(1),
+                column(6, selectizeInput("sensType", "Sens. line type",
+                  choices = c(
+                    "\U2500\U2500\U2500\U2500\U2500\U2500\U2500" = "1",
+                    "\U2574 \U2574 \U2574 \U2574 \U2574 \U2574" = "2",
+                    "\U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7" = "3",
+                    "\U2574 \U00B7 \U2574 \U00B7 \U2574 \U00B7 \U2574" = "4",
+                    "\U2500 \U2500 \U2500 \U2500 \U2500" = "5",
+                    "\U2500 \U2574 \U2500 \U2574 \U2500 \U2574" = "6"
+                  ),
+                  selected = "1"
+                ))
+              )
+            ),
+            conditionalPanel(
+              condition = "input.subGrps == 'Legend'",
+              fluidRow(
+                column(6, selectizeInput("legendPos12", "Position",
+                  choices = c(
+                    "Top right" = "topright", "Top left" = "topleft",
+                    "Bottom right" = "bottomright", "Bottom left" = "bottomleft", "xy coord." = "xy"
+                  ),
+                  selected = "topright"
+                )),
+                # column(1),
+                column(
+                  3,
+                  conditionalPanel(
+                    condition = "input.legendPos12 == 'xy'",
+                    numericInput("legendXpos12", "x", value = 0, step = 0.1)
+                  )
+                ),
+                # column(1),
+                column(
+                  3,
+                  conditionalPanel(
+                    condition = "input.legendPos12 == 'xy'",
+                    numericInput("legendYpos12", "y", value = 0, step = 0.02)
+                  )
+                )
+              ),
+              fluidRow(
+                column(8, textInput("legendNames12", "Legend labels", "Sens.,Spec.")),
+                # column(1),
+                column(4, numericInput("cex.legend12", "Leg. size", min = 0.5, max = 5, step = 0.1, value = 1))
+              ),
+              fluidRow(
+                column(6, textInput("legendTitle12", "Title", "")),
+                # column(1),
+                column(6, textInput("col.legendTitle12", "Title color", "black"))
+              ),
+              checkboxInput("borderless12", label = "Remove borders.", value = FALSE)
+            ),
+            conditionalPanel(
+              condition = "input.subGrps == 'xAxis'",
+              h5("X-axis options:"),
+
+              ## X axis label options
+              fluidRow(
+                column(6, textInput("xlab12", "Axis label", "Marker Name")),
+                # column(1),
+                column(6, selectizeInput("xfont.lab12", "Label font",
+                  choices = c(
+                    "Regular" = "1", "Bold" = "2",
+                    "Italic" = "3", "Bold Italic" = "4"
+                  ),
+                  selected = "1"
+                ))
+              ),
+              fluidRow(
+                column(6, textInput("xcol.lab12", "Label color", "black")),
+                # column(1),
+                column(6, numericInput("xcex.lab12", "Label size", min = 0.1, max = 5, value = 1, step = 0.1))
+              ),
+
+              ## X axis annotation options
+              fluidRow(
+                column(6, textInput("xcol.axis12", "Annotation color", "black")),
+                # column(1),
+                column(6, numericInput("xcex.axis12", "Annotation size", min = 0.1, max = 5, value = 1, step = 0.1))
+              )
+            ),
+            conditionalPanel(
+              condition = "input.subGrps == 'yAxis'",
+              h5("Y-axis options:"),
+
+              ## Y axis label options
+              fluidRow(
+                column(6, textInput("ylab12", "Axis label", "Value")),
+                # column(1),
+                column(6, selectizeInput("yfont.lab12", "Label font",
+                  choices = c(
+                    "Regular" = "1", "Bold" = "2",
+                    "Italic" = "3", "Bold Italic" = "4"
+                  ),
+                  selected = "1"
+                ))
+              ),
+              fluidRow(
+                column(6, textInput("ycol.lab12", "Label color", "black")),
+                # column(1),
+                column(6, numericInput("ycex.lab12", "Label size", min = 0.1, max = 5, value = 1, step = 0.1))
+              ),
+
+              ## Y axis annotation options
+              fluidRow(
+                column(6, textInput("ycol.axis12", "Annotation color", "black")),
+                # column(1),
+                column(6, numericInput("ycex.axis12", "Annotation size", min = 0.1, max = 5, value = 1, step = 0.1))
+              )
+            )
+          ),
+
+          ## Third graph options (21)
+          conditionalPanel(
+            condition = "input.selectedGraph == '3'",
+            conditionalPanel(
+              condition = "input.subGrps == 'others'",
+              fluidRow(
+                column(6, textInput("main21", "Graph title", "Distribution Graph")),
+                # column(1),
+                column(6, selectizeInput("font.main21", "Title font",
+                  choices = c(
+                    "Regular" = "1", "Bold" = "2",
+                    "Italic" = "3", "Bold Italic" = "4"
+                  ),
+                  selected = "2"
+                ))
+              ),
+              fluidRow(
+                column(6, textInput("col.main21", "Title color", "black")),
+                # column(1),
+                column(6, numericInput("cex.main21", "Title size", min = 0.1, max = 5, value = 1.2, step = 0.1))
+              ),
+              fluidRow(
+                column(6, textInput("lineColD", "Line color (Diseased)", "red")),
+                # column(1),
+                column(6, selectizeInput("lineTypeD", "Line type",
+                  choices = c(
+                    "\U2500\U2500\U2500\U2500\U2500\U2500\U2500" = "1",
+                    "\U2574 \U2574 \U2574 \U2574 \U2574 \U2574" = "2",
+                    "\U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7" = "3",
+                    "\U2574 \U00B7 \U2574 \U00B7 \U2574 \U00B7 \U2574" = "4",
+                    "\U2500 \U2500 \U2500 \U2500 \U2500" = "5",
+                    "\U2500 \U2574 \U2500 \U2574 \U2500 \U2574" = "6"
+                  ),
+                  selected = "1"
+                ))
+              ),
+              fluidRow(
+                column(6, textInput("lineColH", "Line color (Healthy)", "blue")),
+                # column(1),
+                column(6, selectizeInput("lineTypeH", "Line type",
+                  choices = c(
+                    "\U2500\U2500\U2500\U2500\U2500\U2500\U2500" = "1",
+                    "\U2574 \U2574 \U2574 \U2574 \U2574 \U2574" = "2",
+                    "\U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7" = "3",
+                    "\U2574 \U00B7 \U2574 \U00B7 \U2574 \U00B7 \U2574" = "4",
+                    "\U2500 \U2500 \U2500 \U2500 \U2500" = "5",
+                    "\U2500 \U2574 \U2500 \U2574 \U2500 \U2574" = "6"
+                  ),
+                  selected = "1"
+                ))
+              )
+            ),
+            conditionalPanel(
+              condition = "input.subGrps == 'Legend'",
+              fluidRow(
+                column(6, selectizeInput("legendPos21", "Position",
+                  choices = c(
+                    "Top right" = "topright", "Top left" = "topleft",
+                    "Bottom right" = "bottomright", "Bottom left" = "bottomleft", "xy coord." = "xy"
+                  ),
+                  selected = "topright"
+                )),
+                # column(1),
+                column(
+                  3,
+                  conditionalPanel(
+                    condition = "input.legendPos21 == 'xy'",
+                    numericInput("legendXpos21", "x", value = 0, step = 0.1)
+                  )
+                ),
+                # column(1),
+                column(
+                  3,
+                  conditionalPanel(
+                    condition = "input.legendPos21 == 'xy'",
+                    numericInput("legendYpos21", "y", value = 0, step = 0.1)
+                  )
+                )
+              ),
+              fluidRow(
+                column(8, textInput("legendNames21", "Legend labels", "Diseased,Healthy")),
+                # column(1),
+                column(4, numericInput("cex.legend21", "Leg. Size", min = 0.5, max = 5, step = 0.1, value = 1))
+              ),
+              fluidRow(
+                column(6, textInput("legendTitle21", "Title", "")),
+                # column(1),
+                column(6, textInput("col.legendTitle21", "Title color", "black"))
+              ),
+              checkboxInput("borderless21", label = "Remove borders.", value = FALSE)
+            ),
+            conditionalPanel(
+              condition = "input.subGrps == 'xAxis'",
+              h5("X-axis options:"),
+
+              ## X axis label options
+              fluidRow(
+                column(6, textInput("xlab21", "Axis label", "Marker Name")),
+                # column(1),
+                column(6, selectizeInput("xfont.lab21", "Label font",
+                  choices = c(
+                    "Regular" = "1", "Bold" = "2",
+                    "Italic" = "3", "Bold Italic" = "4"
+                  ),
+                  selected = "1"
+                ))
+              ),
+              fluidRow(
+                column(6, textInput("xcol.lab21", "Label color", "black")),
+                # column(1),
+                column(6, numericInput("xcex.lab21", "Label size", min = 0.1, max = 5, value = 1, step = 0.1))
+              ),
+
+              ## X axis annotation options
+              fluidRow(
+                column(6, textInput("xcol.axis21", "Annotation color", "black")),
+                # column(1),
+                column(6, numericInput("xcex.axis21", "Annotation size", min = 0.1, max = 5, value = 1, step = 0.1))
+              )
+            ),
+            conditionalPanel(
+              condition = "input.subGrps == 'yAxis'",
+              h5("Y-axis options:"),
+
+              ## Y axis label options
+              fluidRow(
+                column(6, textInput("ylab21", "Axis label", "Density")),
+                # column(1),
+                column(6, selectizeInput("yfont.lab21", "Label font",
+                  choices = c(
+                    "Regular" = "1", "Bold" = "2",
+                    "Italic" = "3", "Bold Italic" = "4"
+                  ),
+                  selected = "1"
+                ))
+              ),
+              fluidRow(
+                column(6, textInput("ycol.lab21", "Label color", "black")),
+                # column(1),
+                column(6, numericInput("ycex.lab21", "Label size", min = 0.1, max = 5, value = 1, step = 0.1))
+              ),
+
+              ## Y axis annotation options
+              fluidRow(
+                column(6, textInput("ycol.axis21", "Annotation color", "black")),
+                # column(1),
+                column(6, numericInput("ycex.axis21", "Annotation size", min = 0.1, max = 5, value = 1, step = 0.1))
+              )
+            )
+          ),
+
+          ## Fourth graph options (22)
+          conditionalPanel(
+            condition = "input.selectedGraph == '4'",
+            conditionalPanel(
+              condition = "input.subGrps == 'others'",
+              fluidRow(
+                column(6, textInput("main22", "Graph title", "Distribution Graph")),
+                # column(1),
+                column(6, selectizeInput("font.main22", "Title font",
+                  choices = c(
+                    "Regular" = "1", "Bold" = "2",
+                    "Italic" = "3", "Bold Italic" = "4"
+                  ),
+                  selected = "2"
+                ))
+              ),
+              fluidRow(
+                column(6, textInput("col.main22", "Title color", "black")),
+                # column(1),
+                column(6, numericInput("cex.main22", "Title size", min = 0.1, max = 5, value = 1.2, step = 0.1))
+              ),
+              numericInput("jitterAmount", "Amount of jittering", min = 0.01, max = 0.5, value = 0.05, step = 0.01),
+
+              ## pch options for Healthy and Diseased subjects
+              fluidRow(
+                column(8, textInput("colPoints", "Point colors", "black,black")),
+                # column(1),
+                column(4, numericInput("pchPoints", "Type", min = 0, max = 25, step = 1, value = 1))
+              ),
+              fluidRow(
+                column(4, numericInput("pchSize", "Point size", min = 0.1, max = 5, step = 0.1, value = 1)),
+                # column(1),
+                column(
+                  8,
+                  conditionalPanel(
+                    condition = "input.pchPoints > 20",
+                    textInput("pchFill", "Fill points with color", "white,white")
+                  )
+                )
+              )
+            ),
+            conditionalPanel(
+              condition = "input.subGrps == 'xAxis'",
+              h5("X-axis options:"),
+
+              ## X axis label options
+              fluidRow(
+                column(6, textInput("xlab22", "Axis label", "Disease Status")),
+                # column(1),
+                column(6, selectizeInput("xfont.lab22", "Label font",
+                  choices = c(
+                    "Regular" = "1", "Bold" = "2",
+                    "Italic" = "3", "Bold Italic" = "4"
+                  ),
+                  selected = "1"
+                ))
+              ),
+              fluidRow(
+                column(6, textInput("xcol.lab22", "Label color", "black")),
+                # column(1),
+                column(6, numericInput("xcex.lab22", "Label size", min = 0.1, max = 5, value = 1, step = 0.1))
+              ),
+
+              ## X axis annotation options
+              fluidRow(
+                column(12, textInput("xlabels22", "Annotation names (comma seperated)", "Healthy,Diseased"))
+              ),
+              fluidRow(
+                column(6, textInput("xcol.axis22", "Annotation color", "black")),
+                # column(1),
+                column(6, numericInput("xcex.axis22", "Annotation size", min = 0.1, max = 5, value = 1, step = 0.1))
+              )
+            ),
+            conditionalPanel(
+              condition = "input.subGrps == 'yAxis'",
+              h5("Y-axis options:"),
+
+              ## Y axis label options
+              fluidRow(
+                column(6, textInput("ylab22", "Axis label", "Marker Name")),
+                # column(1),
+                column(6, selectizeInput("yfont.lab22", "Label font",
+                  choices = c(
+                    "Regular" = "1", "Bold" = "2",
+                    "Italic" = "3", "Bold Italic" = "4"
+                  ),
+                  selected = "1"
+                ))
+              ),
+              fluidRow(
+                column(6, textInput("ycol.lab22", "Label color", "black")),
+                # column(1),
+                column(6, numericInput("ycex.lab22", "Label size", min = 0.1, max = 5, value = 1, step = 0.1))
+              ),
+
+              ## Y axis annotation options
+              fluidRow(
+                column(6, textInput("ycol.axis22", "Annotation color", "black")),
+                # column(1),
+                column(6, numericInput("ycex.axis22", "Annotation size", min = 0.1, max = 5, value = 1, step = 0.1))
+              )
+            )
+          )
+        )
+      ), # End for Cut Points tab.
+
+      conditionalPanel(
+        condition = "input.tabs1=='Sample size'",
+        #       h5("Choose one of the following methods (*):"),
+        #       HTML('<br>'),
+        selectInput(
+          inputId = "sampleSizeMethod", label = "Select Method (*)",
+          choices = c("Single test" = 1, "Comparison of two tests" = 2, "Non-inferiority" = 3),
+          selected = 1, multiple = FALSE, selectize = TRUE
+        ),
+        helpText("Select one method and fill only the fields shown for the chosen method."),
+        HTML("<br>"),
+        conditionalPanel(
+          condition = "input.sampleSizeMethod == '1'",
+          numericInput(inputId = "alpha1", label = "Type I error", value = 0.05, min = 0, max = 1, step = 0.01),
+          numericInput(inputId = "power1", label = "Power", value = 0.80, min = 0, max = 1, step = 0.1),
+          numericInput(inputId = "auc", label = "Area under the ROC curve", value = 0.60, min = 0.5, max = 1, step = 0.1),
+          numericInput(inputId = "ratio", label = "Allocation ratio", value = 1, min = 0, step = 0.1)
+        ),
+        conditionalPanel(
+          condition = "input.sampleSizeMethod == '2'",
+          numericInput(inputId = "alpha2", label = "Type I error", value = 0.05, min = 0, max = 1, step = 0.01),
+          numericInput(inputId = "power2", label = "Power", value = 0.80, min = 0, max = 1, step = 0.1),
+          numericInput(inputId = "auc01", label = "AUC for 1st test under null hypothesis", value = 0.80, min = 0.5, max = 1, step = 0.1),
+          numericInput(inputId = "auc02", label = "AUC for 2nd test under null hypothesis", value = 0.80, min = 0.5, max = 1, step = 0.1),
+          numericInput(inputId = "auc11", label = "AUC for 1st test under alternative hypothesis", value = 0.90, min = 0.5, max = 1, step = 0.1),
+          numericInput(inputId = "auc12", label = "AUC for 2nd test under alternative hypothesis", value = 0.70, min = 0.5, max = 1, step = 0.1),
+          numericInput(inputId = "ratio2", label = "Allocation ratio", value = 1, min = 0, step = 0.1)
+        ),
+        conditionalPanel(
+          condition = "input.sampleSizeMethod == '3'",
+          numericInput(inputId = "alpha3", label = "Type I error", value = 0.05, min = 0, max = 1, step = 0.01),
+          numericInput(inputId = "power3", label = "Power", value = 0.80, min = 0, max = 1, step = 0.1),
+          numericInput(inputId = "aucs", label = "AUC for standard test", value = 0.80, min = 0.5, max = 1, step = 0.1),
+          numericInput(inputId = "aucn", label = "AUC for new test", value = 0.80, min = 0.5, max = 1, step = 0.1),
+          numericInput(inputId = "sd", label = "Smallest difference", value = 0.1, step = 0.1),
+          numericInput(inputId = "ratio3", label = "Allocation ratio", value = 1, min = 0, step = 0.1)
+        ),
+        HTML("<br>"),
+        HTML('<p>(*) See <a href="http://66.199.228.237/boundary/complex_decision_making_and_ethics/ROC_Analysis.pdf" target="_blank"> Obuchowski, 2005</a> for further details.</p>'),
+        HTML("<br>")
+      ), ## End for Sample Size tab.
+
+
+      conditionalPanel(
+        condition = "input.tabs1=='Manual'",
+        HTML('<p align="center"><img src="manual.png" width=200 height=200 alt="Manual cover image"></p>')
+      ),
+      conditionalPanel(
+        condition = "input.tabs1=='Authors & News'",
+        HTML('<p align="center"> <a href="https://www.erciyes.edu.tr/home/index" target="_blank"><img src="eru_logo.png" width=150 height=150 alt="Erciyes University logo"></a> </p>')
       )
-    ),   ## End of Roc Curve Tab
 
-    conditionalPanel(condition="input.tabs1=='Cut points'",
-			h5("1. Select a marker"),
-      selectizeInput("cutoffMarker", "Marker", choices = NULL, multiple = FALSE),
-      HTML('<br>'),
-      h5("2. Select a method for optimal cut-off (*)"),
-      selectizeInput("cutOffMethods", "Cut-off method", 
-        choices = c("Youden", "CB", "MCT", "MinValueSp", "MinValueSe", "ValueSe", "ValueSp", "MinValueSpSe", 
-										"MaxSp", "MaxSe", "MaxSpSe", "MaxProdSpSe", "ROC01", "SpEqualSe", "MaxEfficiency", 
-										"Minimax", "MaxDOR", "MaxKappa", "MinValueNPV", "MinValuePPV", "ValueNPV", "ValuePPV", 
-										"MinValueNPVPPV", "PROC01", "NPVEqualPPV", "MaxNPVPPV", "MaxSumNPVPPV", "MaxProdNPVPPV", 
-										"ValueDLR.Negative", "ValueDLR.Positive", "MinPvalue", "ObservedPrev", "MeanPrev", 
-										"PrevalenceMatching"), 
-        multiple = FALSE),
-      helpText("Continue with method-specific parameters and optional plotting settings below."),
-      h5("3. Method-specific parameters"),
-
-      conditionalPanel(condition="input.cutOffMethods=='Youden'",
-        HTML('<p><b>Youden:</b> Youden index</p>'),
-        HTML('<br>'),
-        numericInput(inputId = "CFP_Youden", label = "Cost of a False Positive", value = 1, min = 0, max = 9999999),
-        numericInput(inputId = "CFN_Youden", label = "Cost of a False Negative", value = 1, min = 0, max = 9999999),
-        checkboxInput(inputId = "generalized_Youden", label = "Generalized Youden Index", value = FALSE),
-        checkboxInput(inputId = "costs_benefits_Youden", label = "Cost-benefit based Youden Index", value = FALSE)
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='CB'",
-        HTML('<p><b>CB:</b> cost-benefit method</p>'),
-        HTML('<br>'),
-        numericInput(inputId = "costs_ratio", label = "Cost ratio", value = 1, min = 0, max = 99999999)
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='MCT'",
-        HTML('<p><b>MCT:</b> minimizes misclassification cost term</p>'),
-        HTML('<br>'),
-        numericInput(inputId = "CFP_MCT", label = "Cost of a False Positive", value = 1, min = 0, max = 9999999),
-        numericInput(inputId = "CFN_MCT", label = "Cost of a False Negative", value = 1, min = 0, max = 9999999)
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='MinValueSp'",
-        HTML('<p><b>MinValueSp:</b> a minimum value set for specificity</p>'),
-        HTML('<br>'),
-        numericInput(inputId = "valueSp_MVSp", label = "Value of Specificity", value = 0.85, min = 0, max = 1, step = 0.01)
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='MinValueSe'",
-        HTML('<p><b>MinValueSe:</b> a minimum value set for sensitivity</p>'),
-        HTML('<br>'),
-        numericInput(inputId = "valueSe_MVSe", label = "Value of Sensitivity", value = 0.85, min = 0, max = 1, step = 0.01)
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='ValueSe'",
-        HTML('<p><b>ValueSe:</b> a value set for sensitivity</p>'),
-        HTML('<br>'),
-        numericInput(inputId = "valueSe_VSe", label = "Value of Sensitivity", value = 0.85, min = 0, max = 1, step = 0.01)
-      ),
-            
-			conditionalPanel(condition="input.cutOffMethods=='ValueSp'",
-        HTML('<p><b>ValueSp:</b> a value set for specificity</p>'),
-        HTML('<br>'),
-        numericInput(inputId = "valueSp_VSp", label = "Value of Specificity", value = 0.85, min = 0, max = 1, step = 0.01)
-			),
-
-      conditionalPanel(condition="input.cutOffMethods=='MinValueSpSe'",
-        HTML('<p><b>MinValueSpSe:</b> a minimum value set for specificity and sensitivity</p>'),
-        HTML('<br>'),
-        numericInput(inputId = "valueSe_MVSpSe", label = "Value of Sensitivity", value = 0.85, min = 0, max = 1, step = 0.01),
-        numericInput(inputId = "valueSp_MVSpSe", label = "Value of Specificity", value = 0.85, min = 0, max = 1, step = 0.01),
-        checkboxInput(inputId = "maxSp_MVSpSe", label = "Maximum specificity", value = TRUE)
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='MaxSp'",
-        HTML('<p><b>MaxSp:</b> maximizes specificity</p>')
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='MaxSe'",
-        HTML('<p><b>MaxSe:</b> maximizes sensitivity</p>')
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='MaxSpSe'",
-        HTML('<p><b>MaxSpSe:</b> maximizes sensitivity and specificity simultaneously</p>')
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='MaxProdSpSe'",
-        HTML('<p><b>MaxProdSpSe:</b> maximizes the product of sensitivity and specificity or accuracy area</p>')
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='ROC01'",
-        HTML('<p><b>ROC01:</b> minimizes distance between ROC plot and point (0,1)</p>')
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='SpEqualSe'",
-        HTML('<p><b>SpEqualSe:</b> sensitivity = specificity</p>')
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='MaxEfficiency'",
-        HTML('<p><b>MaxEfficiency:</b> maximizes efficiency or accuracy, similar to minimize error rate </p>'),
-        HTML('<br>'),
-        checkboxInput(inputId = "costs_benefits_Efficiency", label = "Cost-benefit based Efficiency", value = FALSE),
-        checkboxInput(inputId = "standard_deviation_accuracy", label = "Standart deviation accuracy", value = FALSE)
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='Minimax'",
-        HTML('<p><b>Minimax:</b> minimizes the most frequent error</p>')
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='MaxDOR'",
-        HTML('<p><b>MaxDOR:</b> maximizes diagnostic odds ratio</p>')
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='MaxKappa'",
-        HTML('<p><b>MaxKappa:</b> maximizes kappa index</p>'),
-        HTML('<br>'),
-        numericInput(inputId = "CFP_MK", label = "Cost of a False Positive", value = 1, min = 0, max = 9999999),
-        numericInput(inputId = "CFN_MK", label = "Cost of a False Negative", value = 1, min = 0, max = 9999999),
-        checkboxInput(inputId = "weighted_Kappa", label = "Weighted Kappa", value = FALSE)
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='MinValueNPV'",
-        HTML('<p><b>MinValueNPV:</b> a minimum value set for negative predictive value</p>'),
-        HTML('<br>'),
-        numericInput(inputId = "valueNPV_MVNPV", label = "Value of NPV", value = 0.85, min = 0, max = 1, step = 0.01)
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='MinValuePPV'",
-        HTML('<p><b>MinValuePPV:</b> a minimum value set for positive predictive value</p>'),
-        HTML('<br>'),
-        numericInput(inputId = "valuePPV_MVPPV", label = "Value of PPV", value = 0.85, min = 0, max = 1, step = 0.01)
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='ValueNPV'",
-        HTML('<p><b>ValueNPV:</b> a value set for negative predictive value</p>'),
-        HTML('<br>'),
-        numericInput(inputId = "valueNPV_VNPV", label = "Value of NPV", value = 0.85, min = 0, max = 1, step = 0.01)
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='ValuePPV'",
-        HTML('<p><b>ValuePPV:</b> a value set for positive predictive value</p>'),
-        HTML('<br>'),
-        numericInput(inputId = "valuePPV_VPPV", label = "Value of PPV", value = 0.85, min = 0, max = 1, step = 0.01)
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='MinValueNPVPPV'",
-        HTML('<p><b>MinValueNPVPPV:</b> a minimum value set for predictive values</p>'),
-        HTML('<br>'),
-        numericInput(inputId = "valuePPV_MVNPVPPV", label = "Value of PPV", value = 0.85, min = 0, max = 1, step = 0.01),
-        numericInput(inputId = "valueNPV_MVNPVPPV", label = "Value of NPV", value = 0.85, min = 0, max = 1, step = 0.01),
-        checkboxInput(inputId = "maxNPV_MVNPVPPV", label = "Maximum NPV", value = TRUE)
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='PROC01'",
-        HTML('<p><b>PROC01:</b> minimizes distance between PROC plot and point (0,1)</p>')
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='NPVEqualPPV'",
-        HTML('<p><b>NPVEqualPPV:</b> negative predictive value = positive predictive value</p>')
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='MaxNPVPPV'",
-        HTML('<p><b>MaxNPVPPV:</b> maximizes positive predictive value and negative predictive value simultaneously</p>')
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='MaxSumNPVPPV'",
-        HTML('<p><b>MaxSumNPVPPV:</b> maximizes the sum of the predictive values</p>')
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='MaxProdNPVPPV'",
-        HTML('<p><b>MaxProdNPVPPV:</b> maximizes the product of predictive values</p>')
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='ValueDLR.Negative'",
-        HTML('<p><b>ValueDLR.Negative:</b> a value set for negative diagnostic likelihood ratio</p>'),
-        HTML('<br>'),
-        numericInput(inputId = "valueDLR_Negative", label = "Value of Negative DLR", value = 0.5, min = 0, max = 999999)
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='ValueDLR.Positive'",
-        HTML('<p><b>ValueDLR.Positive:</b> a value set for positive diagnostic likelihood ratio</p>'),
-        HTML('<br>'),
-        numericInput(inputId = "valueDLR_Positive", label = "Value of Positive DLR", value = 2, min = 0, max = 999999)
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='MinPvalue'",
-        HTML('<p><b>MinPvalue:</b> minimizes p-value associated with the statistical Chi-squared test which measures the association between the marker and the binary result obtained on using the cutpoint</p>'),
-        HTML('<br>'),
-        selectInput(inputId = "adjusted_pvalue", label = "Adjustment method for p-value", 
-                    choices = c("Miller and Siegmund" = "PADJMS", "Altman_5" = "PALT5", "Altman_10" = "PALT10"),
-                    multiple = FALSE, selected = "PADJMS")
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='ObservedPrev'",
-        HTML('<p><b>ObservedPrev:</b> the closest value to observed prevalence</p>')
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='MeanPrev'",
-        HTML('<p><b>MeanPrev:</b> the closest value to the mean of the diagnostic test values</p>')
-      ),
-
-      conditionalPanel(condition="input.cutOffMethods=='PrevalenceMatching'",
-        HTML('<p><b>PrevalenceMatching:</b> the value for which predicted prevalence is practically equal to observed prevalence</p>')
-      ),
-
-      HTML('<br>'),
-      HTML('<p>(*) See <a href="http://cran.r-project.org/web/packages/OptimalCutpoints/index.html" target="_blank"> OptimalCutpoints</a> package from R</p>'),
-      HTML('<br>'),
-            
-      h5("4. Plot settings (optional)"),
-      checkboxInput("showPlots", "Include plots.", FALSE),
-            
-      conditionalPanel(condition="input.showPlots",
-				fluidRow(
-					# column(1),
-					column(6, sliderInput("myheightCutoff", "Plot height:", value=600, min=400, max=1400)),
-					# column(1),
-					column(6, sliderInput("mywidthCutoff", "Plot width:", value=800, min=400, max=1400 ))
-				),
-				
-				HTML('<br>'),
-				checkboxInput("cutoffPlotsOpts", "More plot options (See Manual)", FALSE),
-				HTML('<br>')
-      ),
-            
-      conditionalPanel(condition="input.cutoffPlotsOpts",
-				fluidRow(
-					column(12, selectizeInput("fontfamily", "Font family", 
-											choices = c("Times New Roman" = "serif", "Arial" = "sans", 
-														      "Corier New" = "mono"), selected = "sans"))
-				),
-
-				radioButtons(
-          "selectedGraph",
-          tags$span(class = "visually-hidden", "Select graph panel"),
-          list("Top Left \U2003 \U2003" = 1, "Top Right \U2003 \U2003" = 2, 
-							 "Bottom Left \U2002\U2008" = 3, "Bottom Right" = 4),
-          selected = 1
-        ),
-				
-				HTML('<br>'),
-				
-				selectizeInput(
-          "subGrps",
-          tags$span(class = "visually-hidden", "Select graph options section"),
-          choices = NULL,
-          selected = NULL
-        ),
-				
-				## First graph options (11)
-				conditionalPanel(condition = "input.selectedGraph == '1'",
-					conditionalPanel(condition = "input.subGrps == 'others'",
-						fluidRow(
-						  column(6, textInput("main11", "Graph title", "ROC Curve")),
-						  # column(1),
-						  column(6, selectizeInput("font.main11", "Title font", 
-                                        choices = c("Regular" = "1", "Bold" = "2", 
-																						        "Italic" = "3", "Bold Italic" = "4"), 
-												                selected = "2"))
-						),
-					
-						fluidRow(
-							column(6, textInput("col.main11", "Title color", "black")),
-							# column(1),
-							column(6, numericInput("cex.main11", "Title size", min=0.1, max=5, value = 1.2, step = 0.1))
-						),
-					
-						fluidRow(
-							column(6, textInput("ROCcol11", "ROC line color", "black")),
-							# column(1),
-							column(6, selectizeInput("ROClty11", "ROC line type", 
-													choices = c("\U2500\U2500\U2500\U2500\U2500\U2500\U2500" = "1",
-      																"\U2574 \U2574 \U2574 \U2574 \U2574 \U2574" = "2", 
-      																"\U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7" = "3",
-      																"\U2574 \U00B7 \U2574 \U00B7 \U2574 \U00B7 \U2574" = "4",
-      																"\U2500 \U2500 \U2500 \U2500 \U2500" = "5",
-      																"\U2500 \U2574 \U2500 \U2574 \U2500 \U2574" = "6"),
-													selected = "1"))
-						)
-					),
-					
-					conditionalPanel(condition = "input.subGrps == 'xAxis'",
-						h5('X-axis options:'),
-						
-						## X axis label options
-						fluidRow(
-							column(6, textInput("xlab11", "Axis label", "1-Specificity")),
-							# column(1),
-							column(6, selectizeInput("xfont.lab11", "Label font", 
-                                        choices = c("Regular" = "1", "Bold" = "2", 
-																							      "Italic" = "3", "Bold Italic" = "4"), 
-													              selected = "1"))	
-						),
-						
-						fluidRow(
-							column(6, textInput("xcol.lab11", "Label color", "black")),
-							# column(1),
-							column(6, numericInput("xcex.lab11", "Label size", min=0.1, max=5, value = 1, step = 0.1))
-						),
-						
-						## X axis annotation options
-						fluidRow(
-							column(6, textInput("xcol.axis11", "Annotation color", "black")),
-							# column(1),
-							column(6, numericInput("xcex.axis11", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
-						)
-						
-						#fluidRow(
-						#	column(5, textInput("xcol11", "Axis color", "black")),
-						#	column(1),
-						#	column(5, textInput("xcol.ticks11", "Tickmarks color", "black"))
-						#),
-					),
-					
-					conditionalPanel(condition = "input.subGrps == 'yAxis'",
-						h5('Y-axis options:'),
-						
-						## Y axis label options
-						fluidRow(
-							column(6, textInput("ylab11", "Axis label", "Sensitivity")),
-							# column(1),
-							column(6, selectizeInput("yfont.lab11", "Label font", 
-                                        choices = c("Regular" = "1", "Bold" = "2", 
-																								    "Italic" = "3", "Bold Italic" = "4"), 
-													              selected = "1"))	
-						),
-						
-						fluidRow(
-							column(6, textInput("ycol.lab11", "Label color", "black")),
-							# column(1),
-							column(6, numericInput("ycex.lab11", "Label size", min=0.1, max=5, value = 1, step = 0.1))
-						),
-						
-						## Y axis annotation options
-						fluidRow(
-							column(6, textInput("ycol.axis11", "Annotation color", "black")),
-							# column(1),
-							column(6, numericInput("ycex.axis11", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
-						)
-					)	
-				),
-				
-				## Second graph options (12)
-				conditionalPanel(condition = "input.selectedGraph == '2'",
-					conditionalPanel(condition = "input.subGrps == 'others'",
-						fluidRow(
-							column(6, textInput("main12", "Graph title", "Sens. & Spec. Curve")),
-							# column(1),
-							column(6, selectizeInput("font.main12", "Title font", 
-                                        choices = c("Regular" = "1", "Bold" = "2", 
-																								    "Italic" = "3", "Bold Italic" = "4"), 
-													              selected = "2"))
-						),
-					
-						fluidRow(
-							column(6, textInput("col.main12", "Title color", "black")),
-							# column(1),
-							column(6, numericInput("cex.main12", "Title size", min=0.1, max=5, value = 1.2, step = 0.1))
-						),
-					
-						fluidRow(
-							column(6, textInput("specCol", "Spec. line color", "blue")),
-							# column(1),
-							column(6, selectizeInput("specType", "Spec. line type", 
-													choices = c("\U2500\U2500\U2500\U2500\U2500\U2500\U2500" = "1",
-      																"\U2574 \U2574 \U2574 \U2574 \U2574 \U2574" = "2", 
-      																"\U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7" = "3",
-      																"\U2574 \U00B7 \U2574 \U00B7 \U2574 \U00B7 \U2574" = "4",
-      																"\U2500 \U2500 \U2500 \U2500 \U2500" = "5",
-      																"\U2500 \U2574 \U2500 \U2574 \U2500 \U2574" = "6"),
-													selected = "1"))
-						),
-						
-						fluidRow(
-							column(6, textInput("sensCol", "Sens. line color", "red")),
-							# column(1),
-							column(6, selectizeInput("sensType", "Sens. line type", 
-													choices = c("\U2500\U2500\U2500\U2500\U2500\U2500\U2500" = "1",
-      																"\U2574 \U2574 \U2574 \U2574 \U2574 \U2574" = "2", 
-      																"\U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7" = "3",
-      																"\U2574 \U00B7 \U2574 \U00B7 \U2574 \U00B7 \U2574" = "4",
-      																"\U2500 \U2500 \U2500 \U2500 \U2500" = "5",
-      																"\U2500 \U2574 \U2500 \U2574 \U2500 \U2574" = "6"),
-													selected = "1"))
-						)
-					),
-					
-					conditionalPanel(condition = "input.subGrps == 'Legend'",
-						fluidRow(
-							column(6, selectizeInput("legendPos12", "Position", 
-                                        choices = c("Top right" = "topright", "Top left" = "topleft", 
-                                                    "Bottom right" = "bottomright", "Bottom left" = "bottomleft", "xy coord." = "xy"),
-														            selected = "topright")),
-							# column(1),
-							column(3,
-								conditionalPanel(condition = "input.legendPos12 == 'xy'",
-									numericInput("legendXpos12", "x", value = 0, step = 0.1)
-								)
-							),
-							# column(1),
-							column(3,
-								conditionalPanel(condition = "input.legendPos12 == 'xy'",
-									numericInput("legendYpos12", "y", value = 0, step = 0.02)
-								)
-							)
-						),
-						
-						fluidRow(
-							column(8, textInput("legendNames12", "Legend labels", "Sens.,Spec.")),
-							# column(1),
-							column(4, numericInput("cex.legend12", "Leg. size", min = 0.5, max = 5, step = 0.1, value = 1))
-						),
-						
-						fluidRow(
-							column(6, textInput("legendTitle12", "Title", "")),
-							# column(1),
-							column(6, textInput("col.legendTitle12", "Title color", "black"))
-						),
-                        
-            checkboxInput("borderless12", label = "Remove borders.", value = FALSE)
-					),
-					
-					conditionalPanel(condition = "input.subGrps == 'xAxis'",
-						h5('X-axis options:'),
-						
-						## X axis label options
-						fluidRow(
-							column(6, textInput("xlab12", "Axis label", "Marker Name")),
-							# column(1),
-							column(6, selectizeInput("xfont.lab12", "Label font", 
-                                        choices = c("Regular" = "1", "Bold" = "2", 
-																								    "Italic" = "3", "Bold Italic" = "4"), 
-													              selected = "1"))	
-						),
-						
-						fluidRow(
-							column(6, textInput("xcol.lab12", "Label color", "black")),
-							# column(1),
-							column(6, numericInput("xcex.lab12", "Label size", min=0.1, max=5, value = 1, step = 0.1))
-						),
-						
-						## X axis annotation options
-						fluidRow(
-							column(6, textInput("xcol.axis12", "Annotation color", "black")),
-							# column(1),
-							column(6, numericInput("xcex.axis12", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
-						)
-					),
-					
-					conditionalPanel(condition = "input.subGrps == 'yAxis'",
-						h5('Y-axis options:'),
-						
-						## Y axis label options
-						fluidRow(
-							column(6, textInput("ylab12", "Axis label", "Value")),
-							# column(1),
-							column(6, selectizeInput("yfont.lab12", "Label font", 
-                                        choices = c("Regular" = "1", "Bold" = "2", 
-																								    "Italic" = "3", "Bold Italic" = "4"), 
-													              selected = "1"))	
-						),
-						
-						fluidRow(
-							column(6, textInput("ycol.lab12", "Label color", "black")),
-							# column(1),
-							column(6, numericInput("ycex.lab12", "Label size", min=0.1, max=5, value = 1, step = 0.1))
-						),
-						
-						## Y axis annotation options
-						fluidRow(
-							column(6, textInput("ycol.axis12", "Annotation color", "black")),
-							# column(1),
-							column(6, numericInput("ycex.axis12", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
-						)
-					)
-				),
-				
-				## Third graph options (21)
-				conditionalPanel(condition = "input.selectedGraph == '3'",
-					conditionalPanel(condition = "input.subGrps == 'others'",
-						fluidRow(
-							column(6, textInput("main21", "Graph title", "Distribution Graph")),
-							# column(1),
-							column(6, selectizeInput("font.main21", "Title font", 
-                                        choices = c("Regular" = "1", "Bold" = "2", 
-									                                  "Italic" = "3", "Bold Italic" = "4"), 
-													              selected = "2"))
-						),
-					
-						fluidRow(
-							column(6, textInput("col.main21", "Title color", "black")),
-							# column(1),
-							column(6, numericInput("cex.main21", "Title size", min=0.1, max=5, value = 1.2, step = 0.1))
-						),
-					
-						fluidRow(
-							column(6, textInput("lineColD", "Line color (Diseased)", "red")),
-							# column(1),
-							column(6, selectizeInput("lineTypeD", "Line type", 
-													choices = c("\U2500\U2500\U2500\U2500\U2500\U2500\U2500" = "1",
-      																"\U2574 \U2574 \U2574 \U2574 \U2574 \U2574" = "2", 
-      																"\U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7" = "3",
-      																"\U2574 \U00B7 \U2574 \U00B7 \U2574 \U00B7 \U2574" = "4",
-      																"\U2500 \U2500 \U2500 \U2500 \U2500" = "5",
-      																"\U2500 \U2574 \U2500 \U2574 \U2500 \U2574" = "6"),
-													selected = "1"))
-						),
-						
-						fluidRow(
-							column(6, textInput("lineColH", "Line color (Healthy)", "blue")),
-							# column(1),
-							column(6, selectizeInput("lineTypeH", "Line type", 
-													choices = c("\U2500\U2500\U2500\U2500\U2500\U2500\U2500" = "1",
-      																"\U2574 \U2574 \U2574 \U2574 \U2574 \U2574" = "2", 
-      																"\U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7 \U00B7" = "3",
-      																"\U2574 \U00B7 \U2574 \U00B7 \U2574 \U00B7 \U2574" = "4",
-      																"\U2500 \U2500 \U2500 \U2500 \U2500" = "5",
-      																"\U2500 \U2574 \U2500 \U2574 \U2500 \U2574" = "6"),
-													selected = "1"))
-						)
-					),
-					
-					conditionalPanel(condition = "input.subGrps == 'Legend'",
-						fluidRow(
-							column(6, selectizeInput("legendPos21", "Position", 
-                                        choices = c("Top right" = "topright", "Top left" = "topleft", 
-                                                    "Bottom right" = "bottomright", "Bottom left" = "bottomleft", "xy coord." = "xy"),
-														            selected = "topright")),
-							# column(1),
-							column(3,
-								conditionalPanel(condition = "input.legendPos21 == 'xy'",
-									numericInput("legendXpos21", "x", value = 0, step = 0.1)
-								)
-							),
-							# column(1),
-							column(3,
-								conditionalPanel(condition = "input.legendPos21 == 'xy'",
-									numericInput("legendYpos21", "y", value = 0, step = 0.1)
-								)
-							)
-						),
-						
-						fluidRow(
-							column(8, textInput("legendNames21", "Legend labels", "Diseased,Healthy")),
-							# column(1),
-							column(4, numericInput("cex.legend21", "Leg. Size", min = 0.5, max = 5, step = 0.1, value = 1))
-						),
-						
-						fluidRow(
-							column(6, textInput("legendTitle21", "Title", "")),
-							# column(1),
-							column(6, textInput("col.legendTitle21", "Title color", "black"))
-						),
-                        
-						checkboxInput("borderless21", label = "Remove borders.", value = FALSE)
-					),
-					
-					conditionalPanel(condition = "input.subGrps == 'xAxis'",
-						h5('X-axis options:'),
-						
-						## X axis label options
-						fluidRow(
-							column(6, textInput("xlab21", "Axis label", "Marker Name")),
-							# column(1),
-							column(6, selectizeInput("xfont.lab21", "Label font", 
-                                        choices = c("Regular" = "1", "Bold" = "2", 
-																								    "Italic" = "3", "Bold Italic" = "4"), 
-													              selected = "1"))	
-						),
-						
-						fluidRow(
-							column(6, textInput("xcol.lab21", "Label color", "black")),
-							# column(1),
-							column(6, numericInput("xcex.lab21", "Label size", min=0.1, max=5, value = 1, step = 0.1))
-						),
-						
-						## X axis annotation options
-						fluidRow(
-							column(6, textInput("xcol.axis21", "Annotation color", "black")),
-							# column(1),
-							column(6, numericInput("xcex.axis21", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
-						)
-					),
-					
-					conditionalPanel(condition = "input.subGrps == 'yAxis'",
-						h5('Y-axis options:'),
-						
-						## Y axis label options
-						fluidRow(
-							column(6, textInput("ylab21", "Axis label", "Density")),
-							# column(1),
-							column(6, selectizeInput("yfont.lab21", "Label font", 
-                                        choices = c("Regular" = "1", "Bold" = "2", 
-																								    "Italic" = "3", "Bold Italic" = "4"), 
-													              selected = "1"))	
-						),
-						
-						fluidRow(
-							column(6, textInput("ycol.lab21", "Label color", "black")),
-							# column(1),
-							column(6, numericInput("ycex.lab21", "Label size", min=0.1, max=5, value = 1, step = 0.1))
-						),
-						
-						## Y axis annotation options
-						fluidRow(
-							column(6, textInput("ycol.axis21", "Annotation color", "black")),
-							# column(1),
-							column(6, numericInput("ycex.axis21", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
-						)
-					)
-				),
-				
-				## Fourth graph options (22)
-				conditionalPanel(condition = "input.selectedGraph == '4'",
-					conditionalPanel(condition = "input.subGrps == 'others'",
-						fluidRow(
-							column(6, textInput("main22", "Graph title", "Distribution Graph")),
-							# column(1),
-							column(6, selectizeInput("font.main22", "Title font", 
-                                        choices = c("Regular" = "1", "Bold" = "2", 
-																							      "Italic" = "3", "Bold Italic" = "4"), 
-													              selected = "2"))
-						),
-					
-						fluidRow(
-							column(6, textInput("col.main22", "Title color", "black")),
-							# column(1),
-							column(6, numericInput("cex.main22", "Title size", min=0.1, max=5, value = 1.2, step = 0.1))
-						),
-						
-						numericInput("jitterAmount", "Amount of jittering", min=0.01, max = 0.5, value = 0.05, step = 0.01),
-						
-						## pch options for Healthy and Diseased subjects
-						fluidRow(
-							column(8, textInput("colPoints", "Point colors", "black,black")),
-							# column(1),
-							column(4, numericInput("pchPoints", "Type", min = 0, max = 25, step = 1, value = 1))
-						),
-						
-						fluidRow(
-							column(4, numericInput("pchSize", "Point size", min = 0.1, max = 5, step = 0.1, value = 1)),
-							# column(1),
-							column(8,
-								conditionalPanel(condition = "input.pchPoints > 20",
-									textInput("pchFill", "Fill points with color" ,"white,white")
-								)
-							)
-						)
-					),
-					
-					conditionalPanel(condition = "input.subGrps == 'xAxis'",
-						h5('X-axis options:'),
-						
-						## X axis label options
-						fluidRow(
-							column(6, textInput("xlab22", "Axis label", "Disease Status")),
-							# column(1),
-							column(6, selectizeInput("xfont.lab22", "Label font", 
-                                        choices = c("Regular" = "1", "Bold" = "2", 
-																							      "Italic" = "3", "Bold Italic" = "4"), 
-													              selected = "1"))	
-						),
-						
-						fluidRow(
-							column(6, textInput("xcol.lab22", "Label color", "black")),
-							# column(1),
-							column(6, numericInput("xcex.lab22", "Label size", min=0.1, max=5, value = 1, step = 0.1))
-						),
-						
-						## X axis annotation options
-						fluidRow(
-							column(12, textInput("xlabels22", "Annotation names (comma seperated)", "Healthy,Diseased"))
-						),
-						
-						fluidRow(
-							column(6, textInput("xcol.axis22", "Annotation color", "black")),
-							# column(1),
-							column(6, numericInput("xcex.axis22", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
-						)
-					),
-					
-					conditionalPanel(condition = "input.subGrps == 'yAxis'",
-						h5('Y-axis options:'),
-						
-						## Y axis label options
-						fluidRow(
-							column(6, textInput("ylab22", "Axis label", "Marker Name")),
-							# column(1),
-							column(6, selectizeInput("yfont.lab22", "Label font", 
-                                        choices = c("Regular" = "1", "Bold" = "2", 
-																								    "Italic" = "3", "Bold Italic" = "4"), 
-													              selected = "1"))	
-						),
-						
-						fluidRow(
-							column(6, textInput("ycol.lab22", "Label color", "black")),
-							# column(1),
-							column(6, numericInput("ycex.lab22", "Label size", min=0.1, max=5, value = 1, step = 0.1))
-						),
-						
-						## Y axis annotation options
-						fluidRow(
-							column(6, textInput("ycol.axis22", "Annotation color", "black")),
-							# column(1),
-							column(6, numericInput("ycex.axis22", "Annotation size", min=0.1, max=5, value = 1, step = 0.1))
-						)
-					)	
-				)
-			)
-    ), # End for Cut Points tab.
-
-	    conditionalPanel(condition="input.tabs1=='Sample size'",
-#       h5("Choose one of the following methods (*):"),
-#       HTML('<br>'),
-	      selectInput(inputId = "sampleSizeMethod", label = "Select Method (*)", 
-	                  choices = c("Single test" = 1, "Comparison of two tests" = 2, "Non-inferiority" = 3), 
-	                  selected = 1, multiple = FALSE, selectize = TRUE),
-	      helpText("Select one method and fill only the fields shown for the chosen method."),
-      
-      HTML('<br>'),
-      
-      conditionalPanel(condition = "input.sampleSizeMethod == '1'",
-        numericInput(inputId = "alpha1", label = "Type I error", value = 0.05, min = 0, max = 1, step = 0.01),
-        numericInput(inputId = "power1", label = "Power", value = 0.80, min = 0, max = 1, step = 0.1),
-        numericInput(inputId = "auc", label = "Area under the ROC curve", value = 0.60, min = 0.5, max = 1, step = 0.1),
-        numericInput(inputId = "ratio", label = "Allocation ratio", value = 1, min = 0, step = 0.1)
-      ),
-
-      conditionalPanel(condition = "input.sampleSizeMethod == '2'",
-        numericInput(inputId = "alpha2", label = "Type I error", value = 0.05, min = 0, max = 1, step = 0.01),
-        numericInput(inputId = "power2", label = "Power", value = 0.80, min = 0, max = 1, step = 0.1),
-        numericInput(inputId = "auc01", label = "AUC for 1st test under null hypothesis", value = 0.80, min = 0.5, max = 1, step = 0.1),
-        numericInput(inputId = "auc02", label = "AUC for 2nd test under null hypothesis", value = 0.80, min = 0.5, max = 1, step = 0.1),
-        numericInput(inputId = "auc11", label = "AUC for 1st test under alternative hypothesis", value = 0.90, min = 0.5, max = 1, step = 0.1),
-        numericInput(inputId = "auc12", label = "AUC for 2nd test under alternative hypothesis", value = 0.70, min = 0.5, max = 1, step = 0.1),
-        numericInput(inputId = "ratio2", label = "Allocation ratio", value = 1, min = 0, step = 0.1)
-      ),
-
-      conditionalPanel(condition = "input.sampleSizeMethod == '3'",
-        numericInput(inputId = "alpha3", label = "Type I error", value = 0.05, min = 0, max = 1, step = 0.01),
-        numericInput(inputId = "power3", label = "Power", value = 0.80, min = 0, max = 1, step = 0.1),
-        numericInput(inputId = "aucs", label = "AUC for standard test", value = 0.80, min = 0.5, max = 1, step = 0.1),
-        numericInput(inputId = "aucn", label = "AUC for new test", value = 0.80, min = 0.5, max = 1, step = 0.1),
-        numericInput(inputId = "sd", label = "Smallest difference", value = 0.1, step = 0.1),
-        numericInput(inputId = "ratio3", label = "Allocation ratio", value = 1, min = 0, step = 0.1)
-      ),
-
-      HTML('<br>'),
-      HTML('<p>(*) See <a href="http://66.199.228.237/boundary/complex_decision_making_and_ethics/ROC_Analysis.pdf" target="_blank"> Obuchowski, 2005</a> for further details.</p>'),
-      HTML('<br>')
-    ),   ## End for Sample Size tab.
-
-
-		conditionalPanel(condition="input.tabs1=='Manual'",
-		  HTML('<p align="center"><img src="manual.png" width=200 height=200 alt="Manual cover image"></p>')
-		),
-	
-	  conditionalPanel(condition="input.tabs1=='Authors & News'",
-	    HTML('<p align="center"> <a href="https://www.erciyes.edu.tr/home/index" target="_blank"><img src="eru_logo.png" width=150 height=150 alt="Erciyes University logo"></a> </p>')
-	  )
-
-#     conditionalPanel(condition="input.tabs1=='Options'",
-#       selectInput(inputId = "Deneme", label = "Deneme", choices = c("A", "B"), selected = "A")
-#     )
-	),
-
-	mainPanel(id = "easyroc-main-content", tabindex = "-1",
-		tabsetPanel(
-			tabPanel(title="Introduction", 
-        h5("The easiest way to perform ROC analysis!"),
-        HTML('<p> A receiver operating characteristics (ROC) curve is a graphical approach which 
-                assess the performance of a binary classifier system. The ROC curve analysis is widely 
-                used in medicine, radiology, biometrics and various application of machine learning. </p>'),
-        HTML('<p align="justify"> Here we developed an easy way to carry out ROC analysis.
+      #     conditionalPanel(condition="input.tabs1=='Options'",
+      #       selectInput(inputId = "Deneme", label = "Deneme", choices = c("A", "B"), selected = "A")
+      #     )
+    ),
+    mainPanel(
+      id = "easyroc-main-content", tabindex = "-1",
+      tabsetPanel(
+        tabPanel(
+          title = "Introduction",
+          h5("The easiest way to perform ROC analysis!"),
+          HTML("<p> A receiver operating characteristics (ROC) curve is a graphical approach which
+                assess the performance of a binary classifier system. The ROC curve analysis is widely
+                used in medicine, radiology, biometrics and various application of machine learning. </p>"),
+          HTML('<p align="justify"> Here we developed an easy way to carry out ROC analysis.
                 This application creates ROC curves, calculates area under the curve (AUC)
-                values and confidence intervals for the AUC values, and performs multiple comparisons 
+                values and confidence intervals for the AUC values, and performs multiple comparisons
                 for ROC curves in a user-friendly, up-to-date and comprehensive way. Moreover,
                 easyROC computes and compares partial AUCs. It can also perform sample size calculation.</p>'),
-       
-        HTML('<p> An important feature of this application is to determine cut-off values especially for diagnostic tests. 
-              For this task, we made use of <a href="http://cran.r-project.org/web/packages/OptimalCutpoints/index.html" target="_blank">OptimalCutpoints</a> 
+          HTML('<p> An important feature of this application is to determine cut-off values especially for diagnostic tests.
+              For this task, we made use of <a href="http://cran.r-project.org/web/packages/OptimalCutpoints/index.html" target="_blank">OptimalCutpoints</a>
               package (Lopez-Raton et al, 2014) of R [1].</p>'),
-
-        HTML('<p><div align="center"><table cellpadding="0" cellspacing="0"><tr><td><img src="ROCplot.png" width="300" height="300" border="10000" alt="ROC plot example"></td><td><img src="CutOff_Plots.png" width="400" height="400" border="70" alt="Cut-off plots example"></td></tr></table></div></p>'),
-
-        h6("[1] Monica Lopez-Raton, Maria Xose Rodriguez-Alvarez, Carmen Cadarso Suarez, Francisco Gude Sampedro (2014). OptimalCutpoints: An R Package for Selecting Optimal Cutpoints in Diagnostic Tests. Journal of Statistical Software, 61(8), 1-36."),
-        
-        HTML('<br>'),
-        
-        HTML('<p><b>Disclaimer:</b> This server is intended for research purposes only, not for clinical or commercial use. 
-             It is a non-profit service to the scientific community, provided on an "AS-IS " basis without any warranty, 
+          HTML('<p><div align="center"><table cellpadding="0" cellspacing="0"><tr><td><img src="ROCplot.png" width="300" height="300" border="10000" alt="ROC plot example"></td><td><img src="CutOff_Plots.png" width="400" height="400" border="70" alt="Cut-off plots example"></td></tr></table></div></p>'),
+          h6("[1] Monica Lopez-Raton, Maria Xose Rodriguez-Alvarez, Carmen Cadarso Suarez, Francisco Gude Sampedro (2014). OptimalCutpoints: An R Package for Selecting Optimal Cutpoints in Diagnostic Tests. Journal of Statistical Software, 61(8), 1-36."),
+          HTML("<br>"),
+          HTML('<p><b>Disclaimer:</b> This server is intended for research purposes only, not for clinical or commercial use.
+             It is a non-profit service to the scientific community, provided on an "AS-IS " basis without any warranty,
              expressed or implied. The authors can not be held liable in any way for the service provided here. </p>')
-			),
-			
-			tabPanel("Data upload",
-			  HTML('<br>'),
-			  # verbatimTextOutput("console"),
-        navbarPage(title = '',
-          tabPanel('Data', dataTableOutput('RawData'))
-        )
-      ),
-
-      tabPanel("ROC curve",
-        downloadButton("downloadROCStats", "Download ROC statistics as txt-file"),
-        downloadButton("downloadROCData", "Download ROC coordinates as txt-file"),
-        downloadButton("downloadROCPlot", "Download plot as pdf-file"),
-          
-        h4(textOutput(outputId = "section1")),
-        navbarPage(id = "navbarROCcurve",
-          title = '',
-          tabPanel('Statistics', dataTableOutput('ROCstatistics')),
-          tabPanel('ROC Coordinates', dataTableOutput('ROCcoordinates')),
-          tabPanel('Multiple Comparisons', dataTableOutput('ROCcomparisons')),
-          tabPanel('Partial AUC', dataTableOutput('resultPAuc'))
+        ),
+        tabPanel(
+          "Data upload",
+          HTML("<br>"),
+          # verbatimTextOutput("console"),
+          navbarPage(
+            title = "",
+            tabPanel("Data", dataTableOutput("RawData"))
+          )
+        ),
+        tabPanel(
+          "ROC curve",
+          downloadButton("downloadROCStats", "Download ROC statistics as txt-file"),
+          downloadButton("downloadROCData", "Download ROC coordinates as txt-file"),
+          downloadButton("downloadROCPlot", "Download plot as pdf-file"),
+          h4(textOutput(outputId = "section1")),
+          navbarPage(
+            id = "navbarROCcurve",
+            title = "",
+            tabPanel("Statistics", dataTableOutput("ROCstatistics")),
+            tabPanel("ROC Coordinates", dataTableOutput("ROCcoordinates")),
+            tabPanel("Multiple Comparisons", dataTableOutput("ROCcomparisons")),
+            tabPanel("Partial AUC", dataTableOutput("resultPAuc"))
+          ),
+          conditionalPanel(
+            condition = "input.navbarROCcurve != 'ROC Coordinates'",
+            textOutput(outputId = "CIreminderLine1"),
+            h6(textOutput(outputId = "CIreminderLine2"))
+          ),
+          HTML("<br>"),
+          h4(textOutput(outputId = "section2")),
+          plotOutput("ROCplot")
+        ),
+        tabPanel(
+          "Cut points",
+          downloadButton("downloadCutOffresults", "Download results as txt-file"),
+          downloadButton("downloadCutOffPlotPDF", "Download plots as pdf-file"),
+          verbatimTextOutput("cutPoints"),
+          HTML('<div align="center">'),
+          plotOutput("cutPointsPlot"),
+          HTML("</div>")
+        ),
+        tabPanel(
+          title = "Sample size",
+          # downloadButton("downloadSampleSizeResults", "Download results as txt-file"),
+          verbatimTextOutput("SampleSizeForRoc")
+        ),
+        tabPanel(
+          "Authors & News",
+          h4("Authors"),
+          HTML('<p><a href="http://yunus.hacettepe.edu.tr/~dincer.goksuluk/" target="_blank"> <b>Dincer Goksuluk</b></a><p>'),
+          HTML("<p>Erciyes University, Faculty of Medicine, Department of Biostatistics<p>"),
+          HTML('<p><a href="mailto:dincergoksuluk@erciyes.edu.tr" target="_blank">dincergoksuluk@erciyes.edu.tr</a><p>'),
+          HTML('<p><a href="https://personel.trakya.edu.tr/selcukkorkmaz/#.YGG-eK8zaUk" target="_blank"> <b>Selcuk Korkmaz</b></a><p>'),
+          HTML("<p>Trakya University, Faculty of Medicine, Department of Biostatistics<p>"),
+          HTML('<p><a href="mailto:selcukkorkmaz@trakya.edu.tr" target="_blank">selcukkorkmaz@trakya.edu.tr</a><p>'),
+          HTML('<p><a href="https://avesis.erciyes.edu.tr/gokmenzararsiz" target="_blank"> <b>Gokmen Zararsiz</b></a><p>'),
+          HTML("<p>Erciyes University, Faculty of Medicine, Department of Biostatistics<p>"),
+          HTML('<p><a href="mailto:gokmenzararsiz@erciyes.edu.tr" target="_blank">gokmenzararsiz@erciyes.edu.tr</a><p>'),
+          HTML("<br>"),
+          h4("News"),
+          HTML("<br>"),
+          HTML("<p><b> Version 1.3.1 (July 25, 2016)</b><p>"),
+          HTML("<p> (1) Minor fixes: Added feature to keep only pairwise complete data. Missing cases are now removed before ROC curve analysis which causes to null return in ROC statistics.<p>"),
+          HTML("<br>"),
+          HTML("<p><b> Version 1.3 (July 25, 2016)</b><p>"),
+          HTML("<p> (1) Support for prametric ROC curve approximation.<p>"),
+          HTML("<p> (2) Minor bug fixes and improvements.<p>"),
+          HTML("<p> (3) Minor changes in user interface.<p>"),
+          HTML("<br>"),
+          HTML("<p><b> Version 1.2 (May 6, 2016)</b><p>"),
+          HTML("<p> (1) User manual added.<p>"),
+          HTML("<p> (2) Minor bug fixes and improvements.<p>"),
+          HTML("<p> (3) Re-checked the package dependencies.<p>"),
+          HTML("<br>"),
+          HTML("<p><b> Version 1.1 (June 23, 2015) </b><p>"),
+          HTML("<p> (1) Partial AUC feature has been added.<p>"),
+          HTML("<p> (2) Sample size calculation tab has been added.<p>"),
+          HTML("<p> (3) Minor improvements and bug fixes.<p>"),
+          HTML("<br>"),
+          HTML("<p><b> Version 1.0 (March 19, 2015)</b><p>"),
+          HTML("<p> (1) Initial version has been released.<p>"),
+          HTML("<br>"),
+          h5("Other Tools"),
+          HTML('<p><a href="/app/MLViS/" target="_blank"> <b>MLViS: a machine learning-based virtual screening tool</b></a><p>'),
+          HTML('<p><a href="/app/MVN/" target="_blank"> <b>MVN: a web-tool for assessing multivariate normality </b></a><p>'),
+          HTML('<p><a href="/app/DDNAA/" target="_blank"> <b>DDNAA: Decision support system for differential diagnosis of nontraumatic acute abdomen </b></a><p>'),
+          HTML("<br>"),
+          h6("Please feel free to send us bugs and feature requests.")
         ),
 
-        conditionalPanel(condition = "input.navbarROCcurve != 'ROC Coordinates'",
-		      textOutput(outputId = "CIreminderLine1"),
-		      h6(textOutput(outputId = "CIreminderLine2"))
+        # 			# General Options will be included here.
+        # 			tabPanel(title = "Options",
+        #         selectInput(inputId = "Deneme2", label = "Deneme2", choices = c("A", "B", "C"), selected = "C"),
+        #         verbatimTextOutput("deneme2")
+        # 			),
+
+        tabPanel(
+          title = "Manual",
+          h3("Usage of the web-tool:"),
+          h4("Data upload"),
+          HTML("<p> Load your data set in *.txt file format using this tab.</p>"),
+          HTML("<ul><li><p> Rows must represent the observations and each column must represent the variables.</p></li></ul>"),
+          HTML("<ul><li><p> First row must be a header which indicates the variable names.</p></li></ul>"),
+          HTML('<div style="left;"><img src="manual/dataUpload.png" width=400, height = 300/><img src="manual/dataUpload2.png" width=500, height = 300/></div>'),
+          HTML("<br>"),
+          h4("ROC curve"),
+          HTML("<p>Use this tab to perform ROC curve analysis. easyROC supports both parametric and nonparametric approximations for ROC curve analysis.</p>"),
+          HTML("<ul><li><p>First select marker(s), where all names of the variables, except the status variable, will be imported automatically by the tool.</p></li></ul>"),
+          HTML("<ul><li><p>Once the markers are selected, the direction should be defined. By default, higher values indicate higher risks. </p></li></ul>"),
+          HTML("<ul><li><p>Under <b>Statistics</b> subtab, you can get area under the curve (AUC) value and its standard error, confidence interval and statistical significance, instantly. </p></li></ul>"),
+          HTML("<ul><li><p>One may select one of parametric or nonparametric approximations under <b>Advanced options</b> checkbox (By default, the nonparametric approach is selected). The standart errors can be estimated using one of the proposed methods.
+             Likewise, users can select a method for confidence inerval estimation. Moreover, one can also change the type I error (Default is 0.05). </p></li></ul>"),
+          HTML("<ul><li><p>Furthermore, the ROC curve plot can be obtained under this tab. There are plenty of options under the <b>Plot options</b> checkbox, such as font type, axis label and colour etc. </p></li></ul>"),
+          HTML("<br>"),
+          HTML('<div style="left;"><img src="manual/rocCurve.png" width=900, height = 500</div>'),
+          HTML("<br>"),
+          HTML("<br>"),
+          HTML("<p>Each false positive and true positive points can be found under <b>ROC Coordinates</b> subtab for each marker. </p>"),
+          HTML('<div style="left;"><img src="manual/rocCoordinates.png" width=900, height = 400</div>'),
+          HTML("<br>"),
+          HTML("<br>"),
+          HTML("<p><b>Multiple Comparisons</b> subtab can be used to perform pairwise statistical comparisons for two or more ROC curves.</p>"),
+          HTML("<ul><li><p>The comparison methods can be changed under <i>Multiple Comparison Method</i> option. Available methods are Bonferroni (by default), False discovery rate and none (i.e no adjustment on multiple tests).</p></li></ul>"),
+          HTML('<div style="left;"><img src="manual/multipleComparison.png" width=900, height = 300</div>'),
+          HTML("<br>"),
+          HTML("<br>"),
+          HTML("<p><b>Partial AUC</b> subtab gives partial AUC value(s) for specified ranges based on both sensitivity and specificity.</p>"),
+          HTML('<div style="left;"><img src="manual/partialAUC.png" width=900, height = 300</div>'),
+          HTML("<br>"),
+          HTML("<br>"),
+          h4("Cut points"),
+          HTML("<ul><li><p>Users can determine optimal cut-off points for their marker(s) using this tab.</p></li></ul>"),
+          HTML("<ul><li><p>First, a ROC curve analysis has to be done in order to use this option.</p></li></ul>"),
+          HTML("<ul><li><p>Then, one of the markers, which are used for ROC curve analysis, can be selected to determine the optimal cut-off points. </p></li></ul>"),
+          HTML("<ul><li><p>One can select one of 34 methods for optimal cut-off point determination.</p></li></ul>"),
+          HTML('<ul><li><p>These methods can be found in the <a href="http://cran.r-project.org/web/packages/OptimalCutpoints/index.html" target="_blank"> OptimalCutpoints</a> package of R.</p></li></ul>'),
+          HTML("<ul><li><p>Several graphs, including ROC curve with the optimal cut-off point, Sensitivity & Specificity Curve and Distribution graphs, can be created as well.</p></li></ul>"),
+          HTML('<div style="left;"><img src="manual/cutPoints.png" width=900, height = 500</div>'),
+          HTML("<br>"),
+          HTML("<br>"),
+          h4("Sample size"),
+          HTML("<ul><li><p>Sample size calculation for ROC curve analysis can be implemented under this tab.</p></li></ul>"),
+          HTML("<ul><li><p>There are three different options for sample size calculation.</p></li></ul>"),
+          HTML("<ul><li><p>One can perform a sample size calculation for a single diagnostic test, comparison of two diagnostic tests or noninferiority of a new test to a standard test.</p></li></ul>"),
+          HTML('<p>Please see <a href="http://66.199.228.237/boundary/complex_decision_making_and_ethics/ROC_Analysis.pdf" target="_blank"> Obuchowski, 2005</a> for further details about the methods.</p>'),
+          HTML('<div style="left;"><img src="manual/sampleSize.png" width=900, height = 400</div>'),
+          tags$br(),
+          tags$br(),
+          tags$br()
         ),
-          
-        HTML('<br>'),
-        h4(textOutput(outputId = "section2")),
-        plotOutput("ROCplot")
+        id = "tabs1", type = "pills"
       ),
-
-      tabPanel("Cut points",
-        downloadButton("downloadCutOffresults", "Download results as txt-file"),
-        downloadButton("downloadCutOffPlotPDF", "Download plots as pdf-file"),   
-        verbatimTextOutput("cutPoints"),
-				
-        HTML('<div align="center">'),
-				  plotOutput("cutPointsPlot"),
-				HTML('</div>')
-			),
-
-      tabPanel(title = "Sample size",
-        #downloadButton("downloadSampleSizeResults", "Download results as txt-file"),
-        verbatimTextOutput("SampleSizeForRoc")
-      ),
-      
-
-			
-      tabPanel("Authors & News",
-        h4("Authors"),
-        HTML('<p><a href="http://yunus.hacettepe.edu.tr/~dincer.goksuluk/" target="_blank"> <b>Dincer Goksuluk</b></a><p>'),
-        HTML('<p>Erciyes University, Faculty of Medicine, Department of Biostatistics<p>'),
-        HTML('<p><a href="mailto:dincergoksuluk@erciyes.edu.tr" target="_blank">dincergoksuluk@erciyes.edu.tr</a><p>'),
-        
-        HTML('<p><a href="https://personel.trakya.edu.tr/selcukkorkmaz/#.YGG-eK8zaUk" target="_blank"> <b>Selcuk Korkmaz</b></a><p>'),
-        HTML('<p>Trakya University, Faculty of Medicine, Department of Biostatistics<p>'),
-        HTML('<p><a href="mailto:selcukkorkmaz@trakya.edu.tr" target="_blank">selcukkorkmaz@trakya.edu.tr</a><p>'),
-        
-        HTML('<p><a href="https://avesis.erciyes.edu.tr/gokmenzararsiz" target="_blank"> <b>Gokmen Zararsiz</b></a><p>'),
-        HTML('<p>Erciyes University, Faculty of Medicine, Department of Biostatistics<p>'),
-        HTML('<p><a href="mailto:gokmenzararsiz@erciyes.edu.tr" target="_blank">gokmenzararsiz@erciyes.edu.tr</a><p>'),
-        HTML('<br>'),
-
-        h4("News"),
-        HTML('<br>'),
-        HTML('<p><b> Version 1.3.1 (July 25, 2016)</b><p>'),
-		    HTML('<p> (1) Minor fixes: Added feature to keep only pairwise complete data. Missing cases are now removed before ROC curve analysis which causes to null return in ROC statistics.<p>'),
-
-        HTML('<br>'),
-        HTML('<p><b> Version 1.3 (July 25, 2016)</b><p>'),
-        HTML('<p> (1) Support for prametric ROC curve approximation.<p>'),
-        HTML('<p> (2) Minor bug fixes and improvements.<p>'),
-        HTML('<p> (3) Minor changes in user interface.<p>'),
-        
-        HTML('<br>'),
-        HTML('<p><b> Version 1.2 (May 6, 2016)</b><p>'),
-        HTML('<p> (1) User manual added.<p>'),
-        HTML('<p> (2) Minor bug fixes and improvements.<p>'),
-        HTML('<p> (3) Re-checked the package dependencies.<p>'),
-
-        HTML('<br>'),
-        HTML('<p><b> Version 1.1 (June 23, 2015) </b><p>'),
-        HTML('<p> (1) Partial AUC feature has been added.<p>'),
-        HTML('<p> (2) Sample size calculation tab has been added.<p>'),
-        HTML('<p> (3) Minor improvements and bug fixes.<p>'),
-
-        HTML('<br>'),
-        HTML('<p><b> Version 1.0 (March 19, 2015)</b><p>'),
-        HTML('<p> (1) Initial version has been released.<p>'),
-        HTML('<br>'),
-
-        h5("Other Tools"),
-
-        HTML('<p><a href="/app/MLViS/" target="_blank"> <b>MLViS: a machine learning-based virtual screening tool</b></a><p>'),
-        HTML('<p><a href="/app/MVN/" target="_blank"> <b>MVN: a web-tool for assessing multivariate normality </b></a><p>'),
-        HTML('<p><a href="/app/DDNAA/" target="_blank"> <b>DDNAA: Decision support system for differential diagnosis of nontraumatic acute abdomen </b></a><p>'),
-        HTML('<br>'),
-
-        h6("Please feel free to send us bugs and feature requests.")
-      ),
-			
-# 			# General Options will be included here.
-# 			tabPanel(title = "Options",
-#         selectInput(inputId = "Deneme2", label = "Deneme2", choices = c("A", "B", "C"), selected = "C"),
-#         verbatimTextOutput("deneme2")
-# 			), 
-			
-      tabPanel(title="Manual",
-        h3("Usage of the web-tool:"),
-        h4("Data upload"),
-        HTML('<p> Load your data set in *.txt file format using this tab.</p>'),
-        HTML('<ul><li><p> Rows must represent the observations and each column must represent the variables.</p></li></ul>'),
-        HTML('<ul><li><p> First row must be a header which indicates the variable names.</p></li></ul>'),
-        HTML('<div style="left;"><img src="manual/dataUpload.png" width=400, height = 300/><img src="manual/dataUpload2.png" width=500, height = 300/></div>'),
-        HTML('<br>'),
-
-        h4("ROC curve"),
-        HTML('<p>Use this tab to perform ROC curve analysis. easyROC supports both parametric and nonparametric approximations for ROC curve analysis.</p>'),
-        HTML('<ul><li><p>First select marker(s), where all names of the variables, except the status variable, will be imported automatically by the tool.</p></li></ul>'),
-        HTML('<ul><li><p>Once the markers are selected, the direction should be defined. By default, higher values indicate higher risks. </p></li></ul>'),
-        HTML('<ul><li><p>Under <b>Statistics</b> subtab, you can get area under the curve (AUC) value and its standard error, confidence interval and statistical significance, instantly. </p></li></ul>'),
-        HTML('<ul><li><p>One may select one of parametric or nonparametric approximations under <b>Advanced options</b> checkbox (By default, the nonparametric approach is selected). The standart errors can be estimated using one of the proposed methods. 
-             Likewise, users can select a method for confidence inerval estimation. Moreover, one can also change the type I error (Default is 0.05). </p></li></ul>'),
-        HTML('<ul><li><p>Furthermore, the ROC curve plot can be obtained under this tab. There are plenty of options under the <b>Plot options</b> checkbox, such as font type, axis label and colour etc. </p></li></ul>'),
-        HTML('<br>'),
-
-        HTML('<div style="left;"><img src="manual/rocCurve.png" width=900, height = 500</div>'),
-        HTML('<br>'),
-        HTML('<br>'),
-        HTML('<p>Each false positive and true positive points can be found under <b>ROC Coordinates</b> subtab for each marker. </p>'),
-
-        HTML('<div style="left;"><img src="manual/rocCoordinates.png" width=900, height = 400</div>'),
-        HTML('<br>'),
-        HTML('<br>'),
-
-        HTML('<p><b>Multiple Comparisons</b> subtab can be used to perform pairwise statistical comparisons for two or more ROC curves.</p>'),
-        HTML('<ul><li><p>The comparison methods can be changed under <i>Multiple Comparison Method</i> option. Available methods are Bonferroni (by default), False discovery rate and none (i.e no adjustment on multiple tests).</p></li></ul>'),
-
-        HTML('<div style="left;"><img src="manual/multipleComparison.png" width=900, height = 300</div>'),
-        HTML('<br>'),
-        HTML('<br>'),
-
-        HTML('<p><b>Partial AUC</b> subtab gives partial AUC value(s) for specified ranges based on both sensitivity and specificity.</p>'),
-        HTML('<div style="left;"><img src="manual/partialAUC.png" width=900, height = 300</div>'),
-        HTML('<br>'),
-        HTML('<br>'),
-
-        h4("Cut points"),
-        HTML('<ul><li><p>Users can determine optimal cut-off points for their marker(s) using this tab.</p></li></ul>'),
-        HTML('<ul><li><p>First, a ROC curve analysis has to be done in order to use this option.</p></li></ul>'),
-        HTML('<ul><li><p>Then, one of the markers, which are used for ROC curve analysis, can be selected to determine the optimal cut-off points. </p></li></ul>'),
-        HTML('<ul><li><p>One can select one of 34 methods for optimal cut-off point determination.</p></li></ul>'),
-        HTML('<ul><li><p>These methods can be found in the <a href="http://cran.r-project.org/web/packages/OptimalCutpoints/index.html" target="_blank"> OptimalCutpoints</a> package of R.</p></li></ul>'),
-        HTML('<ul><li><p>Several graphs, including ROC curve with the optimal cut-off point, Sensitivity & Specificity Curve and Distribution graphs, can be created as well.</p></li></ul>'),
-        HTML('<div style="left;"><img src="manual/cutPoints.png" width=900, height = 500</div>'),
-        HTML('<br>'),
-        HTML('<br>'),
-
-        h4("Sample size"),
-        HTML('<ul><li><p>Sample size calculation for ROC curve analysis can be implemented under this tab.</p></li></ul>'),
-        HTML('<ul><li><p>There are three different options for sample size calculation.</p></li></ul>'),
-        HTML('<ul><li><p>One can perform a sample size calculation for a single diagnostic test, comparison of two diagnostic tests or noninferiority of a new test to a standard test.</p></li></ul>'),
-
-        HTML('<p>Please see <a href="http://66.199.228.237/boundary/complex_decision_making_and_ethics/ROC_Analysis.pdf" target="_blank"> Obuchowski, 2005</a> for further details about the methods.</p>'),
-
-        HTML('<div style="left;"><img src="manual/sampleSize.png" width=900, height = 400</div>'),
-        
-        tags$br(),
-        tags$br(),
-        tags$br()
-      ), id = "tabs1", type = "pills"),
-
-    tags$head(
-      tags$style(type = "text/css", "
+      tags$head(
+        tags$style(type = "text/css", "
         .easyroc-skip-link {
           position: absolute;
           left: 8px;
@@ -1301,11 +1363,10 @@ shinyUI(fluidPage(
           }
         }
       ")
-    ),
-
-    tags$head(
-      tags$link(rel = "shortcut icon", href = "favicon-2.ico")
+      ),
+      tags$head(
+        tags$link(rel = "shortcut icon", href = "favicon-2.ico")
+      )
     )
   )
 ))
-)
