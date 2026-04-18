@@ -62,7 +62,6 @@ Yaklaşım: R-first (Shiny ekosistemi içinde modernizasyon, davranış eşdeğe
 - `mod_cut_points`
 - `mod_sample_size`
 - `mod_downloads`
-- `mod_docs_about`
 
 ## 5. Fazlar ve Zaman Planı (12-14 Hafta)
 
